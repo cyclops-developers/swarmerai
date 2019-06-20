@@ -15,7 +15,9 @@ import PageNotFound from './PageNotFound'
 import { AUTH_TOKEN } from '../constant'
 import { isTokenExpired } from '../helper/jwtHelper'
 import { graphql } from 'react-apollo'
-import  { gql } from 'apollo-boost'
+import { gql } from 'apollo-boost'
+import { CreateProjectForm } from '../modules/CreateProjectForm'
+import 'antd/dist/antd.css'
 
 const ProtectedRoute = ({ component: Component, token, ...rest }) => {
   return token ? (
@@ -147,7 +149,7 @@ class RootContainer extends Component {
           <ProtectedRoute
             token={this.state.token}
             path="/create"
-            component={null}
+            component={CreateProjectForm}
           />
           <Route
             token={this.state.token}
