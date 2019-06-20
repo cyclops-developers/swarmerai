@@ -1,0 +1,74 @@
+version: "3.5"
+
+services:
+  swamerai:
+    image: swamerai
+    container_name: swamerai
+    build: .
+    volumes:
+      - ./:/usr/src/app/
+    ports:
+      - 3000:3000
+    environment:
+      - "NODE_ENV=development"
+      - "AWS_REGION=localhost"
+      - "AWS_ACCESS_KEY_ID=MOCK_ACCESS_KEY_ID"
+      - "AWS_SECRET_ACCESS_KEY=MOCK_SECRET_ACCESS_KEY"
+      - REDIS_URL=redis://cache
+
+  es:
+    container_name: swamerai_es
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+    volumes:
+      - ./data/elasticsearch:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    environment:
+      - cluster.name=swarmerai-cluster
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms64m -Xmx256m
+      - discovery.type=single-node
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+      - http.cors.allow-methods=GET
+      - http.cors.allow-headers=Content-Type, Access-Control-Origin
+      - xpack.security.enabled=false
+      - xpack.monitoring.enabled=false
+      - xpack.ml.enabled=false
+      - xpack.graph.enabled=false
+      - xpack.watcher.enabled=false
+  
+  kibana:
+    container_name: swamerai_kibana
+    image: docker.elastic.co/kibana/kibana:7.1.1
+    ports:
+      - "5601:5601"
+    environment:
+      - xpack.security.enabled=false
+      - ELASTICSEARCH_URL=http://es:9200
+    depends_on:
+      - es
+
+  redis:
+    container_name: swamerai_redis
+    image: redis
+    ports:
+      - "6379:6379"
+
+  s3:
+    image: localstack/localstack:latest
+    container_name: swamerai_s3
+    ports:
+      - '4563-4584:4563-4584'
+      - '8055:8080'
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - './data/localstack:/tmp/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+
+networks:
+  default:
+    name: laguro_network
