@@ -57,6 +57,13 @@ type Project {
   updatedAt: DateTime!
   name: String!
   description: String!
+  validation: Int!
+  bucketUrl: String!
+  category: String!
+  currentJobId: String
+  type: ProjectType
+  repeatableClass: Boolean
+  imageDimension: String
   creator: User!
 }
 
@@ -70,6 +77,13 @@ input ProjectCreateInput {
   id: ID
   name: String!
   description: String!
+  validation: Int!
+  bucketUrl: String!
+  category: String!
+  currentJobId: String
+  type: ProjectType
+  repeatableClass: Boolean
+  imageDimension: String
   creator: UserCreateOneWithoutProjectsInput!
 }
 
@@ -82,6 +96,13 @@ input ProjectCreateWithoutCreatorInput {
   id: ID
   name: String!
   description: String!
+  validation: Int!
+  bucketUrl: String!
+  category: String!
+  currentJobId: String
+  type: ProjectType
+  repeatableClass: Boolean
+  imageDimension: String
 }
 
 type ProjectEdge {
@@ -100,6 +121,20 @@ enum ProjectOrderByInput {
   name_DESC
   description_ASC
   description_DESC
+  validation_ASC
+  validation_DESC
+  bucketUrl_ASC
+  bucketUrl_DESC
+  category_ASC
+  category_DESC
+  currentJobId_ASC
+  currentJobId_DESC
+  type_ASC
+  type_DESC
+  repeatableClass_ASC
+  repeatableClass_DESC
+  imageDimension_ASC
+  imageDimension_DESC
 }
 
 type ProjectPreviousValues {
@@ -108,6 +143,13 @@ type ProjectPreviousValues {
   updatedAt: DateTime!
   name: String!
   description: String!
+  validation: Int!
+  bucketUrl: String!
+  category: String!
+  currentJobId: String
+  type: ProjectType
+  repeatableClass: Boolean
+  imageDimension: String
 }
 
 input ProjectScalarWhereInput {
@@ -169,6 +211,76 @@ input ProjectScalarWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
+  validation: Int
+  validation_not: Int
+  validation_in: [Int!]
+  validation_not_in: [Int!]
+  validation_lt: Int
+  validation_lte: Int
+  validation_gt: Int
+  validation_gte: Int
+  bucketUrl: String
+  bucketUrl_not: String
+  bucketUrl_in: [String!]
+  bucketUrl_not_in: [String!]
+  bucketUrl_lt: String
+  bucketUrl_lte: String
+  bucketUrl_gt: String
+  bucketUrl_gte: String
+  bucketUrl_contains: String
+  bucketUrl_not_contains: String
+  bucketUrl_starts_with: String
+  bucketUrl_not_starts_with: String
+  bucketUrl_ends_with: String
+  bucketUrl_not_ends_with: String
+  category: String
+  category_not: String
+  category_in: [String!]
+  category_not_in: [String!]
+  category_lt: String
+  category_lte: String
+  category_gt: String
+  category_gte: String
+  category_contains: String
+  category_not_contains: String
+  category_starts_with: String
+  category_not_starts_with: String
+  category_ends_with: String
+  category_not_ends_with: String
+  currentJobId: String
+  currentJobId_not: String
+  currentJobId_in: [String!]
+  currentJobId_not_in: [String!]
+  currentJobId_lt: String
+  currentJobId_lte: String
+  currentJobId_gt: String
+  currentJobId_gte: String
+  currentJobId_contains: String
+  currentJobId_not_contains: String
+  currentJobId_starts_with: String
+  currentJobId_not_starts_with: String
+  currentJobId_ends_with: String
+  currentJobId_not_ends_with: String
+  type: ProjectType
+  type_not: ProjectType
+  type_in: [ProjectType!]
+  type_not_in: [ProjectType!]
+  repeatableClass: Boolean
+  repeatableClass_not: Boolean
+  imageDimension: String
+  imageDimension_not: String
+  imageDimension_in: [String!]
+  imageDimension_not_in: [String!]
+  imageDimension_lt: String
+  imageDimension_lte: String
+  imageDimension_gt: String
+  imageDimension_gte: String
+  imageDimension_contains: String
+  imageDimension_not_contains: String
+  imageDimension_starts_with: String
+  imageDimension_not_starts_with: String
+  imageDimension_ends_with: String
+  imageDimension_not_ends_with: String
   AND: [ProjectScalarWhereInput!]
   OR: [ProjectScalarWhereInput!]
   NOT: [ProjectScalarWhereInput!]
@@ -192,20 +304,46 @@ input ProjectSubscriptionWhereInput {
   NOT: [ProjectSubscriptionWhereInput!]
 }
 
+enum ProjectType {
+  CLASS
+  BINARY
+}
+
 input ProjectUpdateInput {
   name: String
   description: String
+  validation: Int
+  bucketUrl: String
+  category: String
+  currentJobId: String
+  type: ProjectType
+  repeatableClass: Boolean
+  imageDimension: String
   creator: UserUpdateOneRequiredWithoutProjectsInput
 }
 
 input ProjectUpdateManyDataInput {
   name: String
   description: String
+  validation: Int
+  bucketUrl: String
+  category: String
+  currentJobId: String
+  type: ProjectType
+  repeatableClass: Boolean
+  imageDimension: String
 }
 
 input ProjectUpdateManyMutationInput {
   name: String
   description: String
+  validation: Int
+  bucketUrl: String
+  category: String
+  currentJobId: String
+  type: ProjectType
+  repeatableClass: Boolean
+  imageDimension: String
 }
 
 input ProjectUpdateManyWithoutCreatorInput {
@@ -228,6 +366,13 @@ input ProjectUpdateManyWithWhereNestedInput {
 input ProjectUpdateWithoutCreatorDataInput {
   name: String
   description: String
+  validation: Int
+  bucketUrl: String
+  category: String
+  currentJobId: String
+  type: ProjectType
+  repeatableClass: Boolean
+  imageDimension: String
 }
 
 input ProjectUpdateWithWhereUniqueWithoutCreatorInput {
@@ -300,6 +445,76 @@ input ProjectWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
+  validation: Int
+  validation_not: Int
+  validation_in: [Int!]
+  validation_not_in: [Int!]
+  validation_lt: Int
+  validation_lte: Int
+  validation_gt: Int
+  validation_gte: Int
+  bucketUrl: String
+  bucketUrl_not: String
+  bucketUrl_in: [String!]
+  bucketUrl_not_in: [String!]
+  bucketUrl_lt: String
+  bucketUrl_lte: String
+  bucketUrl_gt: String
+  bucketUrl_gte: String
+  bucketUrl_contains: String
+  bucketUrl_not_contains: String
+  bucketUrl_starts_with: String
+  bucketUrl_not_starts_with: String
+  bucketUrl_ends_with: String
+  bucketUrl_not_ends_with: String
+  category: String
+  category_not: String
+  category_in: [String!]
+  category_not_in: [String!]
+  category_lt: String
+  category_lte: String
+  category_gt: String
+  category_gte: String
+  category_contains: String
+  category_not_contains: String
+  category_starts_with: String
+  category_not_starts_with: String
+  category_ends_with: String
+  category_not_ends_with: String
+  currentJobId: String
+  currentJobId_not: String
+  currentJobId_in: [String!]
+  currentJobId_not_in: [String!]
+  currentJobId_lt: String
+  currentJobId_lte: String
+  currentJobId_gt: String
+  currentJobId_gte: String
+  currentJobId_contains: String
+  currentJobId_not_contains: String
+  currentJobId_starts_with: String
+  currentJobId_not_starts_with: String
+  currentJobId_ends_with: String
+  currentJobId_not_ends_with: String
+  type: ProjectType
+  type_not: ProjectType
+  type_in: [ProjectType!]
+  type_not_in: [ProjectType!]
+  repeatableClass: Boolean
+  repeatableClass_not: Boolean
+  imageDimension: String
+  imageDimension_not: String
+  imageDimension_in: [String!]
+  imageDimension_not_in: [String!]
+  imageDimension_lt: String
+  imageDimension_lte: String
+  imageDimension_gt: String
+  imageDimension_gte: String
+  imageDimension_contains: String
+  imageDimension_not_contains: String
+  imageDimension_starts_with: String
+  imageDimension_not_starts_with: String
+  imageDimension_ends_with: String
+  imageDimension_not_ends_with: String
   creator: UserWhereInput
   AND: [ProjectWhereInput!]
   OR: [ProjectWhereInput!]

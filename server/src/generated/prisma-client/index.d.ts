@@ -140,6 +140,8 @@ export interface ClientConstructor<T> {
  * Types
  */
 
+export type ProjectType = "CLASS" | "BINARY";
+
 export type ProjectOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -150,7 +152,21 @@ export type ProjectOrderByInput =
   | "name_ASC"
   | "name_DESC"
   | "description_ASC"
-  | "description_DESC";
+  | "description_DESC"
+  | "validation_ASC"
+  | "validation_DESC"
+  | "bucketUrl_ASC"
+  | "bucketUrl_DESC"
+  | "category_ASC"
+  | "category_DESC"
+  | "currentJobId_ASC"
+  | "currentJobId_DESC"
+  | "type_ASC"
+  | "type_DESC"
+  | "repeatableClass_ASC"
+  | "repeatableClass_DESC"
+  | "imageDimension_ASC"
+  | "imageDimension_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -164,16 +180,35 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface UserUpdateOneRequiredWithoutProjectsInput {
-  create?: Maybe<UserCreateWithoutProjectsInput>;
-  update?: Maybe<UserUpdateWithoutProjectsDataInput>;
-  upsert?: Maybe<UserUpsertWithoutProjectsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
+export interface ProjectUpdateInput {
+  name?: Maybe<String>;
+  description?: Maybe<String>;
+  validation?: Maybe<Int>;
+  bucketUrl?: Maybe<String>;
+  category?: Maybe<String>;
+  currentJobId?: Maybe<String>;
+  type?: Maybe<ProjectType>;
+  repeatableClass?: Maybe<Boolean>;
+  imageDimension?: Maybe<String>;
+  creator?: Maybe<UserUpdateOneRequiredWithoutProjectsInput>;
 }
 
 export type ProjectWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
+
+export interface ProjectUpdateWithWhereUniqueWithoutCreatorInput {
+  where: ProjectWhereUniqueInput;
+  data: ProjectUpdateWithoutCreatorDataInput;
+}
+
+export interface UserCreateInput {
+  id?: Maybe<ID_Input>;
+  email: String;
+  password: String;
+  name: String;
+  projects?: Maybe<ProjectCreateManyWithoutCreatorInput>;
+}
 
 export interface ProjectUpdateManyWithoutCreatorInput {
   create?: Maybe<
@@ -198,12 +233,333 @@ export interface ProjectUpdateManyWithoutCreatorInput {
   >;
 }
 
-export interface UserCreateInput {
+export interface UserUpsertWithoutProjectsInput {
+  update: UserUpdateWithoutProjectsDataInput;
+  create: UserCreateWithoutProjectsInput;
+}
+
+export interface ProjectWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  description?: Maybe<String>;
+  description_not?: Maybe<String>;
+  description_in?: Maybe<String[] | String>;
+  description_not_in?: Maybe<String[] | String>;
+  description_lt?: Maybe<String>;
+  description_lte?: Maybe<String>;
+  description_gt?: Maybe<String>;
+  description_gte?: Maybe<String>;
+  description_contains?: Maybe<String>;
+  description_not_contains?: Maybe<String>;
+  description_starts_with?: Maybe<String>;
+  description_not_starts_with?: Maybe<String>;
+  description_ends_with?: Maybe<String>;
+  description_not_ends_with?: Maybe<String>;
+  validation?: Maybe<Int>;
+  validation_not?: Maybe<Int>;
+  validation_in?: Maybe<Int[] | Int>;
+  validation_not_in?: Maybe<Int[] | Int>;
+  validation_lt?: Maybe<Int>;
+  validation_lte?: Maybe<Int>;
+  validation_gt?: Maybe<Int>;
+  validation_gte?: Maybe<Int>;
+  bucketUrl?: Maybe<String>;
+  bucketUrl_not?: Maybe<String>;
+  bucketUrl_in?: Maybe<String[] | String>;
+  bucketUrl_not_in?: Maybe<String[] | String>;
+  bucketUrl_lt?: Maybe<String>;
+  bucketUrl_lte?: Maybe<String>;
+  bucketUrl_gt?: Maybe<String>;
+  bucketUrl_gte?: Maybe<String>;
+  bucketUrl_contains?: Maybe<String>;
+  bucketUrl_not_contains?: Maybe<String>;
+  bucketUrl_starts_with?: Maybe<String>;
+  bucketUrl_not_starts_with?: Maybe<String>;
+  bucketUrl_ends_with?: Maybe<String>;
+  bucketUrl_not_ends_with?: Maybe<String>;
+  category?: Maybe<String>;
+  category_not?: Maybe<String>;
+  category_in?: Maybe<String[] | String>;
+  category_not_in?: Maybe<String[] | String>;
+  category_lt?: Maybe<String>;
+  category_lte?: Maybe<String>;
+  category_gt?: Maybe<String>;
+  category_gte?: Maybe<String>;
+  category_contains?: Maybe<String>;
+  category_not_contains?: Maybe<String>;
+  category_starts_with?: Maybe<String>;
+  category_not_starts_with?: Maybe<String>;
+  category_ends_with?: Maybe<String>;
+  category_not_ends_with?: Maybe<String>;
+  currentJobId?: Maybe<String>;
+  currentJobId_not?: Maybe<String>;
+  currentJobId_in?: Maybe<String[] | String>;
+  currentJobId_not_in?: Maybe<String[] | String>;
+  currentJobId_lt?: Maybe<String>;
+  currentJobId_lte?: Maybe<String>;
+  currentJobId_gt?: Maybe<String>;
+  currentJobId_gte?: Maybe<String>;
+  currentJobId_contains?: Maybe<String>;
+  currentJobId_not_contains?: Maybe<String>;
+  currentJobId_starts_with?: Maybe<String>;
+  currentJobId_not_starts_with?: Maybe<String>;
+  currentJobId_ends_with?: Maybe<String>;
+  currentJobId_not_ends_with?: Maybe<String>;
+  type?: Maybe<ProjectType>;
+  type_not?: Maybe<ProjectType>;
+  type_in?: Maybe<ProjectType[] | ProjectType>;
+  type_not_in?: Maybe<ProjectType[] | ProjectType>;
+  repeatableClass?: Maybe<Boolean>;
+  repeatableClass_not?: Maybe<Boolean>;
+  imageDimension?: Maybe<String>;
+  imageDimension_not?: Maybe<String>;
+  imageDimension_in?: Maybe<String[] | String>;
+  imageDimension_not_in?: Maybe<String[] | String>;
+  imageDimension_lt?: Maybe<String>;
+  imageDimension_lte?: Maybe<String>;
+  imageDimension_gt?: Maybe<String>;
+  imageDimension_gte?: Maybe<String>;
+  imageDimension_contains?: Maybe<String>;
+  imageDimension_not_contains?: Maybe<String>;
+  imageDimension_starts_with?: Maybe<String>;
+  imageDimension_not_starts_with?: Maybe<String>;
+  imageDimension_ends_with?: Maybe<String>;
+  imageDimension_not_ends_with?: Maybe<String>;
+  creator?: Maybe<UserWhereInput>;
+  AND?: Maybe<ProjectWhereInput[] | ProjectWhereInput>;
+  OR?: Maybe<ProjectWhereInput[] | ProjectWhereInput>;
+  NOT?: Maybe<ProjectWhereInput[] | ProjectWhereInput>;
+}
+
+export interface ProjectSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<ProjectWhereInput>;
+  AND?: Maybe<ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput>;
+  OR?: Maybe<ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput>;
+  NOT?: Maybe<ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput>;
+}
+
+export interface ProjectCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  description: String;
+  validation: Int;
+  bucketUrl: String;
+  category: String;
+  currentJobId?: Maybe<String>;
+  type?: Maybe<ProjectType>;
+  repeatableClass?: Maybe<Boolean>;
+  imageDimension?: Maybe<String>;
+  creator: UserCreateOneWithoutProjectsInput;
+}
+
+export interface ProjectUpdateManyDataInput {
+  name?: Maybe<String>;
+  description?: Maybe<String>;
+  validation?: Maybe<Int>;
+  bucketUrl?: Maybe<String>;
+  category?: Maybe<String>;
+  currentJobId?: Maybe<String>;
+  type?: Maybe<ProjectType>;
+  repeatableClass?: Maybe<Boolean>;
+  imageDimension?: Maybe<String>;
+}
+
+export interface UserCreateOneWithoutProjectsInput {
+  create?: Maybe<UserCreateWithoutProjectsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface ProjectScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  description?: Maybe<String>;
+  description_not?: Maybe<String>;
+  description_in?: Maybe<String[] | String>;
+  description_not_in?: Maybe<String[] | String>;
+  description_lt?: Maybe<String>;
+  description_lte?: Maybe<String>;
+  description_gt?: Maybe<String>;
+  description_gte?: Maybe<String>;
+  description_contains?: Maybe<String>;
+  description_not_contains?: Maybe<String>;
+  description_starts_with?: Maybe<String>;
+  description_not_starts_with?: Maybe<String>;
+  description_ends_with?: Maybe<String>;
+  description_not_ends_with?: Maybe<String>;
+  validation?: Maybe<Int>;
+  validation_not?: Maybe<Int>;
+  validation_in?: Maybe<Int[] | Int>;
+  validation_not_in?: Maybe<Int[] | Int>;
+  validation_lt?: Maybe<Int>;
+  validation_lte?: Maybe<Int>;
+  validation_gt?: Maybe<Int>;
+  validation_gte?: Maybe<Int>;
+  bucketUrl?: Maybe<String>;
+  bucketUrl_not?: Maybe<String>;
+  bucketUrl_in?: Maybe<String[] | String>;
+  bucketUrl_not_in?: Maybe<String[] | String>;
+  bucketUrl_lt?: Maybe<String>;
+  bucketUrl_lte?: Maybe<String>;
+  bucketUrl_gt?: Maybe<String>;
+  bucketUrl_gte?: Maybe<String>;
+  bucketUrl_contains?: Maybe<String>;
+  bucketUrl_not_contains?: Maybe<String>;
+  bucketUrl_starts_with?: Maybe<String>;
+  bucketUrl_not_starts_with?: Maybe<String>;
+  bucketUrl_ends_with?: Maybe<String>;
+  bucketUrl_not_ends_with?: Maybe<String>;
+  category?: Maybe<String>;
+  category_not?: Maybe<String>;
+  category_in?: Maybe<String[] | String>;
+  category_not_in?: Maybe<String[] | String>;
+  category_lt?: Maybe<String>;
+  category_lte?: Maybe<String>;
+  category_gt?: Maybe<String>;
+  category_gte?: Maybe<String>;
+  category_contains?: Maybe<String>;
+  category_not_contains?: Maybe<String>;
+  category_starts_with?: Maybe<String>;
+  category_not_starts_with?: Maybe<String>;
+  category_ends_with?: Maybe<String>;
+  category_not_ends_with?: Maybe<String>;
+  currentJobId?: Maybe<String>;
+  currentJobId_not?: Maybe<String>;
+  currentJobId_in?: Maybe<String[] | String>;
+  currentJobId_not_in?: Maybe<String[] | String>;
+  currentJobId_lt?: Maybe<String>;
+  currentJobId_lte?: Maybe<String>;
+  currentJobId_gt?: Maybe<String>;
+  currentJobId_gte?: Maybe<String>;
+  currentJobId_contains?: Maybe<String>;
+  currentJobId_not_contains?: Maybe<String>;
+  currentJobId_starts_with?: Maybe<String>;
+  currentJobId_not_starts_with?: Maybe<String>;
+  currentJobId_ends_with?: Maybe<String>;
+  currentJobId_not_ends_with?: Maybe<String>;
+  type?: Maybe<ProjectType>;
+  type_not?: Maybe<ProjectType>;
+  type_in?: Maybe<ProjectType[] | ProjectType>;
+  type_not_in?: Maybe<ProjectType[] | ProjectType>;
+  repeatableClass?: Maybe<Boolean>;
+  repeatableClass_not?: Maybe<Boolean>;
+  imageDimension?: Maybe<String>;
+  imageDimension_not?: Maybe<String>;
+  imageDimension_in?: Maybe<String[] | String>;
+  imageDimension_not_in?: Maybe<String[] | String>;
+  imageDimension_lt?: Maybe<String>;
+  imageDimension_lte?: Maybe<String>;
+  imageDimension_gt?: Maybe<String>;
+  imageDimension_gte?: Maybe<String>;
+  imageDimension_contains?: Maybe<String>;
+  imageDimension_not_contains?: Maybe<String>;
+  imageDimension_starts_with?: Maybe<String>;
+  imageDimension_not_starts_with?: Maybe<String>;
+  imageDimension_ends_with?: Maybe<String>;
+  imageDimension_not_ends_with?: Maybe<String>;
+  AND?: Maybe<ProjectScalarWhereInput[] | ProjectScalarWhereInput>;
+  OR?: Maybe<ProjectScalarWhereInput[] | ProjectScalarWhereInput>;
+  NOT?: Maybe<ProjectScalarWhereInput[] | ProjectScalarWhereInput>;
+}
+
+export interface UserCreateWithoutProjectsInput {
   id?: Maybe<ID_Input>;
   email: String;
   password: String;
   name: String;
-  projects?: Maybe<ProjectCreateManyWithoutCreatorInput>;
+}
+
+export interface ProjectUpsertWithWhereUniqueWithoutCreatorInput {
+  where: ProjectWhereUniqueInput;
+  update: ProjectUpdateWithoutCreatorDataInput;
+  create: ProjectCreateWithoutCreatorInput;
 }
 
 export interface UserUpdateInput {
@@ -211,11 +567,6 @@ export interface UserUpdateInput {
   password?: Maybe<String>;
   name?: Maybe<String>;
   projects?: Maybe<ProjectUpdateManyWithoutCreatorInput>;
-}
-
-export interface UserUpsertWithoutProjectsInput {
-  update: UserUpdateWithoutProjectsDataInput;
-  create: UserCreateWithoutProjectsInput;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -229,51 +580,60 @@ export interface UserSubscriptionWhereInput {
   NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
 }
 
+export interface UserUpdateOneRequiredWithoutProjectsInput {
+  create?: Maybe<UserCreateWithoutProjectsInput>;
+  update?: Maybe<UserUpdateWithoutProjectsDataInput>;
+  upsert?: Maybe<UserUpsertWithoutProjectsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
 export interface UserUpdateManyMutationInput {
   email?: Maybe<String>;
   password?: Maybe<String>;
   name?: Maybe<String>;
 }
 
-export interface ProjectCreateInput {
+export interface ProjectCreateManyWithoutCreatorInput {
+  create?: Maybe<
+    ProjectCreateWithoutCreatorInput[] | ProjectCreateWithoutCreatorInput
+  >;
+  connect?: Maybe<ProjectWhereUniqueInput[] | ProjectWhereUniqueInput>;
+}
+
+export interface ProjectUpdateManyMutationInput {
+  name?: Maybe<String>;
+  description?: Maybe<String>;
+  validation?: Maybe<Int>;
+  bucketUrl?: Maybe<String>;
+  category?: Maybe<String>;
+  currentJobId?: Maybe<String>;
+  type?: Maybe<ProjectType>;
+  repeatableClass?: Maybe<Boolean>;
+  imageDimension?: Maybe<String>;
+}
+
+export interface ProjectCreateWithoutCreatorInput {
   id?: Maybe<ID_Input>;
   name: String;
   description: String;
-  creator: UserCreateOneWithoutProjectsInput;
+  validation: Int;
+  bucketUrl: String;
+  category: String;
+  currentJobId?: Maybe<String>;
+  type?: Maybe<ProjectType>;
+  repeatableClass?: Maybe<Boolean>;
+  imageDimension?: Maybe<String>;
+}
+
+export interface UserUpdateWithoutProjectsDataInput {
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  name?: Maybe<String>;
 }
 
 export interface ProjectUpdateManyWithWhereNestedInput {
   where: ProjectScalarWhereInput;
   data: ProjectUpdateManyDataInput;
-}
-
-export interface UserCreateOneWithoutProjectsInput {
-  create?: Maybe<UserCreateWithoutProjectsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface ProjectUpsertWithWhereUniqueWithoutCreatorInput {
-  where: ProjectWhereUniqueInput;
-  update: ProjectUpdateWithoutCreatorDataInput;
-  create: ProjectCreateWithoutCreatorInput;
-}
-
-export interface UserCreateWithoutProjectsInput {
-  id?: Maybe<ID_Input>;
-  email: String;
-  password: String;
-  name: String;
-}
-
-export interface ProjectUpdateWithoutCreatorDataInput {
-  name?: Maybe<String>;
-  description?: Maybe<String>;
-}
-
-export interface ProjectUpdateInput {
-  name?: Maybe<String>;
-  description?: Maybe<String>;
-  creator?: Maybe<UserUpdateOneRequiredWithoutProjectsInput>;
 }
 
 export interface UserWhereInput {
@@ -341,178 +701,16 @@ export interface UserWhereInput {
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
-export interface ProjectCreateWithoutCreatorInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  description: String;
-}
-
-export interface ProjectUpdateManyDataInput {
+export interface ProjectUpdateWithoutCreatorDataInput {
   name?: Maybe<String>;
   description?: Maybe<String>;
-}
-
-export interface ProjectCreateManyWithoutCreatorInput {
-  create?: Maybe<
-    ProjectCreateWithoutCreatorInput[] | ProjectCreateWithoutCreatorInput
-  >;
-  connect?: Maybe<ProjectWhereUniqueInput[] | ProjectWhereUniqueInput>;
-}
-
-export interface ProjectUpdateManyMutationInput {
-  name?: Maybe<String>;
-  description?: Maybe<String>;
-}
-
-export interface ProjectWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  updatedAt?: Maybe<DateTimeInput>;
-  updatedAt_not?: Maybe<DateTimeInput>;
-  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_lt?: Maybe<DateTimeInput>;
-  updatedAt_lte?: Maybe<DateTimeInput>;
-  updatedAt_gt?: Maybe<DateTimeInput>;
-  updatedAt_gte?: Maybe<DateTimeInput>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  description?: Maybe<String>;
-  description_not?: Maybe<String>;
-  description_in?: Maybe<String[] | String>;
-  description_not_in?: Maybe<String[] | String>;
-  description_lt?: Maybe<String>;
-  description_lte?: Maybe<String>;
-  description_gt?: Maybe<String>;
-  description_gte?: Maybe<String>;
-  description_contains?: Maybe<String>;
-  description_not_contains?: Maybe<String>;
-  description_starts_with?: Maybe<String>;
-  description_not_starts_with?: Maybe<String>;
-  description_ends_with?: Maybe<String>;
-  description_not_ends_with?: Maybe<String>;
-  creator?: Maybe<UserWhereInput>;
-  AND?: Maybe<ProjectWhereInput[] | ProjectWhereInput>;
-  OR?: Maybe<ProjectWhereInput[] | ProjectWhereInput>;
-  NOT?: Maybe<ProjectWhereInput[] | ProjectWhereInput>;
-}
-
-export interface UserUpdateWithoutProjectsDataInput {
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  name?: Maybe<String>;
-}
-
-export interface ProjectScalarWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  updatedAt?: Maybe<DateTimeInput>;
-  updatedAt_not?: Maybe<DateTimeInput>;
-  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_lt?: Maybe<DateTimeInput>;
-  updatedAt_lte?: Maybe<DateTimeInput>;
-  updatedAt_gt?: Maybe<DateTimeInput>;
-  updatedAt_gte?: Maybe<DateTimeInput>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  description?: Maybe<String>;
-  description_not?: Maybe<String>;
-  description_in?: Maybe<String[] | String>;
-  description_not_in?: Maybe<String[] | String>;
-  description_lt?: Maybe<String>;
-  description_lte?: Maybe<String>;
-  description_gt?: Maybe<String>;
-  description_gte?: Maybe<String>;
-  description_contains?: Maybe<String>;
-  description_not_contains?: Maybe<String>;
-  description_starts_with?: Maybe<String>;
-  description_not_starts_with?: Maybe<String>;
-  description_ends_with?: Maybe<String>;
-  description_not_ends_with?: Maybe<String>;
-  AND?: Maybe<ProjectScalarWhereInput[] | ProjectScalarWhereInput>;
-  OR?: Maybe<ProjectScalarWhereInput[] | ProjectScalarWhereInput>;
-  NOT?: Maybe<ProjectScalarWhereInput[] | ProjectScalarWhereInput>;
-}
-
-export interface ProjectSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<ProjectWhereInput>;
-  AND?: Maybe<ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput>;
-  OR?: Maybe<ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput>;
-  NOT?: Maybe<ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput>;
-}
-
-export interface ProjectUpdateWithWhereUniqueWithoutCreatorInput {
-  where: ProjectWhereUniqueInput;
-  data: ProjectUpdateWithoutCreatorDataInput;
+  validation?: Maybe<Int>;
+  bucketUrl?: Maybe<String>;
+  category?: Maybe<String>;
+  currentJobId?: Maybe<String>;
+  type?: Maybe<ProjectType>;
+  repeatableClass?: Maybe<Boolean>;
+  imageDimension?: Maybe<String>;
 }
 
 export type UserWhereUniqueInput = AtLeastOne<{
@@ -549,6 +747,122 @@ export interface UserPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
+export interface ProjectPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name: String;
+  description: String;
+  validation: Int;
+  bucketUrl: String;
+  category: String;
+  currentJobId?: String;
+  type?: ProjectType;
+  repeatableClass?: Boolean;
+  imageDimension?: String;
+}
+
+export interface ProjectPreviousValuesPromise
+  extends Promise<ProjectPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  description: () => Promise<String>;
+  validation: () => Promise<Int>;
+  bucketUrl: () => Promise<String>;
+  category: () => Promise<String>;
+  currentJobId: () => Promise<String>;
+  type: () => Promise<ProjectType>;
+  repeatableClass: () => Promise<Boolean>;
+  imageDimension: () => Promise<String>;
+}
+
+export interface ProjectPreviousValuesSubscription
+  extends Promise<AsyncIterator<ProjectPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  description: () => Promise<AsyncIterator<String>>;
+  validation: () => Promise<AsyncIterator<Int>>;
+  bucketUrl: () => Promise<AsyncIterator<String>>;
+  category: () => Promise<AsyncIterator<String>>;
+  currentJobId: () => Promise<AsyncIterator<String>>;
+  type: () => Promise<AsyncIterator<ProjectType>>;
+  repeatableClass: () => Promise<AsyncIterator<Boolean>>;
+  imageDimension: () => Promise<AsyncIterator<String>>;
+}
+
+export interface Project {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name: String;
+  description: String;
+  validation: Int;
+  bucketUrl: String;
+  category: String;
+  currentJobId?: String;
+  type?: ProjectType;
+  repeatableClass?: Boolean;
+  imageDimension?: String;
+}
+
+export interface ProjectPromise extends Promise<Project>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  description: () => Promise<String>;
+  validation: () => Promise<Int>;
+  bucketUrl: () => Promise<String>;
+  category: () => Promise<String>;
+  currentJobId: () => Promise<String>;
+  type: () => Promise<ProjectType>;
+  repeatableClass: () => Promise<Boolean>;
+  imageDimension: () => Promise<String>;
+  creator: <T = UserPromise>() => T;
+}
+
+export interface ProjectSubscription
+  extends Promise<AsyncIterator<Project>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  description: () => Promise<AsyncIterator<String>>;
+  validation: () => Promise<AsyncIterator<Int>>;
+  bucketUrl: () => Promise<AsyncIterator<String>>;
+  category: () => Promise<AsyncIterator<String>>;
+  currentJobId: () => Promise<AsyncIterator<String>>;
+  type: () => Promise<AsyncIterator<ProjectType>>;
+  repeatableClass: () => Promise<AsyncIterator<Boolean>>;
+  imageDimension: () => Promise<AsyncIterator<String>>;
+  creator: <T = UserSubscription>() => T;
+}
+
+export interface ProjectNullablePromise
+  extends Promise<Project | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  description: () => Promise<String>;
+  validation: () => Promise<Int>;
+  bucketUrl: () => Promise<String>;
+  category: () => Promise<String>;
+  currentJobId: () => Promise<String>;
+  type: () => Promise<ProjectType>;
+  repeatableClass: () => Promise<Boolean>;
+  imageDimension: () => Promise<String>;
+  creator: <T = UserPromise>() => T;
+}
+
 export interface AggregateProject {
   count: Int;
 }
@@ -563,45 +877,6 @@ export interface AggregateProjectSubscription
   extends Promise<AsyncIterator<AggregateProject>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Project {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  name: String;
-  description: String;
-}
-
-export interface ProjectPromise extends Promise<Project>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-  description: () => Promise<String>;
-  creator: <T = UserPromise>() => T;
-}
-
-export interface ProjectSubscription
-  extends Promise<AsyncIterator<Project>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  name: () => Promise<AsyncIterator<String>>;
-  description: () => Promise<AsyncIterator<String>>;
-  creator: <T = UserSubscription>() => T;
-}
-
-export interface ProjectNullablePromise
-  extends Promise<Project | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-  description: () => Promise<String>;
-  creator: <T = UserPromise>() => T;
 }
 
 export interface ProjectEdge {
@@ -678,22 +953,6 @@ export interface UserNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
-}
-
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface ProjectSubscriptionPayload {
@@ -781,21 +1040,20 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface UserEdge {
-  node: User;
-  cursor: String;
+export interface AggregateUser {
+  count: Int;
 }
 
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
     Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface UserSubscriptionPayload {
@@ -823,34 +1081,6 @@ export interface UserSubscriptionPayloadSubscription
   previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
-export interface ProjectPreviousValues {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  name: String;
-  description: String;
-}
-
-export interface ProjectPreviousValuesPromise
-  extends Promise<ProjectPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-  description: () => Promise<String>;
-}
-
-export interface ProjectPreviousValuesSubscription
-  extends Promise<AsyncIterator<ProjectPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  name: () => Promise<AsyncIterator<String>>;
-  description: () => Promise<AsyncIterator<String>>;
-}
-
 export interface UserConnection {
   pageInfo: PageInfo;
   edges: UserEdge[];
@@ -872,23 +1102,40 @@ export interface UserConnectionSubscription
   aggregate: <T = AggregateUserSubscription>() => T;
 }
 
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number;
+
+export type Long = string;
+
 /*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
-
-export type Long = string;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
 export type ID_Input = string | number;
 export type ID_Output = string;
-
-/*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string;
 
 /*
 DateTime scalar input type, allowing Date
@@ -901,9 +1148,9 @@ DateTime scalar output type, which is always a string
 export type DateTimeOutput = string;
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
-export type Int = number;
+export type String = string;
 
 /**
  * Model Metadata
@@ -916,6 +1163,10 @@ export const models: Model[] = [
   },
   {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "ProjectType",
     embedded: false
   }
 ];
