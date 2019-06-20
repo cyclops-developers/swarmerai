@@ -1,0 +1,33 @@
+
+mutation {
+  user1: createUser(data: {
+    email: "taka@laguro.com"
+    name: "Taka"
+    password: "$2b$10$dqyYw5XovLjpmkYNiRDEWuwKaRAvLaG45fnXE5b3KTccKZcRPka2m" # "secret42"
+    projects: {
+      create: {
+        name: "Project number1"
+        description: "This is the project description...."
+      }
+    }
+  }) {
+    id
+  }
+
+  user2: createUser(data: {
+    email: "samito@email.io"
+    name: "Samito"
+    password: "$2b$10$o6KioO.taArzboM44Ig85O3ZFZYZpR3XD7mI8T29eP4znU/.xyJbW"  # "secret43"
+    posts: {
+      create: [{
+        name: "Project number1"
+        description: "This is the project description...."
+      } {
+        name: "Project number1"
+        description: "This is the project description...."
+      }]
+    }
+  }) {
+    id
+  }
+}

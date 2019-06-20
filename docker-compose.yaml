@@ -16,38 +16,30 @@ services:
       - "AWS_SECRET_ACCESS_KEY=MOCK_SECRET_ACCESS_KEY"
       - REDIS_URL=redis://cache
 
-  es:
-    container_name: swamerai_es
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+  prisma:
+    container_name: swamerai_prisma
+    image: prismagraphql/prisma:1.34
+    ports:
+      - '4466:4466'
+    environment:
+      PRISMA_CONFIG: |
+        managementApiSecret: mysecret123
+        port: 4466
+        databases:
+          default:
+            connector: mongo
+            uri: mongodb://prisma:prisma@mongo
+
+  mongo:
+    container_name: swamerai_mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: prisma
+      MONGO_INITDB_ROOT_PASSWORD: prisma
     volumes:
-      - ./data/elasticsearch:/usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
-    environment:
-      - cluster.name=swarmerai-cluster
-      - bootstrap.memory_lock=true
-      - ES_JAVA_OPTS=-Xms64m -Xmx256m
-      - discovery.type=single-node
-      - http.cors.enabled=true
-      - http.cors.allow-origin=*
-      - http.cors.allow-methods=GET
-      - http.cors.allow-headers=Content-Type, Access-Control-Origin
-      - xpack.security.enabled=false
-      - xpack.monitoring.enabled=false
-      - xpack.ml.enabled=false
-      - xpack.graph.enabled=false
-      - xpack.watcher.enabled=false
-  
-  kibana:
-    container_name: swamerai_kibana
-    image: docker.elastic.co/kibana/kibana:7.1.1
-    ports:
-      - "5601:5601"
-    environment:
-      - xpack.security.enabled=false
-      - ELASTICSEARCH_URL=http://es:9200
-    depends_on:
-      - es
+      - ./data/mongo:/var/lib/mongo
 
   redis:
     container_name: swamerai_redis

@@ -24,18 +24,18 @@ help:
 	@echo "   start, stop, build and clean"
 
 start:
-	docker-compose up -d es kibana redis s3
+	docker-compose up -d redis s3 mongo prisma
 	docker ps
 
 stop:
-	docker-compose stop swamerai es kibana redis s3
+	docker-compose stop swamerai redis s3 mongo prisma
 	docker ps
 
 build:
-	docker-compose up -d --build es kibana redis s3
+	docker-compose up -d --build redis s3 mongo prisma
 	docker ps
 
 clean: stop
-	docker-compose rm -f es kibana redis s3 swamerai
+	docker-compose rm -f es redis s3 mongo prisma
 
 

@@ -1,0 +1,32 @@
+type Query {
+  projects: [Project!]!
+  project(id: ID!): Project
+  me: User
+}
+
+type Mutation {
+  signup(email: String!, password: String!, name: String!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+  createProject(name: String!, description: String!): Project!
+  startProject(id: ID!): String!
+  deleteProject(id: ID!): Project!
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  projects: [Project!]!
+}
+
+type Project {
+  id: ID!
+  name: String!
+  description: String!
+  creator: User!
+}
