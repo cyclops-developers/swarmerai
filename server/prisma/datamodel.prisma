@@ -9,9 +9,11 @@ type Project {
   category: String!
   currentJobId: String
   type: ProjectType
-  repeatableClass: Boolean
-  imageDimension: String
-  creator: User! @relation(link: INLINE)
+  repeatable: Boolean
+  question: String
+  classes: [String]
+  width: Int
+  height: Int
 }
 
 type User {
@@ -19,7 +21,6 @@ type User {
   email: String! @unique
   password: String!
   name: String!
-  projects: [Project!]
 }
 
 enum ProjectType{

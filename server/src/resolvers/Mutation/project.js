@@ -1,13 +1,11 @@
 const { getUserId } = require('../../utils')
 
 const project = {
-  async createProject(parent, { name, description }, context) {
-    const userId = getUserId(context)
-    return context.prisma.createProject({
-      name,
-      description,
-      creator: { connect: { id: userId } },
-    })
+  async createProject(parent, input, context) {
+    // const userId = getUserId(context)
+    const data = Object.values(input)[0];
+
+    return context.prisma.createProject(data);
   },
 
   async startProject(parent, { id }, context) {

@@ -7,7 +7,7 @@ type Query {
 type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
-  createProject(name: String!, description: String!): Project!
+  createProject(input: NewProject!): Project!
   startProject(id: ID!): String!
   deleteProject(id: ID!): Project!
 }
@@ -29,4 +29,23 @@ type Project {
   name: String!
   description: String!
   creator: User!
+}
+
+input NewProject {
+  name: String!
+  description: String!
+  validation: Int!
+  bucketUrl: String!
+  category: String!
+  type: ProjectType
+  repeatable: Boolean
+  question: String
+  classes: [String!]
+  width: Int
+  height: Int
+}
+
+enum ProjectType{
+  CLASS
+  BINARY
 }
