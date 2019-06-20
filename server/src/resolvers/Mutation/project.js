@@ -3,7 +3,7 @@ const { getUserId } = require('../../utils')
 const project = {
   async createProject(parent, { name, description }, context) {
     const userId = getUserId(context)
-    return context.prisma.createPost({
+    return context.prisma.createProject({
       name,
       description,
       creator: { connect: { id: userId } },
@@ -14,7 +14,7 @@ const project = {
     const userId = getUserId(context)
     const projectExists = await context.prisma.$exists.project({
       id,
-      author: { id: userId },
+      creator: { id: userId },
     })
     if (!projectExists) {
       throw new Error(`Project not found or you're not the creator`)

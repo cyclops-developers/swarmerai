@@ -4,7 +4,7 @@ type Project {
   updatedAt: DateTime! @updatedAt
   name: String!
   description: String!
-  creator: User!
+  creator: User! @relation(link: INLINE)
 }
 
 type User {
@@ -12,5 +12,5 @@ type User {
   email: String! @unique
   password: String!
   name: String!
-  projects: [Project!]!
+  projects: [Project!]
 }

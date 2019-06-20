@@ -4,7 +4,7 @@ const Query = {
   projects(parent, args, context) {
     const id = getUserId(context)
     const where = {
-      author: {
+      creator: {
         id,
       },
     }
