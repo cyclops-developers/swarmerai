@@ -1,8 +1,8 @@
 import React from 'react'
 import { Select, Input, InputNumber, Radio } from 'antd'
 
-export const BINARY = 'binary'
-export const MULTI_LABEL = 'multi-label'
+export const BINARY = 'BINARY'
+export const MULTI_LABEL = 'CLASS'
 
 const DEFAULT_CATEGORIES_STORAGE_ITEM_NAME = 'defaultCategories'
 const DEFAULT_IMAGE_BUCKETS_STORAGE_ITEM_NAME = 'defaultImageBuckets'
@@ -18,7 +18,7 @@ localStorage.setItem(
   JSON.stringify([
     {
       name: 'us-east-1-125125',
-      url: 'http:bit.ly/laguro-tina',
+      url: 'https://bit.ly/laguro-tina',
     },
     {
       name: 'us-east-1-12512',
@@ -38,7 +38,7 @@ export const defaultCategories = JSON.parse(
   localStorage.getItem(DEFAULT_CATEGORIES_STORAGE_ITEM_NAME),
 )
 
-const defaultImageBuckets = JSON.parse(
+export const defaultImageBuckets = JSON.parse(
   localStorage.getItem(DEFAULT_IMAGE_BUCKETS_STORAGE_ITEM_NAME),
 )
 
@@ -65,7 +65,7 @@ export const FieldInputNumber = ({ field, form, ...props }) => {
 }
 
 export const FieldBucketNameRadioGroup = props => (
-  <Radio.Group {...props}>
+  <Radio.Group {...props.field}>
     {defaultImageBuckets.map(bucket => (
       <Radio style={radioStyle} value={bucket.url}>
         {bucket.name}
@@ -77,7 +77,7 @@ export const FieldBucketNameRadioGroup = props => (
 export const FieldLabelTypeRadioGroup = props => (
   <Radio.Group {...props.field}>
     <Radio style={radioStyle} value={MULTI_LABEL}>
-      Multi-label
+      Multi-class
     </Radio>
     <Radio style={radioStyle} value={BINARY}>
       Binary

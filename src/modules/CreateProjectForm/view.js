@@ -19,21 +19,22 @@ import {
   FieldLabelsSelect,
   MULTI_LABEL,
   defaultCategories,
+  defaultImageBuckets,
 } from '../FieldComponents'
 import { renderFields } from '../RenderField'
 
 const DEFAULT_LABELS_STORAGE_ITEM_NAME = 'defaultLabels'
 
-const CATEGORY_FIELD_NAME = 'category'
-const NAME_FIELD_NAME = 'name'
-const DESCRIPTION_FIELD_NAME = 'description'
-const LABEL_FIELD_NAME = 'default configurations'
-const NUM_VALIDATION_FIELD_NAME = 'number-of-validations'
-const BUCKET_NAME_FIELD_NAME = 'image-bucket-name'
-const LABEL_TYPE_FIELD_NAME = 'Type'
-const IS_LABEL_REPEATABLE_FIELD_NAME = 'is-label-repeatable?'
-const QUESTION_FIELD_NAME = 'question'
-const LABELS_FIELD_NAME = 'labels'
+export const CATEGORY_FIELD_NAME = 'category'
+export const NAME_FIELD_NAME = 'name'
+export const DESCRIPTION_FIELD_NAME = 'description'
+export const LABEL_FIELD_NAME = 'default configurations'
+export const NUM_VALIDATION_FIELD_NAME = 'number-of-validations'
+export const BUCKET_NAME_FIELD_NAME = 'image-bucket-name'
+export const LABEL_TYPE_FIELD_NAME = 'Type'
+export const IS_LABEL_REPEATABLE_FIELD_NAME = 'is-label-repeatable?'
+export const QUESTION_FIELD_NAME = 'question'
+export const LABELS_FIELD_NAME = 'labels'
 
 const OTHER_LABEL = 'other-label'
 
@@ -59,6 +60,7 @@ localStorage.setItem(
       [DESCRIPTION_FIELD_NAME]: 'this is to train tooth numbering model',
       [NAME_FIELD_NAME]: 'Tooth Numbering trial #[enter number here]',
       [CATEGORY_FIELD_NAME]: 'Tooth number detection',
+      [BUCKET_NAME_FIELD_NAME]: 'https://bit.ly/laguro-tina',
     },
   ]),
 )
@@ -141,7 +143,9 @@ const CreateProjectFormViewComponent = props => (
           },
           {
             name: BUCKET_NAME_FIELD_NAME,
-            component: FieldBucketNameRadioGroup,
+            component: _isEmpty(defaultImageBuckets)
+              ? FieldInput
+              : FieldBucketNameRadioGroup,
           },
           {
             name: NUM_VALIDATION_FIELD_NAME,
