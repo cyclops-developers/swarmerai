@@ -11,6 +11,7 @@ import ProjectsPage from './ProjectsPage'
 import LoginPage from './LoginPage'
 import LogoutPage from './LogoutPage'
 import SignupPage from './SignupPage'
+import JobPage from './JobPage'
 import PageNotFound from './PageNotFound'
 import { AUTH_TOKEN } from '../constant'
 import { isTokenExpired } from '../helper/jwtHelper'
@@ -150,6 +151,11 @@ class RootContainer extends Component {
             token={this.state.token}
             path="/create"
             component={CreateProjectForm}
+          />
+          <ProtectedRoute
+            token={this.state.token}
+            path="/"
+            component={JobPage}
           />
           <Route
             token={this.state.token}
