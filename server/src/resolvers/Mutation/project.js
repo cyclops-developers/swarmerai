@@ -3,6 +3,8 @@ const { getUserId } = require('../../utils')
 const project = {
   async createProject(parent, input, context) {
     // const userId = getUserId(context)
+
+    // TODO: Review way to get object properties
     const data = Object.values(input)[0];
 
     return context.prisma.createProject(data);
