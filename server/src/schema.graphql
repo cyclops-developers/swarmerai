@@ -4,7 +4,7 @@ type Query {
   me: User
 
   getCategories: [Category]
-  getActiveJobs: [Jobs!]!
+  getActiveJobs: [Job!]!
   getTask(jobId: String!): Task
 }
 
@@ -66,6 +66,10 @@ input ProjectInput {
 enum ProjectType {
   CLASS
   BINARY
+}
+
+type Category {
+  name: String
 }
 
 type Job {
