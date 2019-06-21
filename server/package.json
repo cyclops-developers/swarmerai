@@ -7,10 +7,7 @@
     "deploy-prisma:local": "prisma deploy -e .env",
     "deploy-prisma-force:local": "prisma deploy -e .env --force"
   },
-  "license": { 
-    "type": "Apache-2.0",
-    "url": "https://opensource.org/licenses/apache2.0.php"
-  },
+  "license": "Apache-2.0",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "graphql-yoga": "^1.18.0",
