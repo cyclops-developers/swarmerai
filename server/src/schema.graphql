@@ -2,14 +2,24 @@ type Query {
   projects: [Project!]!
   project(id: ID!): Project
   me: User
+
+  getCategories: [Category]
+  getActiveJobs: [Jobs!]!
+  getTask(jobId: String!): Task
 }
 
 type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
-  createProject(input: NewProject!): Project!
+  createProject(input: ProjectInput!): Project!
   startProject(id: ID!): String!
   deleteProject(id: ID!): Project!
+
+  saveCategory(category: String!): Boolean
+
+  endJob(id: ID!): Job
+
+  submitTask(input: TaskInput): Task
 }
 
 type AuthPayload {
@@ -29,9 +39,17 @@ type Project {
   name: String!
   description: String!
   creator: User!
+  status: ProjectStatus
 }
 
-input NewProject {
+enum ProjectStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  DELETED
+}
+
+input ProjectInput {
   name: String!
   description: String!
   validation: Int!
@@ -45,7 +63,54 @@ input NewProject {
   height: Int
 }
 
-enum ProjectType{
+enum ProjectType {
   CLASS
   BINARY
+}
+
+type Job {
+  id: String!
+  projectId: String!
+  startDateTime: String!
+  endDateTime: String!
+  fileUrls: [String]
+}
+
+type Task {
+  id: String
+  jobId: String
+  userId: String
+  fileUrl: String
+  type: ProjectType
+  answers: [Answer]
+}
+
+type Answer {
+  id: String
+  class: String
+  vertices: [Vertex]
+}
+
+type Vertex {
+  x: Int
+  y: Int
+}
+
+input TaskInput {
+  id: String
+  jobId: String
+  userId: String
+  fileUrl: String
+  answers: [AnswerInput!]!
+}
+
+input AnswerInput {
+  id: String!
+  class: String!
+  vertices: [VertexInput]
+}
+
+input VertexInput {
+  x: Int
+  y: Int
 }
