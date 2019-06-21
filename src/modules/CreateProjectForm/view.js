@@ -1,141 +1,182 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Field, withFormik, FieldArray } from 'formik'
-import { message, Button, Select } from 'antd'
-import { Box } from '../../components/Box'
+import _isEmpty from 'lodash/isEmpty'
+import _find from 'lodash/find'
+import _capitalize from 'lodash/capitalize'
+import { Form, withFormik } from 'formik'
+import { Button, message, Radio } from 'antd'
 import { Text } from '../../components/Text'
 import { Grid } from '../../components/Grid'
 import { Flex } from '../../components/Flex'
+import {
+  FieldInput,
+  FieldCategorySelect,
+  FieldTextArea,
+  FieldBucketNameRadioGroup,
+  FieldInputNumber,
+  FieldLabelTypeRadioGroup,
+  FieldIsLabelRepeatable,
+  FieldLabelsSelect,
+  MULTI_LABEL,
+  defaultCategories,
+  defaultImageBuckets,
+} from '../FieldComponents'
+import { renderFields } from '../RenderField'
+
+const DEFAULT_LABELS_STORAGE_ITEM_NAME = 'defaultLabels'
+
+export const CATEGORY_FIELD_NAME = 'category'
+export const NAME_FIELD_NAME = 'name'
+export const DESCRIPTION_FIELD_NAME = 'description'
+export const LABEL_FIELD_NAME = 'default configurations'
+export const NUM_VALIDATION_FIELD_NAME = 'number-of-validations'
+export const BUCKET_NAME_FIELD_NAME = 'image-bucket-name'
+export const LABEL_TYPE_FIELD_NAME = 'Type'
+export const IS_LABEL_REPEATABLE_FIELD_NAME = 'is-label-repeatable?'
+export const QUESTION_FIELD_NAME = 'question'
+export const LABELS_FIELD_NAME = 'labels'
+
+const OTHER_LABEL = 'other-label'
+
+const LABEL_NAME = 'label-name'
+
+const radioStyle = {
+  display: 'block',
+  height: '30px',
+  lineHeight: '30px',
+}
+
+// remove later
+localStorage.setItem(
+  DEFAULT_LABELS_STORAGE_ITEM_NAME,
+  JSON.stringify([
+    {
+      [LABEL_NAME]: 'Tooth number',
+      [LABEL_TYPE_FIELD_NAME]: MULTI_LABEL,
+      [IS_LABEL_REPEATABLE_FIELD_NAME]: false,
+      [QUESTION_FIELD_NAME]: 'Please outline a tooth and select tooth number.',
+      [LABELS_FIELD_NAME]: ['1', '2', '3', '4'],
+      [NUM_VALIDATION_FIELD_NAME]: 3,
+      [DESCRIPTION_FIELD_NAME]: 'this is to train tooth numbering model',
+      [NAME_FIELD_NAME]: 'Tooth Numbering trial #[enter number here]',
+      [CATEGORY_FIELD_NAME]: 'Tooth number detection',
+      [BUCKET_NAME_FIELD_NAME]: 'https://bit.ly/laguro-tina',
+    },
+  ]),
+)
+// remove above
+
+const DEFAULT_LABELS = JSON.parse(
+  localStorage.getItem(DEFAULT_LABELS_STORAGE_ITEM_NAME),
+)
+
+const FieldLabelNameRadioGroup = props => (
+  <Radio.Group
+    {...props.field}
+    onChange={e => {
+      props.form.setFieldValue(LABEL_FIELD_NAME, e.target.value)
+      const label = _find(DEFAULT_LABELS, [LABEL_NAME, e.target.value])
+
+      if (label) {
+        Object.keys(label)
+          .filter(key => key !== LABEL_NAME)
+          .map(fieldName =>
+            props.form.setFieldValue(fieldName, label[fieldName]),
+          )
+      } else {
+        ;[
+          LABEL_TYPE_FIELD_NAME,
+          IS_LABEL_REPEATABLE_FIELD_NAME,
+          QUESTION_FIELD_NAME,
+          LABELS_FIELD_NAME,
+          NUM_VALIDATION_FIELD_NAME,
+          DESCRIPTION_FIELD_NAME,
+          NAME_FIELD_NAME,
+          CATEGORY_FIELD_NAME,
+        ].map(fieldName => props.form.setFieldValue(fieldName, undefined))
+      }
+    }}
+  >
+    {DEFAULT_LABELS.map(label => (
+      <Radio style={radioStyle} value={label[LABEL_NAME]}>
+        {getFieldNameText(label[LABEL_NAME])}
+      </Radio>
+    ))}
+    <Radio style={radioStyle} value={OTHER_LABEL}>
+      Create my own
+    </Radio>
+  </Radio.Group>
+)
+
+const getFieldNameText = fieldName => _capitalize(fieldName.replace(/-/g, ' '))
+
+const getFieldValue = ({ props, fieldName }) => {
+  return props.values[fieldName]
+}
 
 const CreateProjectFormViewComponent = props => (
   <Form>
-    <FieldArray
-      name="availabilityList"
-      render={arrayHelpers => (
-        <div>
-          {props.values.availabilityList.map((availability, index) => (
-            <Box key={index} mb={100}>
-              <Text fontSize={30} color="#000000">
-                hello, is this working?
-              </Text>
-              {availability.isOpen ? (
-                <Fragment>
-                  <Field
-                    name={`availabilityList.${index}.selectedLocations`}
-                    placeholder="Selected Locations"
-                    component={props => <Select />}
-                  />
-                  <Box mb={15}>
-                    <Text
-                      fontSize={1}
-                      fontWeight="500"
-                      letterSpacing="-0.4px"
-                      color="text.black"
-                      mb="10px"
-                    >
-                      Repeat on
-                    </Text>
-                  </Box>
-                  <Grid
-                    gridTemplateColumns={['100%', '', `64px 150px 64px 150px`]}
-                  >
-                    <Text
-                      fontSize={1}
-                      fontWeight="500"
-                      letterSpacing="-0.4px"
-                      color="text.black"
-                      mt={[0, '', 20]}
-                      mb={10}
-                    >
-                      From
-                    </Text>
+    <Text fontWeight="700" fontSize={24} mb={20}>
+      Create new project
+    </Text>
+    <Grid gridTemplateColumns={'auto auto auto'}>
+      {renderFields({
+        fields: [
+          {
+            onlyVisibleIf: !_isEmpty(DEFAULT_LABELS),
+            name: LABEL_FIELD_NAME,
+            component: FieldLabelNameRadioGroup,
+          },
+          {
+            name: CATEGORY_FIELD_NAME,
+            component: _isEmpty(defaultCategories)
+              ? FieldInput
+              : FieldCategorySelect,
+          },
+          {
+            name: NAME_FIELD_NAME,
+            component: FieldInput,
+          },
+          {
+            name: DESCRIPTION_FIELD_NAME,
+            component: FieldTextArea,
+          },
+          {
+            name: BUCKET_NAME_FIELD_NAME,
+            component: _isEmpty(defaultImageBuckets)
+              ? FieldInput
+              : FieldBucketNameRadioGroup,
+          },
+          {
+            name: NUM_VALIDATION_FIELD_NAME,
+            component: FieldInputNumber,
+          },
 
-                    <Text
-                      fontSize={1}
-                      fontWeight="500"
-                      letterSpacing="-0.4px"
-                      color="text.black"
-                      mt={[0, '', 20]}
-                      textAlign={['left', '', 'center']}
-                      mb={10}
-                    >
-                      to
-                    </Text>
-                  </Grid>
-                </Fragment>
-              ) : (
-                <Button
-                  type="ghost"
-                  height="auto"
-                  onClick={() => {
-                    props.values.availabilityList.forEach(
-                      (availability, index2) => {
-                        if (index === index2) {
-                          props.setFieldValue(
-                            `availabilityList.${index2}.isOpen`,
-                            true,
-                          )
-                        } else {
-                          props.setFieldValue(
-                            `availabilityList.${index2}.isOpen`,
-                            false,
-                          )
-                        }
-                      },
-                    )
-                  }}
-                >
-                  <Box textAlign="left">
-                    {props.values.availabilityList[index].selectedLocations && (
-                      <Text
-                        fontSize={3}
-                        color="text.blue"
-                        fontWeight="500"
-                        mb="7px"
-                      ></Text>
-                    )}
-                  </Box>
-                </Button>
-              )}
-            </Box>
-          ))}
-
-          <Button type="ghost" mt={16} ml={30}>
-            <Flex
-              height="22px"
-              onClick={() => {
-                props.values.availabilityList.forEach((availability, index) => {
-                  props.setFieldValue(`availabilityList.${index}.isOpen`, false)
-                })
-
-                // arrayHelpers.push({
-                //   startTime: moment()
-                //     .startOf('hour')
-                //     .hour(8),
-                //   endTime: moment()
-                //     .startOf('hour')
-                //     .hour(15),
-                //   range: [
-                //     moment()
-                //       .startOf('day')
-                //       .add(1, 'day'),
-                //     null,
-                //   ],
-                //   selectedLocations: '',
-                //   isOpen: true,
-                //   days: {},
-                // })
-              }}
-              alignItems="center"
-            >
-              <Text fontSize={[1, '', 3]} letterSpacing="-0.5px">
-                Add another availability
-              </Text>
-            </Flex>
-          </Button>
-        </div>
-      )}
-    />
+          {
+            name: QUESTION_FIELD_NAME,
+            component: FieldInput,
+          },
+          {
+            name: LABEL_TYPE_FIELD_NAME,
+            component: FieldLabelTypeRadioGroup,
+            gridColumn: '1/2',
+          },
+          {
+            name: IS_LABEL_REPEATABLE_FIELD_NAME,
+            component: FieldIsLabelRepeatable,
+            onlyVisibleIf:
+              getFieldValue({ props, fieldName: LABEL_TYPE_FIELD_NAME }) ===
+              MULTI_LABEL,
+            gridColumn: '2/3',
+          },
+          {
+            name: LABELS_FIELD_NAME,
+            component: FieldLabelsSelect,
+          },
+        ],
+        getFieldNameTextFromFieldName: getFieldNameText,
+      })}
+    </Grid>
 
     <Flex width="100%" justifyContent="center" mt={28}>
       <Button
@@ -164,11 +205,11 @@ export const CreateProjectFormView = withFormik({
     return { ...data }
   },
   handleSubmit: async (values, actions) => {
-    const result = await actions.props.onSuccess(values)
+    const result = await actions.props.onSubmit(values)
     actions.setSubmitting(false)
 
     if (result) {
-      message.success('Availability settings successfully updated!')
+      message.success('Project successfully created!')
     }
   },
 })(CreateProjectFormViewComponent)

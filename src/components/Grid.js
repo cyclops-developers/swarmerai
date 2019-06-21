@@ -6,18 +6,19 @@ const Grid = system(
     is: Box,
     display: 'grid',
   },
-  // Use these instead
   'gridTemplateColumns',
   'gridTemplateRows',
   'gridColumnGap',
   'gridRowGap',
   'gridGap',
-  //
   'space',
   'position',
   'alignItems',
   'justifyItems',
   'width',
 )
+
+const GridItem = system('gridColumn', 'gridRow')
+Grid.Item = GridItem
 
 export { Grid }
