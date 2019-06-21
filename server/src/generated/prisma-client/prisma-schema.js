@@ -57,7 +57,16 @@ type Project {
   updatedAt: DateTime!
   name: String!
   description: String!
-  creator: User!
+  validation: Int!
+  bucketUrl: String!
+  category: String!
+  currentJobId: String
+  type: ProjectType
+  repeatable: Boolean
+  question: String
+  classes: [String!]!
+  width: Int
+  height: Int
 }
 
 type ProjectConnection {
@@ -66,22 +75,24 @@ type ProjectConnection {
   aggregate: AggregateProject!
 }
 
+input ProjectCreateclassesInput {
+  set: [String!]
+}
+
 input ProjectCreateInput {
   id: ID
   name: String!
   description: String!
-  creator: UserCreateOneWithoutProjectsInput!
-}
-
-input ProjectCreateManyWithoutCreatorInput {
-  create: [ProjectCreateWithoutCreatorInput!]
-  connect: [ProjectWhereUniqueInput!]
-}
-
-input ProjectCreateWithoutCreatorInput {
-  id: ID
-  name: String!
-  description: String!
+  validation: Int!
+  bucketUrl: String!
+  category: String!
+  currentJobId: String
+  type: ProjectType
+  repeatable: Boolean
+  question: String
+  classes: ProjectCreateclassesInput
+  width: Int
+  height: Int
 }
 
 type ProjectEdge {
@@ -100,6 +111,24 @@ enum ProjectOrderByInput {
   name_DESC
   description_ASC
   description_DESC
+  validation_ASC
+  validation_DESC
+  bucketUrl_ASC
+  bucketUrl_DESC
+  category_ASC
+  category_DESC
+  currentJobId_ASC
+  currentJobId_DESC
+  type_ASC
+  type_DESC
+  repeatable_ASC
+  repeatable_DESC
+  question_ASC
+  question_DESC
+  width_ASC
+  width_DESC
+  height_ASC
+  height_DESC
 }
 
 type ProjectPreviousValues {
@@ -108,70 +137,16 @@ type ProjectPreviousValues {
   updatedAt: DateTime!
   name: String!
   description: String!
-}
-
-input ProjectScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  description: String
-  description_not: String
-  description_in: [String!]
-  description_not_in: [String!]
-  description_lt: String
-  description_lte: String
-  description_gt: String
-  description_gte: String
-  description_contains: String
-  description_not_contains: String
-  description_starts_with: String
-  description_not_starts_with: String
-  description_ends_with: String
-  description_not_ends_with: String
-  AND: [ProjectScalarWhereInput!]
-  OR: [ProjectScalarWhereInput!]
-  NOT: [ProjectScalarWhereInput!]
+  validation: Int!
+  bucketUrl: String!
+  category: String!
+  currentJobId: String
+  type: ProjectType
+  repeatable: Boolean
+  question: String
+  classes: [String!]!
+  width: Int
+  height: Int
 }
 
 type ProjectSubscriptionPayload {
@@ -192,53 +167,43 @@ input ProjectSubscriptionWhereInput {
   NOT: [ProjectSubscriptionWhereInput!]
 }
 
+enum ProjectType {
+  CLASS
+  BINARY
+}
+
+input ProjectUpdateclassesInput {
+  set: [String!]
+}
+
 input ProjectUpdateInput {
   name: String
   description: String
-  creator: UserUpdateOneRequiredWithoutProjectsInput
-}
-
-input ProjectUpdateManyDataInput {
-  name: String
-  description: String
+  validation: Int
+  bucketUrl: String
+  category: String
+  currentJobId: String
+  type: ProjectType
+  repeatable: Boolean
+  question: String
+  classes: ProjectUpdateclassesInput
+  width: Int
+  height: Int
 }
 
 input ProjectUpdateManyMutationInput {
   name: String
   description: String
-}
-
-input ProjectUpdateManyWithoutCreatorInput {
-  create: [ProjectCreateWithoutCreatorInput!]
-  delete: [ProjectWhereUniqueInput!]
-  connect: [ProjectWhereUniqueInput!]
-  set: [ProjectWhereUniqueInput!]
-  disconnect: [ProjectWhereUniqueInput!]
-  update: [ProjectUpdateWithWhereUniqueWithoutCreatorInput!]
-  upsert: [ProjectUpsertWithWhereUniqueWithoutCreatorInput!]
-  deleteMany: [ProjectScalarWhereInput!]
-  updateMany: [ProjectUpdateManyWithWhereNestedInput!]
-}
-
-input ProjectUpdateManyWithWhereNestedInput {
-  where: ProjectScalarWhereInput!
-  data: ProjectUpdateManyDataInput!
-}
-
-input ProjectUpdateWithoutCreatorDataInput {
-  name: String
-  description: String
-}
-
-input ProjectUpdateWithWhereUniqueWithoutCreatorInput {
-  where: ProjectWhereUniqueInput!
-  data: ProjectUpdateWithoutCreatorDataInput!
-}
-
-input ProjectUpsertWithWhereUniqueWithoutCreatorInput {
-  where: ProjectWhereUniqueInput!
-  update: ProjectUpdateWithoutCreatorDataInput!
-  create: ProjectCreateWithoutCreatorInput!
+  validation: Int
+  bucketUrl: String
+  category: String
+  currentJobId: String
+  type: ProjectType
+  repeatable: Boolean
+  question: String
+  classes: ProjectUpdateclassesInput
+  width: Int
+  height: Int
 }
 
 input ProjectWhereInput {
@@ -300,7 +265,92 @@ input ProjectWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
-  creator: UserWhereInput
+  validation: Int
+  validation_not: Int
+  validation_in: [Int!]
+  validation_not_in: [Int!]
+  validation_lt: Int
+  validation_lte: Int
+  validation_gt: Int
+  validation_gte: Int
+  bucketUrl: String
+  bucketUrl_not: String
+  bucketUrl_in: [String!]
+  bucketUrl_not_in: [String!]
+  bucketUrl_lt: String
+  bucketUrl_lte: String
+  bucketUrl_gt: String
+  bucketUrl_gte: String
+  bucketUrl_contains: String
+  bucketUrl_not_contains: String
+  bucketUrl_starts_with: String
+  bucketUrl_not_starts_with: String
+  bucketUrl_ends_with: String
+  bucketUrl_not_ends_with: String
+  category: String
+  category_not: String
+  category_in: [String!]
+  category_not_in: [String!]
+  category_lt: String
+  category_lte: String
+  category_gt: String
+  category_gte: String
+  category_contains: String
+  category_not_contains: String
+  category_starts_with: String
+  category_not_starts_with: String
+  category_ends_with: String
+  category_not_ends_with: String
+  currentJobId: String
+  currentJobId_not: String
+  currentJobId_in: [String!]
+  currentJobId_not_in: [String!]
+  currentJobId_lt: String
+  currentJobId_lte: String
+  currentJobId_gt: String
+  currentJobId_gte: String
+  currentJobId_contains: String
+  currentJobId_not_contains: String
+  currentJobId_starts_with: String
+  currentJobId_not_starts_with: String
+  currentJobId_ends_with: String
+  currentJobId_not_ends_with: String
+  type: ProjectType
+  type_not: ProjectType
+  type_in: [ProjectType!]
+  type_not_in: [ProjectType!]
+  repeatable: Boolean
+  repeatable_not: Boolean
+  question: String
+  question_not: String
+  question_in: [String!]
+  question_not_in: [String!]
+  question_lt: String
+  question_lte: String
+  question_gt: String
+  question_gte: String
+  question_contains: String
+  question_not_contains: String
+  question_starts_with: String
+  question_not_starts_with: String
+  question_ends_with: String
+  question_not_ends_with: String
+  width: Int
+  width_not: Int
+  width_in: [Int!]
+  width_not_in: [Int!]
+  width_lt: Int
+  width_lte: Int
+  width_gt: Int
+  width_gte: Int
+  height: Int
+  height_not: Int
+  height_in: [Int!]
+  height_not_in: [Int!]
+  height_lt: Int
+  height_lte: Int
+  height_gt: Int
+  height_gte: Int
   AND: [ProjectWhereInput!]
   OR: [ProjectWhereInput!]
   NOT: [ProjectWhereInput!]
@@ -330,7 +380,6 @@ type User {
   email: String!
   password: String!
   name: String!
-  projects(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project!]
 }
 
 type UserConnection {
@@ -340,19 +389,6 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  id: ID
-  email: String!
-  password: String!
-  name: String!
-  projects: ProjectCreateManyWithoutCreatorInput
-}
-
-input UserCreateOneWithoutProjectsInput {
-  create: UserCreateWithoutProjectsInput
-  connect: UserWhereUniqueInput
-}
-
-input UserCreateWithoutProjectsInput {
   id: ID
   email: String!
   password: String!
@@ -404,31 +440,12 @@ input UserUpdateInput {
   email: String
   password: String
   name: String
-  projects: ProjectUpdateManyWithoutCreatorInput
 }
 
 input UserUpdateManyMutationInput {
   email: String
   password: String
   name: String
-}
-
-input UserUpdateOneRequiredWithoutProjectsInput {
-  create: UserCreateWithoutProjectsInput
-  update: UserUpdateWithoutProjectsDataInput
-  upsert: UserUpsertWithoutProjectsInput
-  connect: UserWhereUniqueInput
-}
-
-input UserUpdateWithoutProjectsDataInput {
-  email: String
-  password: String
-  name: String
-}
-
-input UserUpsertWithoutProjectsInput {
-  update: UserUpdateWithoutProjectsDataInput!
-  create: UserCreateWithoutProjectsInput!
 }
 
 input UserWhereInput {
@@ -488,9 +505,6 @@ input UserWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  projects_every: ProjectWhereInput
-  projects_some: ProjectWhereInput
-  projects_none: ProjectWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

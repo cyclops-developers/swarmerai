@@ -4,7 +4,16 @@ type Project {
   updatedAt: DateTime! @updatedAt
   name: String!
   description: String!
-  creator: User! @relation(link: INLINE)
+  validation: Int!
+  bucketUrl: String!
+  category: String!
+  currentJobId: String
+  type: ProjectType
+  repeatable: Boolean
+  question: String
+  classes: [String]
+  width: Int
+  height: Int
 }
 
 type User {
@@ -12,5 +21,9 @@ type User {
   email: String! @unique
   password: String!
   name: String!
-  projects: [Project!]
+}
+
+enum ProjectType{
+  CLASS
+  BINARY
 }
