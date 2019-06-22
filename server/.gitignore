@@ -25,6 +25,3 @@ yarn-error.log*
 
 #Docker environment
 /data
-
-#Prisma generated data
-/src/generated/*

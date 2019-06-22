@@ -5,7 +5,11 @@ const project = {
     // const userId = getUserId(context)
 
     // TODO: Review way to get object properties
-    const data = Object.values(input)[0];
+    let data = Object.values(input)[0];
+
+    if (data.classes) {
+      data.classes = { set: data.classes };
+    }
 
     return context.prisma.createProject(data);
   },

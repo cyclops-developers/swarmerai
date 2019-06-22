@@ -38,6 +38,15 @@ type Project {
   id: ID!
   name: String!
   description: String!
+  validation: Int!
+  bucketUrl: String!
+  category: String!
+  type: ProjectType!
+  repeatable: Boolean
+  question: String
+  classes: [String!]
+  width: Int
+  height: Int
   creator: User!
   status: ProjectStatus
 }
@@ -55,7 +64,7 @@ input ProjectInput {
   validation: Int!
   bucketUrl: String!
   category: String!
-  type: ProjectType
+  type: ProjectType!
   repeatable: Boolean
   question: String
   classes: [String!]
