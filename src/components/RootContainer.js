@@ -19,6 +19,7 @@ import { graphql } from 'react-apollo'
 import { gql } from 'apollo-boost'
 import { CreateProjectForm } from '../modules/CreateProjectForm'
 import 'antd/dist/antd.css'
+import ProjectPage from '../pages/ProjectPage'
 
 const ProtectedRoute = ({ component: Component, token, ...rest }) => {
   return token ? (
@@ -135,6 +136,11 @@ class RootContainer extends Component {
             token={this.state.token}
             path="/projects"
             component={ProjectsPage}
+          />
+          <ProtectedRoute
+            token={this.state.token}
+            path="/project/:id"
+            component={ProjectPage}
           />
           <ProtectedRoute
             token={this.state.token}

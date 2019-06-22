@@ -16,7 +16,6 @@ import {
   LABELS_FIELD_NAME,
 } from './view'
 import { Box } from '../../components/Box'
-import { BINARY } from '../FieldComponents'
 
 const Composed = adopt({
   [CREATE_PROJECT_ENDPOINT_NAME]: ({ render }) => (
@@ -39,10 +38,6 @@ class CreateProjectForm extends PureComponent {
       <Composed>
         {props => {
           const handleSubmit = async values => {
-            // eslint-disable-next-line
-            debugger
-            console.log('1232', props)
-
             const imageDimensions = await getImageDimensions(
               values[BUCKET_NAME_FIELD_NAME],
             )

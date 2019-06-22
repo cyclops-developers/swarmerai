@@ -95,6 +95,7 @@ const FieldLabelNameRadioGroup = props => (
           CATEGORY_FIELD_NAME,
         ].map(fieldName => props.form.setFieldValue(fieldName, undefined))
       }
+      return null
     }}
   >
     {DEFAULT_LABELS.map(label => (

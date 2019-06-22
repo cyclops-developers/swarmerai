@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react'
-import { ProjectsTable } from '../modules/Projects'
 
-class ProjectsPage extends Component {
+class ProjectPage extends Component {
   // componentWillReceiveProps(nextProps) {
   //   if (this.props.location.key !== nextProps.location.key) {
   //     this.props.projectsQuery.refetch()
@@ -9,12 +8,8 @@ class ProjectsPage extends Component {
   // }
 
   render() {
-    return (
-      <Fragment>
-        <ProjectsTable />
-      </Fragment>
-    )
+    return <Fragment></Fragment>
   }
 }
 
-export default ProjectsPage
+export default ProjectPage
