@@ -5,7 +5,7 @@ type Query {
 
   getCategories: [Category]
   getActiveJobs: [Job!]!
-  getTask(jobId: String!): Task
+  getNextTask(jobId: String!): Task
 }
 
 type Mutation {
@@ -16,6 +16,7 @@ type Mutation {
   deleteProject(id: ID!): Project!
 
   saveCategory(category: String!): Category
+  deleteCategory(id: String!): Boolean
 
   endJob(id: ID!): Job
 
@@ -73,7 +74,7 @@ input ProjectInput {
 }
 
 enum ProjectType {
-  CLASS
+  MULTI_CLASS
   BINARY
 }
 
