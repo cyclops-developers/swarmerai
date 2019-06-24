@@ -1,4 +1,4 @@
-const { getUserId } = require('../../utils')
+const { getUserId } = require('../../utils');
 
 const project = {
   async createProject(parent, input, context) {

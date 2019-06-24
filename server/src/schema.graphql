@@ -15,7 +15,7 @@ type Mutation {
   startProject(id: ID!): String!
   deleteProject(id: ID!): Project!
 
-  saveCategory(category: String!): Boolean
+  saveCategory(category: String!): Category
 
   endJob(id: ID!): Job
 
@@ -78,7 +78,8 @@ enum ProjectType {
 }
 
 type Category {
-  name: String
+  id: ID!
+  name: String!
 }
 
 type Job {
