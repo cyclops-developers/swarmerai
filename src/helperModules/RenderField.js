@@ -7,8 +7,8 @@ import { Text } from '../components/Text'
 
 const renderField = ({ name, component, gridColumn, getFieldNameText }) => (
   <Grid.Item gridColumn={gridColumn || '1/-1'}>
-    <Box mb={15}>
-      <Text fontSize={14} fontWeight="700">
+    <Box mb={22}>
+      <Text fontSize={14} mb={5} fontWeight="700">
         {getFieldNameText(name)}
       </Text>
       <Field name={name} component={component} />

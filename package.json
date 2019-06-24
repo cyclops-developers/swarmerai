@@ -26,6 +26,7 @@
     "formik": "^1.5.7",
     "graphql": "^14.3.1",
     "graphql-tag": "^2.10.1",
+    "is-image-url": "^1.1.8",
     "konva": "^3.3.3",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",

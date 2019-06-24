@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react'
 import { adopt } from 'react-adopt'
 import { Mutation } from 'react-apollo'
 import _get from 'lodash/get'
+import isImageUrl from 'is-image-url'
 import { CREATE_PROJECT_ENDPOINT_NAME, createProjectMutation } from './queries'
 import {
-  CreateProjectFormView,
   NAME_FIELD_NAME,
   NUM_VALIDATION_FIELD_NAME,
   BUCKET_NAME_FIELD_NAME,
@@ -14,8 +14,10 @@ import {
   QUESTION_FIELD_NAME,
   IS_LABEL_REPEATABLE_FIELD_NAME,
   LABELS_FIELD_NAME,
-} from './view'
+} from '../ProjectForm'
 import { Box } from '../../components/Box'
+import { ProjectForm } from '../ProjectForm'
+import { H2 } from '../../helperModules/Texts'
 
 const Composed = adopt({
   [CREATE_PROJECT_ENDPOINT_NAME]: ({ render }) => (
@@ -32,15 +34,18 @@ const getImageDimensions = src => {
   })
 }
 
-class CreateProjectForm extends PureComponent {
+class CreateProject extends PureComponent {
   render() {
     return (
       <Composed>
         {props => {
           const handleSubmit = async values => {
-            const imageDimensions = await getImageDimensions(
-              values[BUCKET_NAME_FIELD_NAME],
-            )
+            const imageUrl = values[BUCKET_NAME_FIELD_NAME]
+            console.log('1232submit', imageUrl)
+
+            console.log('1232isImage')
+            const imageDimensions = await getImageDimensions(imageUrl)
+
             _get(props, `${CREATE_PROJECT_ENDPOINT_NAME}`)({
               variables: {
                 input: {
@@ -62,7 +67,8 @@ class CreateProjectForm extends PureComponent {
 
           return (
             <Box>
-              <CreateProjectFormView data={{}} onSubmit={handleSubmit} />
+              <H2>Create new project</H2>
+              <ProjectForm data={{}} onSubmit={handleSubmit} />
             </Box>
           )
         }}
@@ -71,4 +77,4 @@ class CreateProjectForm extends PureComponent {
   }
 }
 
-export { CreateProjectForm }
+export { CreateProject }

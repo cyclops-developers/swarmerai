@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { graphql } from 'react-apollo'
-import  { gql } from 'apollo-boost'
+import { gql } from 'apollo-boost'
 import { AUTH_TOKEN } from '../constant'
 
 class SignupPage extends Component {
@@ -12,6 +12,7 @@ class SignupPage extends Component {
   }
 
   render() {
+    console.log('1232signupPage')
     return (
       <div className="pa4 flex justify-center bg-white">
         <form onSubmit={this._signup}>

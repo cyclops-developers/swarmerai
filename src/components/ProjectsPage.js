@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { ProjectsTable } from '../modules/Projects'
+import { ProjectsTable } from '../modules/ProjectsTable'
 
 class ProjectsPage extends Component {
   // componentWillReceiveProps(nextProps) {

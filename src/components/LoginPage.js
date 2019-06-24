@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { graphql } from 'react-apollo'
-import  { gql } from 'apollo-boost'
+import { gql } from 'apollo-boost'
 import { AUTH_TOKEN } from '../constant'
 
 class LoginPage extends Component {
@@ -33,15 +33,14 @@ class LoginPage extends Component {
             onChange={e => this.setState({ password: e.target.value })}
             value={this.state.password}
           />
-          {this.state.email &&
-            this.state.password && (
-              <button
-                className="pa3 bg-black-10 bn dim ttu pointer"
-                onClick={this._login}
-              >
-                Log in
-              </button>
-            )}
+          {this.state.email && this.state.password && (
+            <button
+              className="pa3 bg-black-10 bn dim ttu pointer"
+              onClick={this._login}
+            >
+              Log in
+            </button>
+          )}
         </div>
       </div>
     )
@@ -58,6 +57,8 @@ class LoginPage extends Component {
       })
       .then(result => {
         const token = result.data.login.token
+
+        localStorage.setItem('user', JSON.stringify(result.data.login.user))
 
         this.props.refreshTokenFn &&
           this.props.refreshTokenFn({
