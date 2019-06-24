@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Select, Input, InputNumber, Radio } from 'antd'
+import { Box } from '../components/Box'
 
 export const BINARY = 'BINARY'
 export const MULTI_LABEL = 'CLASS'
@@ -65,13 +66,18 @@ export const FieldInputNumber = ({ field, form, ...props }) => {
 }
 
 export const FieldBucketNameRadioGroup = props => (
-  <Radio.Group {...props.field}>
-    {defaultImageBuckets.map(bucket => (
-      <Radio style={radioStyle} value={bucket.url}>
-        {bucket.name}
-      </Radio>
-    ))}
-  </Radio.Group>
+  <Fragment>
+    <Box>
+      <Input style={{ width: 300 }} {...props.field}></Input>
+    </Box>
+    <Radio.Group {...props.field}>
+      {defaultImageBuckets.map(bucket => (
+        <Radio style={radioStyle} value={bucket.url}>
+          {bucket.name}
+        </Radio>
+      ))}
+    </Radio.Group>
+  </Fragment>
 )
 
 export const FieldLabelTypeRadioGroup = props => (
@@ -107,14 +113,17 @@ export const FieldLabelsSelect = ({ field, form, ...props }) => (
   />
 )
 
-export const FieldCategorySelect = ({ field, form, ...props }) => (
-  <Select
-    {...field}
-    {...props}
-    onChange={value => form.setFieldValue(field.name, value)}
-  >
-    {defaultCategories.map(category => (
-      <Select.Option value={category}>{category}</Select.Option>
-    ))}
-  </Select>
+export const FieldCategoryRadioGroup = ({ field, form, ...props }) => (
+  <Fragment>
+    <Box>
+      <Input style={{ width: 300 }} {...field}></Input>
+    </Box>
+    <Radio.Group {...field}>
+      {defaultCategories.map(category => (
+        <Radio style={radioStyle} value={category}>
+          {category}
+        </Radio>
+      ))}
+    </Radio.Group>
+  </Fragment>
 )

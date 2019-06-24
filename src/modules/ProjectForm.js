@@ -1,16 +1,13 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 import _find from 'lodash/find'
 import _capitalize from 'lodash/capitalize'
 import { Form, withFormik } from 'formik'
 import { Button, message, Radio } from 'antd'
-import { Text } from '../../components/Text'
-import { Grid } from '../../components/Grid'
-import { Flex } from '../../components/Flex'
+import { Grid } from '../components/Grid'
+import { Flex } from '../components/Flex'
 import {
   FieldInput,
-  FieldCategorySelect,
   FieldTextArea,
   FieldBucketNameRadioGroup,
   FieldInputNumber,
@@ -20,8 +17,9 @@ import {
   MULTI_LABEL,
   defaultCategories,
   defaultImageBuckets,
-} from '../FieldComponents'
-import { renderFields } from '../RenderField'
+  FieldCategoryRadioGroup,
+} from '../helperModules/FieldComponents'
+import { renderFields } from '../helperModules/RenderField'
 
 const DEFAULT_LABELS_STORAGE_ITEM_NAME = 'defaultLabels'
 
@@ -30,13 +28,11 @@ export const NAME_FIELD_NAME = 'name'
 export const DESCRIPTION_FIELD_NAME = 'description'
 export const LABEL_FIELD_NAME = 'default configurations'
 export const NUM_VALIDATION_FIELD_NAME = 'number-of-validations'
-export const BUCKET_NAME_FIELD_NAME = 'image-bucket-name'
+export const BUCKET_NAME_FIELD_NAME = 'image-bucket-url'
 export const LABEL_TYPE_FIELD_NAME = 'Type'
 export const IS_LABEL_REPEATABLE_FIELD_NAME = 'is-label-repeatable?'
 export const QUESTION_FIELD_NAME = 'question'
 export const LABELS_FIELD_NAME = 'labels'
-
-const OTHER_LABEL = 'other-label'
 
 const LABEL_NAME = 'label-name'
 
@@ -93,8 +89,10 @@ const FieldLabelNameRadioGroup = props => (
           DESCRIPTION_FIELD_NAME,
           NAME_FIELD_NAME,
           CATEGORY_FIELD_NAME,
+          BUCKET_NAME_FIELD_NAME,
         ].map(fieldName => props.form.setFieldValue(fieldName, undefined))
       }
+      return null
     }}
   >
     {DEFAULT_LABELS.map(label => (
@@ -102,9 +100,6 @@ const FieldLabelNameRadioGroup = props => (
         {getFieldNameText(label[LABEL_NAME])}
       </Radio>
     ))}
-    <Radio style={radioStyle} value={OTHER_LABEL}>
-      Create my own
-    </Radio>
   </Radio.Group>
 )
 
@@ -114,11 +109,8 @@ const getFieldValue = ({ props, fieldName }) => {
   return props.values[fieldName]
 }
 
-const CreateProjectFormViewComponent = props => (
+const ProjectFormComponent = props => (
   <Form>
-    <Text fontWeight="700" fontSize={24} mb={20}>
-      Create new project
-    </Text>
     <Grid gridTemplateColumns={'auto auto auto'}>
       {renderFields({
         fields: [
@@ -131,7 +123,7 @@ const CreateProjectFormViewComponent = props => (
             name: CATEGORY_FIELD_NAME,
             component: _isEmpty(defaultCategories)
               ? FieldInput
-              : FieldCategorySelect,
+              : FieldCategoryRadioGroup,
           },
           {
             name: NAME_FIELD_NAME,
@@ -191,15 +183,7 @@ const CreateProjectFormViewComponent = props => (
   </Form>
 )
 
-CreateProjectFormViewComponent.defaultProps = {
-  onSuccess: async () => {},
-}
-
-CreateProjectFormViewComponent.propTypes = {
-  onSuccess: PropTypes.func.isRequired,
-}
-
-export const CreateProjectFormView = withFormik({
+export const ProjectForm = withFormik({
   mapPropsToValues: props => {
     const { data } = props
     return { ...data }
@@ -212,4 +196,4 @@ export const CreateProjectFormView = withFormik({
       message.success('Project successfully created!')
     }
   },
-})(CreateProjectFormViewComponent)
+})(ProjectFormComponent)

@@ -1,15 +1,14 @@
 import React, { Component, Fragment } from 'react'
 import {
-  NavLink,
   Link,
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect,
 } from 'react-router-dom'
+import { ThemeProvider } from 'styled-components'
 import ProjectsPage from './ProjectsPage'
 import LoginPage from './LoginPage'
-import LogoutPage from './LogoutPage'
 import SignupPage from './SignupPage'
 import JobPage from './JobPage'
 import PageNotFound from './PageNotFound'
@@ -17,8 +16,12 @@ import { AUTH_TOKEN } from '../constant'
 import { isTokenExpired } from '../helper/jwtHelper'
 import { graphql } from 'react-apollo'
 import { gql } from 'apollo-boost'
-import { CreateProjectForm } from '../modules/CreateProjectForm'
+import { CreateProject } from '../modules/CreateProject'
 import 'antd/dist/antd.css'
+import ProjectPage from '../pages/ProjectPage'
+import theme from '../theme'
+import Header from '../modules/Header'
+import { Container } from './Container'
 
 const ProtectedRoute = ({ component: Component, token, ...rest }) => {
   return token ? (
@@ -78,7 +81,7 @@ class RootContainer extends Component {
     return (
       <Router>
         <Fragment>
-          {this.renderNavBar()}
+          {/* {this.renderNavBar()} */}
           {this.renderRoute()}
         </Fragment>
       </Router>
@@ -88,20 +91,6 @@ class RootContainer extends Component {
   renderNavBar() {
     return (
       <nav className="pa3 pa4-ns">
-        {this.props.data &&
-          this.props.data.me &&
-          this.props.data.me.email &&
-          this.state.token && (
-            <NavLink
-              className="link dim f6 f5-ns dib mr3 black"
-              activeClassName="gray"
-              exact={true}
-              to="/projects"
-              title="Projects"
-            >
-              Projects
-            </NavLink>
-          )}
         {this.state.token ? (
           <div
             onClick={() => {
@@ -129,38 +118,59 @@ class RootContainer extends Component {
 
   renderRoute() {
     return (
-      <div className="fl w-100 pl4 pr4">
-        <Switch>
-          <ProtectedRoute
-            token={this.state.token}
-            path="/projects"
-            component={ProjectsPage}
-          />
-          <ProtectedRoute
-            token={this.state.token}
-            path="/create"
-            component={CreateProjectForm}
-          />
-          <ProtectedRoute
-            token={this.state.token}
-            path="/"
-            component={JobPage}
-          />
-          <Route
-            token={this.state.token}
-            path="/login"
-            render={props => <LoginPage refreshTokenFn={this.refreshTokenFn} />}
-          />
-          <Route
-            token={this.state.token}
-            path="/signup"
-            render={props => (
-              <SignupPage refreshTokenFn={this.refreshTokenFn} />
-            )}
-          />
-          <Route path="/logout" component={LogoutPage} />
-          <Route component={PageNotFound} />
-        </Switch>
+      <div className="fl w-100">
+        <ThemeProvider theme={theme}>
+          <div>
+            <Header
+              mb={30}
+              token={this.state.token}
+              refreshTokenFn={this.refreshTokenFn}
+            />
+            <Container>
+              <Switch>
+                <Route
+                  token={this.state.token}
+                  path={['/login', '/']}
+                  render={props => (
+                    <LoginPage
+                      refreshTokenFn={this.refreshTokenFn}
+                      {...props}
+                    />
+                  )}
+                  exact
+                />
+                <ProtectedRoute
+                  token={this.state.token}
+                  path="/projects"
+                  component={ProjectsPage}
+                />
+                <ProtectedRoute
+                  token={this.state.token}
+                  path="/project/:id"
+                  component={ProjectPage}
+                />
+                <ProtectedRoute
+                  token={this.state.token}
+                  path="/create"
+                  component={CreateProject}
+                />
+                <ProtectedRoute
+                  token={this.state.token}
+                  path="/jobs"
+                  component={JobPage}
+                />
+                <Route
+                  token={this.state.token}
+                  path="/signup"
+                  render={props => (
+                    <SignupPage refreshTokenFn={this.refreshTokenFn} />
+                  )}
+                />
+                <Route component={PageNotFound} />
+              </Switch>
+            </Container>
+          </div>
+        </ThemeProvider>
       </div>
     )
   }

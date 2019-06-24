@@ -19,5 +19,5 @@ class AuthError extends Error {
 
 module.exports = {
   getUserId,
-  AuthError
+  AuthError,
 }
