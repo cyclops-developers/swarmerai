@@ -2,10 +2,13 @@ const { getUserId } = require('../../utils');
 
 const project = {
   async createProject(parent, input, context) {
-    // const userId = getUserId(context)
-
     // TODO: Review way to get object properties
     let data = Object.values(input)[0];
+    
+    // Add user
+    const userId = getUserId(context);
+    const creator = { connect: { id: userId } };
+    data.creator = creator;
 
     if (data.classes) {
       data.classes = { set: data.classes };

@@ -16,7 +16,7 @@ type Mutation {
   deleteProject(id: ID!): Project!
 
   saveCategory(category: String!): Category
-  deleteCategory(id: String!): Boolean
+  deleteCategory(id: String!): Category
 
   endJob(id: ID!): Job
 

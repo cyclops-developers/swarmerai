@@ -9,6 +9,7 @@ type Project {
   id: ID! @id
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+  creator: User! @relation(link: INLINE)
   name: String!
   description: String!
   validation: Int!
