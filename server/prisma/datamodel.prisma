@@ -37,15 +37,16 @@ type Job {
   projectId: String!
   startDateTime: String!
   endDateTime: String!
-  fileUrls: [String]
+  fileIds: [String]
 }
 
 type Task {
   id: ID! @id
   jobId: String
   userId: String
-  fileUrl: String
+  fileId: String
   type: ProjectType
+  labels: Json
 }
 
 enum ProjectType {
