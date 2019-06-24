@@ -26,6 +26,7 @@ help:
 start:
 	docker-compose up -d redis s3 mongo prisma
 	docker ps
+	make start-app
 
 stop:
 	docker-compose stop swamerai redis s3 mongo prisma
@@ -34,8 +35,23 @@ stop:
 build:
 	docker-compose up -d --build redis s3 mongo prisma
 	docker ps
+	make build-app
+	make build-prisma
 
 clean: stop
 	docker-compose rm -f es redis s3 mongo prisma
 
+build-app:
+	yarn install
+	cd server && yarn install
 
+build-prisma:
+	cd server/prisma && PRISMA_MANAGEMENT_API_SECRET=mysecret123 prisma deploy
+
+start-app: start-app-server start-app-client
+
+start-app-server:
+	cd server && yarn start &
+
+start-app-client:
+	yarn start
