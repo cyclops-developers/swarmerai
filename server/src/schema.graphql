@@ -95,12 +95,12 @@ type Task {
   id: String
   jobId: String
   userId: String
-  fileUrl: String
+  fileId: String
   type: ProjectType
-  answers: [Answer]
+  labels: [Label]
 }
 
-type Answer {
+type Label {
   id: String
   class: String
   vertices: [Vertex]
@@ -113,13 +113,12 @@ type Vertex {
 
 input TaskInput {
   jobId: String
-  userId: String
-  fileUrl: String
+  fileId: String
   type: ProjectType
-  answers: [AnswerInput]
+  labels: [LabelInput]
 }
 
-input AnswerInput {
+input LabelInput {
   id: String!
   class: String!
   vertices: [VertexInput]
