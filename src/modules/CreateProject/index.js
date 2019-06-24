@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react'
 import { adopt } from 'react-adopt'
 import { Mutation } from 'react-apollo'
 import _get from 'lodash/get'
-import isImageUrl from 'is-image-url'
 import { CREATE_PROJECT_ENDPOINT_NAME, createProjectMutation } from './queries'
 import {
   NAME_FIELD_NAME,
@@ -41,9 +40,6 @@ class CreateProject extends PureComponent {
         {props => {
           const handleSubmit = async values => {
             const imageUrl = values[BUCKET_NAME_FIELD_NAME]
-            console.log('1232submit', imageUrl)
-
-            console.log('1232isImage')
             const imageDimensions = await getImageDimensions(imageUrl)
 
             _get(props, `${CREATE_PROJECT_ENDPOINT_NAME}`)({

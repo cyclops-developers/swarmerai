@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useCallback } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import _get from 'lodash/get'
 import UserMenu from './UserMenu'

@@ -6,7 +6,7 @@ import {
 } from '../../util/projectUtils'
 import { InternalLink } from '../../util/linkUtils'
 import { PROJECT_DETAILS_PAGE_PREFIX } from '../../strings/urlStrings'
-import { getUserName, USER_NAME_FIELD_NAME } from '../../util/userUtils'
+import { getUserName } from '../../util/userUtils'
 import { Table } from 'antd'
 import {
   getIdFromGqlObject,

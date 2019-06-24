@@ -12,7 +12,6 @@ class SignupPage extends Component {
   }
 
   render() {
-    console.log('1232signupPage')
     return (
       <div className="pa4 flex justify-center bg-white">
         <form onSubmit={this._signup}>

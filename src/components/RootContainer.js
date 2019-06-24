@@ -130,10 +130,14 @@ class RootContainer extends Component {
               <Switch>
                 <Route
                   token={this.state.token}
-                  path="/login"
+                  path={['/login', '/']}
                   render={props => (
-                    <LoginPage refreshTokenFn={this.refreshTokenFn} />
+                    <LoginPage
+                      refreshTokenFn={this.refreshTokenFn}
+                      {...props}
+                    />
                   )}
+                  exact
                 />
                 <ProtectedRoute
                   token={this.state.token}
@@ -152,7 +156,7 @@ class RootContainer extends Component {
                 />
                 <ProtectedRoute
                   token={this.state.token}
-                  path="/"
+                  path="/jobs"
                   component={JobPage}
                 />
                 <Route

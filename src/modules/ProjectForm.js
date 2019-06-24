@@ -34,8 +34,6 @@ export const IS_LABEL_REPEATABLE_FIELD_NAME = 'is-label-repeatable?'
 export const QUESTION_FIELD_NAME = 'question'
 export const LABELS_FIELD_NAME = 'labels'
 
-const OTHER_LABEL = 'other-label'
-
 const LABEL_NAME = 'label-name'
 
 const radioStyle = {

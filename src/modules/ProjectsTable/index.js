@@ -4,7 +4,7 @@ import { adopt } from 'react-adopt'
 import { GET_PROJECTS_ENDPOINT_NAME, GET_PROJECTS_QUERY } from './queries'
 import { Query } from 'react-apollo'
 import moment from 'moment'
-import { getDataFromReactAdoptProps } from '../../util/gqlUtils'
+// import { getDataFromReactAdoptProps } from '../../util/gqlUtils'
 
 const Composed = adopt({
   [GET_PROJECTS_ENDPOINT_NAME]: ({ render }) => (
