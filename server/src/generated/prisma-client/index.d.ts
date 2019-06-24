@@ -335,7 +335,7 @@ export type UserOrderByInput =
   | "name_ASC"
   | "name_DESC";
 
-export type ProjectType = "CLASS" | "BINARY";
+export type ProjectType = "MULTI_CLASS" | "BINARY";
 
 export type CategoryWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;

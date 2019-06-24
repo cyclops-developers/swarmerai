@@ -483,7 +483,7 @@ input ProjectSubscriptionWhereInput {
 }
 
 enum ProjectType {
-  CLASS
+  MULTI_CLASS
   BINARY
 }
 
