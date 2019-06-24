@@ -10,6 +10,16 @@ const category = {
         }
 
       },
+      async deleteCategory(parent, input, context) {
+          try {
+              return context.prisma.deleteCategory({id: input.id});
+          }
+          catch (err) {
+              console.log(err);
+              return null;
+          }
+  
+        },
 
 }
 
