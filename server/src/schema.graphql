@@ -111,11 +111,11 @@ type Vertex {
 }
 
 input TaskInput {
-  id: String
   jobId: String
   userId: String
   fileUrl: String
-  answers: [AnswerInput!]!
+  type: ProjectType
+  answers: [AnswerInput]
 }
 
 input AnswerInput {
