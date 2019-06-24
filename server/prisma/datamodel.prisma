@@ -1,3 +1,10 @@
+type User {
+  id: ID! @id
+  email: String! @unique
+  password: String!
+  name: String!
+}
+
 type Project {
   id: ID! @id
   createdAt: DateTime! @createdAt
@@ -7,23 +14,47 @@ type Project {
   validation: Int!
   bucketUrl: String!
   category: String!
-  currentJobId: String
   type: ProjectType
-  repeatable: Boolean
+  repeatable: Boolean! @default(value: false)
   question: String
   classes: [String]
   width: Int
   height: Int
+  status: ProjectStatus @default(value: PENDING)
+  currentJobId: String
 }
 
-type User {
+type Category {
   id: ID! @id
-  email: String! @unique
-  password: String!
-  name: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  name: String
 }
 
-enum ProjectType{
-  CLASS
+type Job {
+  id: ID! @id
+  projectId: String!
+  startDateTime: String!
+  endDateTime: String!
+  fileUrls: [String]
+}
+
+type Task {
+  id: ID! @id
+  jobId: String
+  userId: String
+  fileUrl: String
+  type: ProjectType
+}
+
+enum ProjectType {
+  MULTI_CLASS
   BINARY
+}
+
+enum ProjectStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  DELETED
 }

@@ -5,7 +5,7 @@ type Query {
 
   getCategories: [Category]
   getActiveJobs: [Job!]!
-  getTask(jobId: String!): Task
+  getNextTask(jobId: String!): Task
 }
 
 type Mutation {
@@ -15,7 +15,8 @@ type Mutation {
   startProject(id: ID!): String!
   deleteProject(id: ID!): Project!
 
-  saveCategory(category: String!): Boolean
+  saveCategory(category: String!): Category
+  deleteCategory(id: String!): Boolean
 
   endJob(id: ID!): Job
 
@@ -38,6 +39,15 @@ type Project {
   id: ID!
   name: String!
   description: String!
+  validation: Int!
+  bucketUrl: String!
+  category: String!
+  type: ProjectType!
+  repeatable: Boolean
+  question: String
+  classes: [String!]
+  width: Int
+  height: Int
   creator: User!
   status: ProjectStatus
 }
@@ -55,7 +65,7 @@ input ProjectInput {
   validation: Int!
   bucketUrl: String!
   category: String!
-  type: ProjectType
+  type: ProjectType!
   repeatable: Boolean
   question: String
   classes: [String!]
@@ -64,12 +74,13 @@ input ProjectInput {
 }
 
 enum ProjectType {
-  CLASS
+  MULTI_CLASS
   BINARY
 }
 
 type Category {
-  name: String
+  id: ID!
+  name: String!
 }
 
 type Job {
@@ -101,11 +112,11 @@ type Vertex {
 }
 
 input TaskInput {
-  id: String
   jobId: String
   userId: String
   fileUrl: String
-  answers: [AnswerInput!]!
+  type: ProjectType
+  answers: [AnswerInput]
 }
 
 input AnswerInput {

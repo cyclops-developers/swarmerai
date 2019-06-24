@@ -18,7 +18,7 @@ mutation {
     email: "samito@email.io"
     name: "Samito"
     password: "$2b$10$o6KioO.taArzboM44Ig85O3ZFZYZpR3XD7mI8T29eP4znU/.xyJbW"  # "secret43"
-    posts: {
+    projects: {
       create: [{
         name: "Project number1"
         description: "This is the project description...."

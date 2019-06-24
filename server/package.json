@@ -1,5 +1,6 @@
 {
   "name": "swarmerai-graphql-server",
+  "version": "0.1.0",
   "scripts": {
     "start": "nodemon -e js,graphql -x node -r dotenv/config src/index.js",
     "debug": "nodemon -e js,graphql -x node --inspect -r dotenv/config src/index.js",
@@ -7,10 +8,7 @@
     "deploy-prisma:local": "prisma deploy -e .env",
     "deploy-prisma-force:local": "prisma deploy -e .env --force"
   },
-  "license": { 
-    "type": "Apache-2.0",
-    "url": "https://opensource.org/licenses/apache2.0.php"
-  },
+  "license": "Apache-2.0",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "graphql-yoga": "^1.18.0",
