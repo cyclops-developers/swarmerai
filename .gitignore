@@ -22,7 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-package-lock.yml
+package-lock.json
 .vscode
 
 #Docker environment
