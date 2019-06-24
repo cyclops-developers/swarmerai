@@ -11,6 +11,8 @@ export const GET_PROJECTS_QUERY = gql`
       creator {
         name
       }
+      category
+      createdAt
     }
   }
 `

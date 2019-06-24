@@ -2,7 +2,7 @@ import system from 'system-components'
 
 const Text = system(
   {
-    fontFamily: `'Silka', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`,
+    fontFamily: `Avenir-Book`,
     color: 'text.black',
   },
   // core

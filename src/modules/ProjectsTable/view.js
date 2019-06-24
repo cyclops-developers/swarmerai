@@ -3,17 +3,19 @@ import {
   PROJECT_NAME_FIELD_NAME,
   PROJECT_CREATOR_FIELD_NAME,
   PROJECT_CATEGORY_FIELD_NAME,
+  Project,
 } from '../../util/projectUtils'
-import { InternalLink } from '../../util/linkUtils'
-import { PROJECT_DETAILS_PAGE_PREFIX } from '../../strings/urlStrings'
 import { getUserName } from '../../util/userUtils'
-import { Table } from 'antd'
+import { Table, Button, Popconfirm } from 'antd'
 import {
   getIdFromGqlObject,
   GQL_OBJECT_DATE_CREATED_FIELD_NAME,
 } from '../../util/gqlObjectUtils'
 import { moment } from '../../util/libraryUtils'
 import { _uniqBy } from '../../util/lodashUtils'
+import { Box } from '../../components/Box'
+import { Text } from '../../components/Text'
+import { Flex } from '../../components/Flex'
 
 const getUniqFilters = filters => _uniqBy(filters, 'text')
 const getSorter = fieldName => (a, b) =>
@@ -28,17 +30,19 @@ const getFilters = ({ projects, fieldName }) =>
 const getUniqFiltersFromProjects = ({ projects, fieldName }) =>
   getUniqFilters(getFilters({ projects, fieldName }))
 
-export const ProjectsTableView = ({ projects }) => {
+export const ProjectsTableView = ({ projects, ...props }) => {
   const columns = [
     {
       title: 'Project name',
       dataIndex: PROJECT_NAME_FIELD_NAME,
       render: (projectName, project) => (
-        <InternalLink
-          to={`${PROJECT_DETAILS_PAGE_PREFIX}/${getIdFromGqlObject(project)}`}
+        <Box
+          onClick={() =>
+            props.handleProjectNameClick(getIdFromGqlObject(project))
+          }
         >
-          {projectName}
-        </InternalLink>
+          <Text color="cornflowerblue">{projectName}</Text>
+        </Box>
       ),
       filters: getUniqFiltersFromProjects({
         projects,
@@ -94,6 +98,28 @@ export const ProjectsTableView = ({ projects }) => {
       ),
       onFilter: (value, record) =>
         getUserName(record[PROJECT_CREATOR_FIELD_NAME]).indexOf(value) === 0,
+    },
+    {
+      title: 'Actions',
+      dataIndex: '',
+      render: (_, proj) => {
+        const project = new Project(proj)
+        return (
+          <Flex>
+            <Box mr={8}>
+              <Button>Duplicate</Button>
+            </Box>
+            <Popconfirm
+              title="Are you sure you want to delete this project?"
+              onConfirm={() => props.handleDeleteProject(project.getId())}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button>Delete</Button>
+            </Popconfirm>
+          </Flex>
+        )
+      },
     },
   ]
   return <Table pagination={false} columns={columns} dataSource={projects} />

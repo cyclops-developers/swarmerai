@@ -1,4 +1,4 @@
-version: "3.5"
+version: '3.5'
 
 services:
   swamerai:
@@ -10,10 +10,10 @@ services:
     ports:
       - 3000:3000
     environment:
-      - "NODE_ENV=development"
-      - "AWS_REGION=localhost"
-      - "AWS_ACCESS_KEY_ID=MOCK_ACCESS_KEY_ID"
-      - "AWS_SECRET_ACCESS_KEY=MOCK_SECRET_ACCESS_KEY"
+      - 'NODE_ENV=development'
+      - 'AWS_REGION=localhost'
+      - 'AWS_ACCESS_KEY_ID=MOCK_ACCESS_KEY_ID'
+      - 'AWS_SECRET_ACCESS_KEY=MOCK_SECRET_ACCESS_KEY'
       - REDIS_URL=redis://cache
 
   prisma:
@@ -34,7 +34,7 @@ services:
     container_name: swamerai_mongo
     image: mongo
     ports:
-      - "27017:27017"
+      - '27017:27017'
     environment:
       MONGO_INITDB_ROOT_USERNAME: prisma
       MONGO_INITDB_ROOT_PASSWORD: prisma
@@ -45,7 +45,7 @@ services:
     container_name: swamerai_redis
     image: redis
     ports:
-      - "6379:6379"
+      - '6379:6379'
 
   s3:
     image: localstack/localstack:latest

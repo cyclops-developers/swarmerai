@@ -3,7 +3,7 @@ import { Select, Input, InputNumber, Radio } from 'antd'
 import { Box } from '../components/Box'
 
 export const BINARY = 'BINARY'
-export const MULTI_LABEL = 'CLASS'
+export const MULTI_LABEL = 'MULTI_CLASS'
 
 const DEFAULT_CATEGORIES_STORAGE_ITEM_NAME = 'defaultCategories'
 const DEFAULT_IMAGE_BUCKETS_STORAGE_ITEM_NAME = 'defaultImageBuckets'
@@ -111,19 +111,4 @@ export const FieldLabelsSelect = ({ field, form, ...props }) => (
     {...props}
     onChange={value => form.setFieldValue(field.name, value)}
   />
-)
-
-export const FieldCategoryRadioGroup = ({ field, form, ...props }) => (
-  <Fragment>
-    <Box>
-      <Input style={{ width: 300 }} {...field}></Input>
-    </Box>
-    <Radio.Group {...field}>
-      {defaultCategories.map(category => (
-        <Radio style={radioStyle} value={category}>
-          {category}
-        </Radio>
-      ))}
-    </Radio.Group>
-  </Fragment>
 )
