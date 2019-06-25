@@ -10,7 +10,7 @@ import { ThemeProvider } from 'styled-components'
 import ProjectsPage from './ProjectsPage'
 import LoginPage from './LoginPage'
 import SignupPage from './SignupPage'
-import JobPage from './JobPage'
+import TaskPage from './TaskPage'
 import PageNotFound from './PageNotFound'
 import { AUTH_TOKEN } from '../constant'
 import { isTokenExpired } from '../helper/jwtHelper'
@@ -156,8 +156,8 @@ class RootContainer extends Component {
                 />
                 <ProtectedRoute
                   token={this.state.token}
-                  path="/jobs"
-                  component={JobPage}
+                  path="/task"
+                  component={TaskPage}
                 />
                 <Route
                   token={this.state.token}

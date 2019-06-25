@@ -96,7 +96,8 @@ class Canvas extends Component {
       const vertices = []
       const linePoints = []
       const startPoint = {}
-      const { selected } = annotations[id]
+
+      const { className } = annotations[id]
       const { closed } = annotations[id]
       annotations[id].vertices.forEach((v, i) => {
         const length = dotLength
@@ -175,11 +176,7 @@ class Canvas extends Component {
               name={name}
               padding={5}
               fontFamily="Calibri"
-              text={
-                selected.length > 0
-                  ? `${selected[selected.length - 1].value}`
-                  : 'Not selected'
-              }
+              text={className || 'Not selected'}
               fontSize={16}
               lineHeight={1.2}
               fill="#fff"
