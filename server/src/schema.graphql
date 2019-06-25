@@ -50,7 +50,7 @@ type Project {
   height: Int
   creator: User!
   status: ProjectStatus
-  currentJobId: String
+  currentJob: Job
 }
 
 enum ProjectStatus {
