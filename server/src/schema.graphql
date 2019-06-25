@@ -37,6 +37,8 @@ type User {
 
 type Project {
   id: ID!
+  createdAt: String
+  updatedAt: String
   name: String!
   description: String!
   validation: Int!
@@ -81,18 +83,22 @@ enum ProjectType {
 type Category {
   id: ID!
   name: String!
+  createdAt: String
+  updatedAt: String
 }
 
 type Job {
   id: String!
   projectId: String!
-  startDateTime: String!
-  endDateTime: String!
+  startDateTime: String
+  endDateTime: String
   fileUrls: [String]
 }
 
 type Task {
   id: String
+  createdAt: String
+  updatedAt: String
   jobId: String
   userId: String
   fileId: String
