@@ -51,9 +51,10 @@ type Job {
 
 type Task {
   id: ID! @id
-  jobId: String
-  userId: String
-  fileId: String
+  jobId: String!
+  userId: String!
+  fileId: String!
+  jobIdAndFileId: String!
   type: ProjectType
   labels: Json
 }

@@ -3,10 +3,11 @@ import { getQueue } from '../queue'
 
 const removeTaskFromQueue = async (queue, taskId) => {
   const task = await queue.getJob(taskId)
+
   if (!task) {
     return
   }
-
+  // TODO handle error
   return task.remove()
 }
 
@@ -32,22 +33,29 @@ export const getNextTask = async jobId => {
   return data
 }
 
-export const submitTask = async ({ jobId, userId, fileId, answers }) => {
-  await prisma.createTask({ jobId, userId, fileId, answers })
+export const submitTask = async ({ jobId, userId, fileId, type, labels }) => {
+  // taskId refers to the queue tasks and not the completed task with labels
+  const taskId = getTaskId(jobId, fileId)
+
+  const taskAnswer = await prisma.createTask({
+    jobId,
+    userId,
+    type,
+    fileId,
+    labels,
+    jobIdAndFileId: taskId,
+  })
 
   const queue = getQueue(jobId)
-  // TODO implement method
-  // const job = await prisma.job({ id: jobId })
-  // const { validations } = job
-  //
-  // const tasks = await prisma.tasks({ where: { fileId } })
-  // removeTaskFromQueue(queue, getTaskId(jobId, fileId))
-  //
-  // console.log(project)
-  // console.log(tasks)
-  // if (tasks.length > validations) {
-  //   removeTaskFromQueue(queue, getTaskId(jobId, fileId))
-  // }
 
-  return null
+  const job = await prisma.job({ id: jobId })
+  const { validation } = job
+
+  const tasks = await prisma.tasks({ where: { jobIdAndFileId: taskId } })
+
+  if (tasks.length >= validation) {
+    removeTaskFromQueue(queue, getTaskId(jobId, fileId))
+  }
+
+  return taskAnswer
 }
