@@ -7,8 +7,10 @@ const removeTaskFromQueue = async (queue, taskId) => {
   if (!task) {
     return
   }
-  // TODO handle error
-  return task.remove()
+
+  await task.moveToCompleted('succeeded', true, true)
+
+  return null
 }
 
 export const getTaskId = (jobId, fileId) => `${jobId}.${fileId}`
@@ -16,15 +18,32 @@ export const getTaskId = (jobId, fileId) => `${jobId}.${fileId}`
 export const getNextTask = async jobId => {
   const queue = getQueue(jobId)
 
-  const job = await queue.getNextJob()
-  if (!job) {
+  let count = await queue.getWaitingCount()
+
+  if (count === 0) {
     return null
+  }
+
+  let job = await queue.getNextJob()
+
+  // hacky implementation until I can get timeout or removal to work
+  for (let i = 0; i < count; i += 1) {
+    const { data } = job
+    if (Object.keys(data).length !== 0) {
+      break
+    }
+    job = await queue.getNextJob()
   }
 
   const { data, id } = job
 
+  if (Object.keys(data).length === 0) {
+    return null
+  }
+
   // dequeue the job and then add it back to the queue at last position
   await job.moveToCompleted('succeeded', true, true)
+
   await queue.add(id, data, {
     jobId: id,
     removeOnComplete: true,
@@ -54,7 +73,7 @@ export const submitTask = async ({ jobId, userId, fileId, type, labels }) => {
   const tasks = await prisma.tasks({ where: { jobIdAndFileId: taskId } })
 
   if (tasks.length >= validation) {
-    removeTaskFromQueue(queue, getTaskId(jobId, fileId))
+    await removeTaskFromQueue(queue, taskId)
   }
 
   return taskAnswer
