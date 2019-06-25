@@ -8,7 +8,11 @@ const removeTaskFromQueue = async (queue, taskId) => {
     return
   }
 
-  await task.moveToCompleted('succeeded', true, true)
+  try {
+    await task.remove()
+  } catch (err) {
+    await task.moveToCompleted('succeeded', true, true)
+  }
 
   return null
 }
