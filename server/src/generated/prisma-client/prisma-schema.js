@@ -155,7 +155,7 @@ type Job {
   projectId: String!
   startDateTime: String!
   endDateTime: String!
-  fileUrls: [String!]!
+  fileIds: [String!]!
 }
 
 type JobConnection {
@@ -164,7 +164,7 @@ type JobConnection {
   aggregate: AggregateJob!
 }
 
-input JobCreatefileUrlsInput {
+input JobCreatefileIdsInput {
   set: [String!]
 }
 
@@ -173,7 +173,7 @@ input JobCreateInput {
   projectId: String!
   startDateTime: String!
   endDateTime: String!
-  fileUrls: JobCreatefileUrlsInput
+  fileIds: JobCreatefileIdsInput
 }
 
 type JobEdge {
@@ -197,7 +197,7 @@ type JobPreviousValues {
   projectId: String!
   startDateTime: String!
   endDateTime: String!
-  fileUrls: [String!]!
+  fileIds: [String!]!
 }
 
 type JobSubscriptionPayload {
@@ -218,7 +218,7 @@ input JobSubscriptionWhereInput {
   NOT: [JobSubscriptionWhereInput!]
 }
 
-input JobUpdatefileUrlsInput {
+input JobUpdatefileIdsInput {
   set: [String!]
 }
 
@@ -226,14 +226,14 @@ input JobUpdateInput {
   projectId: String
   startDateTime: String
   endDateTime: String
-  fileUrls: JobUpdatefileUrlsInput
+  fileIds: JobUpdatefileIdsInput
 }
 
 input JobUpdateManyMutationInput {
   projectId: String
   startDateTime: String
   endDateTime: String
-  fileUrls: JobUpdatefileUrlsInput
+  fileIds: JobUpdatefileIdsInput
 }
 
 input JobWhereInput {
@@ -301,6 +301,8 @@ input JobWhereInput {
 input JobWhereUniqueInput {
   id: ID
 }
+
+scalar Json
 
 scalar Long
 
@@ -716,8 +718,9 @@ type Task {
   id: ID!
   jobId: String
   userId: String
-  fileUrl: String
+  fileId: String
   type: ProjectType
+  labels: Json
 }
 
 type TaskConnection {
@@ -730,8 +733,9 @@ input TaskCreateInput {
   id: ID
   jobId: String
   userId: String
-  fileUrl: String
+  fileId: String
   type: ProjectType
+  labels: Json
 }
 
 type TaskEdge {
@@ -746,18 +750,21 @@ enum TaskOrderByInput {
   jobId_DESC
   userId_ASC
   userId_DESC
-  fileUrl_ASC
-  fileUrl_DESC
+  fileId_ASC
+  fileId_DESC
   type_ASC
   type_DESC
+  labels_ASC
+  labels_DESC
 }
 
 type TaskPreviousValues {
   id: ID!
   jobId: String
   userId: String
-  fileUrl: String
+  fileId: String
   type: ProjectType
+  labels: Json
 }
 
 type TaskSubscriptionPayload {
@@ -781,15 +788,17 @@ input TaskSubscriptionWhereInput {
 input TaskUpdateInput {
   jobId: String
   userId: String
-  fileUrl: String
+  fileId: String
   type: ProjectType
+  labels: Json
 }
 
 input TaskUpdateManyMutationInput {
   jobId: String
   userId: String
-  fileUrl: String
+  fileId: String
   type: ProjectType
+  labels: Json
 }
 
 input TaskWhereInput {
@@ -835,20 +844,20 @@ input TaskWhereInput {
   userId_not_starts_with: String
   userId_ends_with: String
   userId_not_ends_with: String
-  fileUrl: String
-  fileUrl_not: String
-  fileUrl_in: [String!]
-  fileUrl_not_in: [String!]
-  fileUrl_lt: String
-  fileUrl_lte: String
-  fileUrl_gt: String
-  fileUrl_gte: String
-  fileUrl_contains: String
-  fileUrl_not_contains: String
-  fileUrl_starts_with: String
-  fileUrl_not_starts_with: String
-  fileUrl_ends_with: String
-  fileUrl_not_ends_with: String
+  fileId: String
+  fileId_not: String
+  fileId_in: [String!]
+  fileId_not_in: [String!]
+  fileId_lt: String
+  fileId_lte: String
+  fileId_gt: String
+  fileId_gte: String
+  fileId_contains: String
+  fileId_not_contains: String
+  fileId_starts_with: String
+  fileId_not_starts_with: String
+  fileId_ends_with: String
+  fileId_not_ends_with: String
   type: ProjectType
   type_not: ProjectType
   type_in: [ProjectType!]

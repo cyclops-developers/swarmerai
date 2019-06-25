@@ -320,10 +320,12 @@ export type TaskOrderByInput =
   | "jobId_DESC"
   | "userId_ASC"
   | "userId_DESC"
-  | "fileUrl_ASC"
-  | "fileUrl_DESC"
+  | "fileId_ASC"
+  | "fileId_DESC"
   | "type_ASC"
-  | "type_DESC";
+  | "type_DESC"
+  | "labels_ASC"
+  | "labels_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -337,12 +339,8 @@ export type UserOrderByInput =
 
 export type ProjectStatus = "PENDING" | "ACTIVE" | "COMPLETED" | "DELETED";
 
-export interface JobCreateInput {
-  id?: Maybe<ID_Input>;
-  projectId: String;
-  startDateTime: String;
-  endDateTime: String;
-  fileUrls?: Maybe<JobCreatefileUrlsInput>;
+export interface CategoryUpdateManyMutationInput {
+  name?: Maybe<String>;
 }
 
 export interface ProjectUpdateInput {
@@ -383,8 +381,9 @@ export type TaskWhereUniqueInput = AtLeastOne<{
 export interface TaskUpdateManyMutationInput {
   jobId?: Maybe<String>;
   userId?: Maybe<String>;
-  fileUrl?: Maybe<String>;
+  fileId?: Maybe<String>;
   type?: Maybe<ProjectType>;
+  labels?: Maybe<Json>;
 }
 
 export interface UserCreateInput {
@@ -397,8 +396,29 @@ export interface UserCreateInput {
 export interface TaskUpdateInput {
   jobId?: Maybe<String>;
   userId?: Maybe<String>;
-  fileUrl?: Maybe<String>;
+  fileId?: Maybe<String>;
   type?: Maybe<ProjectType>;
+  labels?: Maybe<Json>;
+}
+
+export interface UserCreateOneInput {
+  create?: Maybe<UserCreateInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface CategorySubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<CategoryWhereInput>;
+  AND?: Maybe<
+    CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput
+  >;
+  OR?: Maybe<CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput>;
+  NOT?: Maybe<
+    CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput
+  >;
 }
 
 export interface TaskWhereInput {
@@ -444,20 +464,20 @@ export interface TaskWhereInput {
   userId_not_starts_with?: Maybe<String>;
   userId_ends_with?: Maybe<String>;
   userId_not_ends_with?: Maybe<String>;
-  fileUrl?: Maybe<String>;
-  fileUrl_not?: Maybe<String>;
-  fileUrl_in?: Maybe<String[] | String>;
-  fileUrl_not_in?: Maybe<String[] | String>;
-  fileUrl_lt?: Maybe<String>;
-  fileUrl_lte?: Maybe<String>;
-  fileUrl_gt?: Maybe<String>;
-  fileUrl_gte?: Maybe<String>;
-  fileUrl_contains?: Maybe<String>;
-  fileUrl_not_contains?: Maybe<String>;
-  fileUrl_starts_with?: Maybe<String>;
-  fileUrl_not_starts_with?: Maybe<String>;
-  fileUrl_ends_with?: Maybe<String>;
-  fileUrl_not_ends_with?: Maybe<String>;
+  fileId?: Maybe<String>;
+  fileId_not?: Maybe<String>;
+  fileId_in?: Maybe<String[] | String>;
+  fileId_not_in?: Maybe<String[] | String>;
+  fileId_lt?: Maybe<String>;
+  fileId_lte?: Maybe<String>;
+  fileId_gt?: Maybe<String>;
+  fileId_gte?: Maybe<String>;
+  fileId_contains?: Maybe<String>;
+  fileId_not_contains?: Maybe<String>;
+  fileId_starts_with?: Maybe<String>;
+  fileId_not_starts_with?: Maybe<String>;
+  fileId_ends_with?: Maybe<String>;
+  fileId_not_ends_with?: Maybe<String>;
   type?: Maybe<ProjectType>;
   type_not?: Maybe<ProjectType>;
   type_in?: Maybe<ProjectType[] | ProjectType>;
@@ -465,32 +485,6 @@ export interface TaskWhereInput {
   AND?: Maybe<TaskWhereInput[] | TaskWhereInput>;
   OR?: Maybe<TaskWhereInput[] | TaskWhereInput>;
   NOT?: Maybe<TaskWhereInput[] | TaskWhereInput>;
-}
-
-export interface CategorySubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<CategoryWhereInput>;
-  AND?: Maybe<
-    CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput
-  >;
-  OR?: Maybe<CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput>;
-  NOT?: Maybe<
-    CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput
-  >;
-}
-
-export interface ProjectSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<ProjectWhereInput>;
-  AND?: Maybe<ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput>;
-  OR?: Maybe<ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput>;
-  NOT?: Maybe<ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput>;
 }
 
 export interface ProjectUpdateManyMutationInput {
@@ -509,9 +503,15 @@ export interface ProjectUpdateManyMutationInput {
   currentJobId?: Maybe<String>;
 }
 
-export interface UserCreateOneInput {
-  create?: Maybe<UserCreateInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
+export interface ProjectSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<ProjectWhereInput>;
+  AND?: Maybe<ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput>;
+  OR?: Maybe<ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput>;
+  NOT?: Maybe<ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput>;
 }
 
 export type ProjectWhereUniqueInput = AtLeastOne<{
@@ -546,7 +546,7 @@ export interface JobUpdateManyMutationInput {
   projectId?: Maybe<String>;
   startDateTime?: Maybe<String>;
   endDateTime?: Maybe<String>;
-  fileUrls?: Maybe<JobUpdatefileUrlsInput>;
+  fileIds?: Maybe<JobUpdatefileIdsInput>;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -560,10 +560,9 @@ export interface UserSubscriptionWhereInput {
   NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  email?: Maybe<String>;
-}>;
+export interface JobUpdatefileIdsInput {
+  set?: Maybe<String[] | String>;
+}
 
 export interface UserWhereInput {
   id?: Maybe<ID_Input>;
@@ -627,6 +626,18 @@ export interface UserWhereInput {
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  email?: Maybe<String>;
+}>;
+
+export interface UserUpdateOneRequiredInput {
+  create?: Maybe<UserCreateInput>;
+  update?: Maybe<UserUpdateDataInput>;
+  upsert?: Maybe<UserUpsertNestedInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
 export interface TaskSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
@@ -638,17 +649,6 @@ export interface TaskSubscriptionWhereInput {
   NOT?: Maybe<TaskSubscriptionWhereInput[] | TaskSubscriptionWhereInput>;
 }
 
-export interface UserUpdateOneRequiredInput {
-  create?: Maybe<UserCreateInput>;
-  update?: Maybe<UserUpdateDataInput>;
-  upsert?: Maybe<UserUpsertNestedInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface JobUpdatefileUrlsInput {
-  set?: Maybe<String[] | String>;
-}
-
 export type JobWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
@@ -657,18 +657,19 @@ export interface JobUpdateInput {
   projectId?: Maybe<String>;
   startDateTime?: Maybe<String>;
   endDateTime?: Maybe<String>;
-  fileUrls?: Maybe<JobUpdatefileUrlsInput>;
+  fileIds?: Maybe<JobUpdatefileIdsInput>;
 }
 
 export interface TaskCreateInput {
   id?: Maybe<ID_Input>;
   jobId?: Maybe<String>;
   userId?: Maybe<String>;
-  fileUrl?: Maybe<String>;
+  fileId?: Maybe<String>;
   type?: Maybe<ProjectType>;
+  labels?: Maybe<Json>;
 }
 
-export interface JobCreatefileUrlsInput {
+export interface JobCreatefileIdsInput {
   set?: Maybe<String[] | String>;
 }
 
@@ -832,10 +833,6 @@ export interface ProjectWhereInput {
   NOT?: Maybe<ProjectWhereInput[] | ProjectWhereInput>;
 }
 
-export interface CategoryUpdateManyMutationInput {
-  name?: Maybe<String>;
-}
-
 export interface CategoryUpdateInput {
   name?: Maybe<String>;
 }
@@ -843,6 +840,14 @@ export interface CategoryUpdateInput {
 export interface CategoryCreateInput {
   id?: Maybe<ID_Input>;
   name?: Maybe<String>;
+}
+
+export interface JobCreateInput {
+  id?: Maybe<ID_Input>;
+  projectId: String;
+  startDateTime: String;
+  endDateTime: String;
+  fileIds?: Maybe<JobCreatefileIdsInput>;
 }
 
 export interface CategoryWhereInput {
@@ -1039,81 +1044,6 @@ export interface UserPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface Job {
-  id: ID_Output;
-  projectId: String;
-  startDateTime: String;
-  endDateTime: String;
-  fileUrls: String[];
-}
-
-export interface JobPromise extends Promise<Job>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  projectId: () => Promise<String>;
-  startDateTime: () => Promise<String>;
-  endDateTime: () => Promise<String>;
-  fileUrls: () => Promise<String[]>;
-}
-
-export interface JobSubscription
-  extends Promise<AsyncIterator<Job>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  projectId: () => Promise<AsyncIterator<String>>;
-  startDateTime: () => Promise<AsyncIterator<String>>;
-  endDateTime: () => Promise<AsyncIterator<String>>;
-  fileUrls: () => Promise<AsyncIterator<String[]>>;
-}
-
-export interface JobNullablePromise extends Promise<Job | null>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  projectId: () => Promise<String>;
-  startDateTime: () => Promise<String>;
-  endDateTime: () => Promise<String>;
-  fileUrls: () => Promise<String[]>;
-}
-
-export interface TaskSubscriptionPayload {
-  mutation: MutationType;
-  node: Task;
-  updatedFields: String[];
-  previousValues: TaskPreviousValues;
-}
-
-export interface TaskSubscriptionPayloadPromise
-  extends Promise<TaskSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = TaskPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = TaskPreviousValuesPromise>() => T;
-}
-
-export interface TaskSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<TaskSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = TaskSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = TaskPreviousValuesSubscription>() => T;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
 export interface CategoryEdge {
   node: Category;
   cursor: String;
@@ -1133,6 +1063,170 @@ export interface CategoryEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface Job {
+  id: ID_Output;
+  projectId: String;
+  startDateTime: String;
+  endDateTime: String;
+  fileIds: String[];
+}
+
+export interface JobPromise extends Promise<Job>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  projectId: () => Promise<String>;
+  startDateTime: () => Promise<String>;
+  endDateTime: () => Promise<String>;
+  fileIds: () => Promise<String[]>;
+}
+
+export interface JobSubscription
+  extends Promise<AsyncIterator<Job>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  projectId: () => Promise<AsyncIterator<String>>;
+  startDateTime: () => Promise<AsyncIterator<String>>;
+  endDateTime: () => Promise<AsyncIterator<String>>;
+  fileIds: () => Promise<AsyncIterator<String[]>>;
+}
+
+export interface JobNullablePromise extends Promise<Job | null>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  projectId: () => Promise<String>;
+  startDateTime: () => Promise<String>;
+  endDateTime: () => Promise<String>;
+  fileIds: () => Promise<String[]>;
+}
+
+export interface ProjectPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name: String;
+  description: String;
+  validation: Int;
+  bucketUrl: String;
+  category: String;
+  type?: ProjectType;
+  repeatable: Boolean;
+  question?: String;
+  classes: String[];
+  width?: Int;
+  height?: Int;
+  status?: ProjectStatus;
+  currentJobId?: String;
+}
+
+export interface ProjectPreviousValuesPromise
+  extends Promise<ProjectPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  description: () => Promise<String>;
+  validation: () => Promise<Int>;
+  bucketUrl: () => Promise<String>;
+  category: () => Promise<String>;
+  type: () => Promise<ProjectType>;
+  repeatable: () => Promise<Boolean>;
+  question: () => Promise<String>;
+  classes: () => Promise<String[]>;
+  width: () => Promise<Int>;
+  height: () => Promise<Int>;
+  status: () => Promise<ProjectStatus>;
+  currentJobId: () => Promise<String>;
+}
+
+export interface ProjectPreviousValuesSubscription
+  extends Promise<AsyncIterator<ProjectPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  description: () => Promise<AsyncIterator<String>>;
+  validation: () => Promise<AsyncIterator<Int>>;
+  bucketUrl: () => Promise<AsyncIterator<String>>;
+  category: () => Promise<AsyncIterator<String>>;
+  type: () => Promise<AsyncIterator<ProjectType>>;
+  repeatable: () => Promise<AsyncIterator<Boolean>>;
+  question: () => Promise<AsyncIterator<String>>;
+  classes: () => Promise<AsyncIterator<String[]>>;
+  width: () => Promise<AsyncIterator<Int>>;
+  height: () => Promise<AsyncIterator<Int>>;
+  status: () => Promise<AsyncIterator<ProjectStatus>>;
+  currentJobId: () => Promise<AsyncIterator<String>>;
+}
+
+export interface Category {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name?: String;
+}
+
+export interface CategoryPromise extends Promise<Category>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+}
+
+export interface CategorySubscription
+  extends Promise<AsyncIterator<Category>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CategoryNullablePromise
+  extends Promise<Category | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
 export interface UserEdge {
   node: User;
   cursor: String;
@@ -1150,6 +1244,27 @@ export interface UserEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
+export interface TaskConnection {
+  pageInfo: PageInfo;
+  edges: TaskEdge[];
+}
+
+export interface TaskConnectionPromise
+  extends Promise<TaskConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<TaskEdge>>() => T;
+  aggregate: <T = AggregateTaskPromise>() => T;
+}
+
+export interface TaskConnectionSubscription
+  extends Promise<AsyncIterator<TaskConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<TaskEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateTaskSubscription>() => T;
+}
+
 export interface AggregateTask {
   count: Int;
 }
@@ -1164,6 +1279,257 @@ export interface AggregateTaskSubscription
   extends Promise<AsyncIterator<AggregateTask>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface Task {
+  id: ID_Output;
+  jobId?: String;
+  userId?: String;
+  fileId?: String;
+  type?: ProjectType;
+  labels?: Json;
+}
+
+export interface TaskPromise extends Promise<Task>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  jobId: () => Promise<String>;
+  userId: () => Promise<String>;
+  fileId: () => Promise<String>;
+  type: () => Promise<ProjectType>;
+  labels: () => Promise<Json>;
+}
+
+export interface TaskSubscription
+  extends Promise<AsyncIterator<Task>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  jobId: () => Promise<AsyncIterator<String>>;
+  userId: () => Promise<AsyncIterator<String>>;
+  fileId: () => Promise<AsyncIterator<String>>;
+  type: () => Promise<AsyncIterator<ProjectType>>;
+  labels: () => Promise<AsyncIterator<Json>>;
+}
+
+export interface TaskNullablePromise
+  extends Promise<Task | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  jobId: () => Promise<String>;
+  userId: () => Promise<String>;
+  fileId: () => Promise<String>;
+  type: () => Promise<ProjectType>;
+  labels: () => Promise<Json>;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface ProjectEdge {
+  node: Project;
+  cursor: String;
+}
+
+export interface ProjectEdgePromise extends Promise<ProjectEdge>, Fragmentable {
+  node: <T = ProjectPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ProjectEdgeSubscription
+  extends Promise<AsyncIterator<ProjectEdge>>,
+    Fragmentable {
+  node: <T = ProjectSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CategoryConnection {
+  pageInfo: PageInfo;
+  edges: CategoryEdge[];
+}
+
+export interface CategoryConnectionPromise
+  extends Promise<CategoryConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<CategoryEdge>>() => T;
+  aggregate: <T = AggregateCategoryPromise>() => T;
+}
+
+export interface CategoryConnectionSubscription
+  extends Promise<AsyncIterator<CategoryConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CategoryEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCategorySubscription>() => T;
+}
+
+export interface User {
+  id: ID_Output;
+  email: String;
+  password: String;
+  name: String;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  password: () => Promise<String>;
+  name: () => Promise<String>;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserNullablePromise
+  extends Promise<User | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  password: () => Promise<String>;
+  name: () => Promise<String>;
+}
+
+export interface CategorySubscriptionPayload {
+  mutation: MutationType;
+  node: Category;
+  updatedFields: String[];
+  previousValues: CategoryPreviousValues;
+}
+
+export interface CategorySubscriptionPayloadPromise
+  extends Promise<CategorySubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = CategoryPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = CategoryPreviousValuesPromise>() => T;
+}
+
+export interface CategorySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CategorySubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = CategorySubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = CategoryPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateJob {
+  count: Int;
+}
+
+export interface AggregateJobPromise
+  extends Promise<AggregateJob>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateJobSubscription
+  extends Promise<AsyncIterator<AggregateJob>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CategoryPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name?: String;
+}
+
+export interface CategoryPreviousValuesPromise
+  extends Promise<CategoryPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+}
+
+export interface CategoryPreviousValuesSubscription
+  extends Promise<AsyncIterator<CategoryPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface JobConnection {
+  pageInfo: PageInfo;
+  edges: JobEdge[];
+}
+
+export interface JobConnectionPromise
+  extends Promise<JobConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<JobEdge>>() => T;
+  aggregate: <T = AggregateJobPromise>() => T;
+}
+
+export interface JobConnectionSubscription
+  extends Promise<AsyncIterator<JobConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<JobEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateJobSubscription>() => T;
+}
+
+export interface TaskPreviousValues {
+  id: ID_Output;
+  jobId?: String;
+  userId?: String;
+  fileId?: String;
+  type?: ProjectType;
+  labels?: Json;
+}
+
+export interface TaskPreviousValuesPromise
+  extends Promise<TaskPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  jobId: () => Promise<String>;
+  userId: () => Promise<String>;
+  fileId: () => Promise<String>;
+  type: () => Promise<ProjectType>;
+  labels: () => Promise<Json>;
+}
+
+export interface TaskPreviousValuesSubscription
+  extends Promise<AsyncIterator<TaskPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  jobId: () => Promise<AsyncIterator<String>>;
+  userId: () => Promise<AsyncIterator<String>>;
+  fileId: () => Promise<AsyncIterator<String>>;
+  type: () => Promise<AsyncIterator<ProjectType>>;
+  labels: () => Promise<AsyncIterator<Json>>;
 }
 
 export interface UserSubscriptionPayload {
@@ -1191,87 +1557,6 @@ export interface UserSubscriptionPayloadSubscription
   previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
-export interface TaskConnection {
-  pageInfo: PageInfo;
-  edges: TaskEdge[];
-}
-
-export interface TaskConnectionPromise
-  extends Promise<TaskConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<TaskEdge>>() => T;
-  aggregate: <T = AggregateTaskPromise>() => T;
-}
-
-export interface TaskConnectionSubscription
-  extends Promise<AsyncIterator<TaskConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<TaskEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateTaskSubscription>() => T;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateProject {
-  count: Int;
-}
-
-export interface AggregateProjectPromise
-  extends Promise<AggregateProject>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateProjectSubscription
-  extends Promise<AsyncIterator<AggregateProject>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface CategoryConnection {
-  pageInfo: PageInfo;
-  edges: CategoryEdge[];
-}
-
-export interface CategoryConnectionPromise
-  extends Promise<CategoryConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<CategoryEdge>>() => T;
-  aggregate: <T = AggregateCategoryPromise>() => T;
-}
-
-export interface CategoryConnectionSubscription
-  extends Promise<AsyncIterator<CategoryConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<CategoryEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateCategorySubscription>() => T;
-}
-
 export interface ProjectConnection {
   pageInfo: PageInfo;
   edges: ProjectEdge[];
@@ -1293,29 +1578,107 @@ export interface ProjectConnectionSubscription
   aggregate: <T = AggregateProjectSubscription>() => T;
 }
 
-export interface CategorySubscriptionPayload {
+export interface ProjectSubscriptionPayload {
   mutation: MutationType;
-  node: Category;
+  node: Project;
   updatedFields: String[];
-  previousValues: CategoryPreviousValues;
+  previousValues: ProjectPreviousValues;
 }
 
-export interface CategorySubscriptionPayloadPromise
-  extends Promise<CategorySubscriptionPayload>,
+export interface ProjectSubscriptionPayloadPromise
+  extends Promise<ProjectSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = CategoryPromise>() => T;
+  node: <T = ProjectPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = CategoryPreviousValuesPromise>() => T;
+  previousValues: <T = ProjectPreviousValuesPromise>() => T;
 }
 
-export interface CategorySubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<CategorySubscriptionPayload>>,
+export interface ProjectSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ProjectSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = CategorySubscription>() => T;
+  node: <T = ProjectSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = CategoryPreviousValuesSubscription>() => T;
+  previousValues: <T = ProjectPreviousValuesSubscription>() => T;
+}
+
+export interface TaskSubscriptionPayload {
+  mutation: MutationType;
+  node: Task;
+  updatedFields: String[];
+  previousValues: TaskPreviousValues;
+}
+
+export interface TaskSubscriptionPayloadPromise
+  extends Promise<TaskSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = TaskPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = TaskPreviousValuesPromise>() => T;
+}
+
+export interface TaskSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<TaskSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = TaskSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = TaskPreviousValuesSubscription>() => T;
+}
+
+export interface JobPreviousValues {
+  id: ID_Output;
+  projectId: String;
+  startDateTime: String;
+  endDateTime: String;
+  fileIds: String[];
+}
+
+export interface JobPreviousValuesPromise
+  extends Promise<JobPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  projectId: () => Promise<String>;
+  startDateTime: () => Promise<String>;
+  endDateTime: () => Promise<String>;
+  fileIds: () => Promise<String[]>;
+}
+
+export interface JobPreviousValuesSubscription
+  extends Promise<AsyncIterator<JobPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  projectId: () => Promise<AsyncIterator<String>>;
+  startDateTime: () => Promise<AsyncIterator<String>>;
+  endDateTime: () => Promise<AsyncIterator<String>>;
+  fileIds: () => Promise<AsyncIterator<String[]>>;
+}
+
+export interface JobSubscriptionPayload {
+  mutation: MutationType;
+  node: Job;
+  updatedFields: String[];
+  previousValues: JobPreviousValues;
+}
+
+export interface JobSubscriptionPayloadPromise
+  extends Promise<JobSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = JobPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = JobPreviousValuesPromise>() => T;
+}
+
+export interface JobSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<JobSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = JobSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = JobPreviousValuesSubscription>() => T;
 }
 
 export interface Project {
@@ -1401,367 +1764,20 @@ export interface ProjectNullablePromise
   currentJobId: () => Promise<String>;
 }
 
-export interface CategoryPreviousValues {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  name?: String;
-}
-
-export interface CategoryPreviousValuesPromise
-  extends Promise<CategoryPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-}
-
-export interface CategoryPreviousValuesSubscription
-  extends Promise<AsyncIterator<CategoryPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface JobEdge {
-  node: Job;
-  cursor: String;
-}
-
-export interface JobEdgePromise extends Promise<JobEdge>, Fragmentable {
-  node: <T = JobPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface JobEdgeSubscription
-  extends Promise<AsyncIterator<JobEdge>>,
-    Fragmentable {
-  node: <T = JobSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface Category {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  name?: String;
-}
-
-export interface CategoryPromise extends Promise<Category>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-}
-
-export interface CategorySubscription
-  extends Promise<AsyncIterator<Category>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface CategoryNullablePromise
-  extends Promise<Category | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-}
-
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
-}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
-}
-
-export interface JobSubscriptionPayload {
-  mutation: MutationType;
-  node: Job;
-  updatedFields: String[];
-  previousValues: JobPreviousValues;
-}
-
-export interface JobSubscriptionPayloadPromise
-  extends Promise<JobSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = JobPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = JobPreviousValuesPromise>() => T;
-}
-
-export interface JobSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<JobSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = JobSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = JobPreviousValuesSubscription>() => T;
-}
-
-export interface Task {
-  id: ID_Output;
-  jobId?: String;
-  userId?: String;
-  fileUrl?: String;
-  type?: ProjectType;
-}
-
-export interface TaskPromise extends Promise<Task>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  jobId: () => Promise<String>;
-  userId: () => Promise<String>;
-  fileUrl: () => Promise<String>;
-  type: () => Promise<ProjectType>;
-}
-
-export interface TaskSubscription
-  extends Promise<AsyncIterator<Task>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  jobId: () => Promise<AsyncIterator<String>>;
-  userId: () => Promise<AsyncIterator<String>>;
-  fileUrl: () => Promise<AsyncIterator<String>>;
-  type: () => Promise<AsyncIterator<ProjectType>>;
-}
-
-export interface TaskNullablePromise
-  extends Promise<Task | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  jobId: () => Promise<String>;
-  userId: () => Promise<String>;
-  fileUrl: () => Promise<String>;
-  type: () => Promise<ProjectType>;
-}
-
-export interface User {
-  id: ID_Output;
-  email: String;
-  password: String;
-  name: String;
-}
-
-export interface UserPromise extends Promise<User>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  password: () => Promise<String>;
-  name: () => Promise<String>;
-}
-
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  email: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserNullablePromise
-  extends Promise<User | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  password: () => Promise<String>;
-  name: () => Promise<String>;
-}
-
-export interface ProjectPreviousValues {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  name: String;
-  description: String;
-  validation: Int;
-  bucketUrl: String;
-  category: String;
-  type?: ProjectType;
-  repeatable: Boolean;
-  question?: String;
-  classes: String[];
-  width?: Int;
-  height?: Int;
-  status?: ProjectStatus;
-  currentJobId?: String;
-}
-
-export interface ProjectPreviousValuesPromise
-  extends Promise<ProjectPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-  description: () => Promise<String>;
-  validation: () => Promise<Int>;
-  bucketUrl: () => Promise<String>;
-  category: () => Promise<String>;
-  type: () => Promise<ProjectType>;
-  repeatable: () => Promise<Boolean>;
-  question: () => Promise<String>;
-  classes: () => Promise<String[]>;
-  width: () => Promise<Int>;
-  height: () => Promise<Int>;
-  status: () => Promise<ProjectStatus>;
-  currentJobId: () => Promise<String>;
-}
-
-export interface ProjectPreviousValuesSubscription
-  extends Promise<AsyncIterator<ProjectPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  name: () => Promise<AsyncIterator<String>>;
-  description: () => Promise<AsyncIterator<String>>;
-  validation: () => Promise<AsyncIterator<Int>>;
-  bucketUrl: () => Promise<AsyncIterator<String>>;
-  category: () => Promise<AsyncIterator<String>>;
-  type: () => Promise<AsyncIterator<ProjectType>>;
-  repeatable: () => Promise<AsyncIterator<Boolean>>;
-  question: () => Promise<AsyncIterator<String>>;
-  classes: () => Promise<AsyncIterator<String[]>>;
-  width: () => Promise<AsyncIterator<Int>>;
-  height: () => Promise<AsyncIterator<Int>>;
-  status: () => Promise<AsyncIterator<ProjectStatus>>;
-  currentJobId: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ProjectSubscriptionPayload {
-  mutation: MutationType;
-  node: Project;
-  updatedFields: String[];
-  previousValues: ProjectPreviousValues;
-}
-
-export interface ProjectSubscriptionPayloadPromise
-  extends Promise<ProjectSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = ProjectPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ProjectPreviousValuesPromise>() => T;
-}
-
-export interface ProjectSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ProjectSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ProjectSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ProjectPreviousValuesSubscription>() => T;
-}
-
-export interface TaskPreviousValues {
-  id: ID_Output;
-  jobId?: String;
-  userId?: String;
-  fileUrl?: String;
-  type?: ProjectType;
-}
-
-export interface TaskPreviousValuesPromise
-  extends Promise<TaskPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  jobId: () => Promise<String>;
-  userId: () => Promise<String>;
-  fileUrl: () => Promise<String>;
-  type: () => Promise<ProjectType>;
-}
-
-export interface TaskPreviousValuesSubscription
-  extends Promise<AsyncIterator<TaskPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  jobId: () => Promise<AsyncIterator<String>>;
-  userId: () => Promise<AsyncIterator<String>>;
-  fileUrl: () => Promise<AsyncIterator<String>>;
-  type: () => Promise<AsyncIterator<ProjectType>>;
-}
-
-export interface JobPreviousValues {
-  id: ID_Output;
-  projectId: String;
-  startDateTime: String;
-  endDateTime: String;
-  fileUrls: String[];
-}
-
-export interface JobPreviousValuesPromise
-  extends Promise<JobPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  projectId: () => Promise<String>;
-  startDateTime: () => Promise<String>;
-  endDateTime: () => Promise<String>;
-  fileUrls: () => Promise<String[]>;
-}
-
-export interface JobPreviousValuesSubscription
-  extends Promise<AsyncIterator<JobPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  projectId: () => Promise<AsyncIterator<String>>;
-  startDateTime: () => Promise<AsyncIterator<String>>;
-  endDateTime: () => Promise<AsyncIterator<String>>;
-  fileUrls: () => Promise<AsyncIterator<String[]>>;
-}
-
-export interface AggregateJob {
+export interface AggregateProject {
   count: Int;
 }
 
-export interface AggregateJobPromise
-  extends Promise<AggregateJob>,
+export interface AggregateProjectPromise
+  extends Promise<AggregateProject>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateJobSubscription
-  extends Promise<AsyncIterator<AggregateJob>>,
+export interface AggregateProjectSubscription
+  extends Promise<AsyncIterator<AggregateProject>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface ProjectEdge {
-  node: Project;
-  cursor: String;
-}
-
-export interface ProjectEdgePromise extends Promise<ProjectEdge>, Fragmentable {
-  node: <T = ProjectPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ProjectEdgeSubscription
-  extends Promise<AsyncIterator<ProjectEdge>>,
-    Fragmentable {
-  node: <T = ProjectSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface TaskEdge {
@@ -1781,28 +1797,27 @@ export interface TaskEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface JobConnection {
-  pageInfo: PageInfo;
-  edges: JobEdge[];
+export interface JobEdge {
+  node: Job;
+  cursor: String;
 }
 
-export interface JobConnectionPromise
-  extends Promise<JobConnection>,
+export interface JobEdgePromise extends Promise<JobEdge>, Fragmentable {
+  node: <T = JobPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface JobEdgeSubscription
+  extends Promise<AsyncIterator<JobEdge>>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<JobEdge>>() => T;
-  aggregate: <T = AggregateJobPromise>() => T;
+  node: <T = JobSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface JobConnectionSubscription
-  extends Promise<AsyncIterator<JobConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<JobEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateJobSubscription>() => T;
-}
-
-export type Long = string;
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -1810,10 +1825,9 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 export type ID_Input = string | number;
 export type ID_Output = string;
 
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
+export type Json = any;
+
+export type Long = string;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
