@@ -35,14 +35,9 @@ type Category {
 type Job {
   id: ID! @id
   projectId: String!
-<<<<<<< HEAD
-  startDateTime: String!
-  endDateTime: String
-=======
   startDateTime: DateTime! @createdAt
   status: ProjectStatus @default(value: PENDING)
   endDateTime: DateTime
->>>>>>> Add babel config
   fileIds: [String]
 
   # redundantly store fields
