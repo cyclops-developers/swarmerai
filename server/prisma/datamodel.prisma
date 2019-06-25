@@ -36,7 +36,7 @@ type Job {
   id: ID! @id
   projectId: String!
   startDateTime: String!
-  endDateTime: String!
+  endDateTime: String
   fileIds: [String]
 }
 

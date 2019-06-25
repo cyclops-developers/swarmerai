@@ -846,7 +846,7 @@ export interface JobCreateInput {
   id?: Maybe<ID_Input>;
   projectId: String;
   startDateTime: String;
-  endDateTime: String;
+  endDateTime?: Maybe<String>;
   fileIds?: Maybe<JobCreatefileIdsInput>;
 }
 
@@ -1083,7 +1083,7 @@ export interface Job {
   id: ID_Output;
   projectId: String;
   startDateTime: String;
-  endDateTime: String;
+  endDateTime?: String;
   fileIds: String[];
 }
 
@@ -1632,7 +1632,7 @@ export interface JobPreviousValues {
   id: ID_Output;
   projectId: String;
   startDateTime: String;
-  endDateTime: String;
+  endDateTime?: String;
   fileIds: String[];
 }
 

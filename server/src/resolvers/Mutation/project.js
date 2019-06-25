@@ -1,4 +1,7 @@
+const { job } = require('./job');
+const moment = require('moment');
 const { getUserId } = require('../../utils');
+
 
 const project = {
   async createProject(parent, input, context) {
@@ -18,17 +21,24 @@ const project = {
   },
 
   async startProject(parent, { id }, context) {
-    const userId = getUserId(context)
-    const projectExists = await context.prisma.$exists.project({
-      id,
-      creator: { id: userId },
-    })
+    const userId = getUserId(context);
+    const projectExists = await context.prisma.projects( { where: { id } } );
+
     if (!projectExists) {
       throw new Error(`Project not found or you're not the creator`)
     }
 
+    const date = moment().utc().format();
+
+    const jobInput = {
+        projectId: id,
+        startDateTime: date
+    };
+
     // Create and return the JobID
-    return 0
+    const jobData = await job.createJob(parent, jobInput, context);
+
+    return jobData.id;
   },
 
   async deleteProject(parent, { id }, context) {
@@ -41,6 +51,8 @@ const project = {
       throw new Error(`Project not found or you're not the creator`)
     }
 
+    // TODO: Check if the project has active Jobs
+    // if not delete the project
     return context.prisma.deleteProject({ id })
   },
 }

@@ -154,7 +154,7 @@ type Job {
   id: ID!
   projectId: String!
   startDateTime: String!
-  endDateTime: String!
+  endDateTime: String
   fileIds: [String!]!
 }
 
@@ -172,7 +172,7 @@ input JobCreateInput {
   id: ID
   projectId: String!
   startDateTime: String!
-  endDateTime: String!
+  endDateTime: String
   fileIds: JobCreatefileIdsInput
 }
 
@@ -196,7 +196,7 @@ type JobPreviousValues {
   id: ID!
   projectId: String!
   startDateTime: String!
-  endDateTime: String!
+  endDateTime: String
   fileIds: [String!]!
 }
 
