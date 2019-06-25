@@ -4,7 +4,6 @@ import { Menu, Dropdown, Icon } from 'antd'
 import { Text } from '../../components/Text'
 
 const UserMenu = ({ user, logout }) => {
-  const { username } = user
   const menu = (
     <Menu>
       <Menu.Item key="0" onClick={logout}>
@@ -21,7 +20,7 @@ const UserMenu = ({ user, logout }) => {
         color="text.darkGray"
         style={{ cursor: 'pointer' }}
       >
-        Logged in as {username} <Icon type="caret-down" />
+        Logged in as <Icon type="caret-down" />
       </Text>
     </Dropdown>
   )
