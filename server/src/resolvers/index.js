@@ -5,6 +5,7 @@ const { category } = require('./Mutation/category')
 const { task } = require('./Mutation/task')
 const { User } = require('./User')
 const { Project } = require('./Project')
+const { job } = require('./Mutation/job')
 
 module.exports = {
   Query,
@@ -13,6 +14,7 @@ module.exports = {
     ...project,
     ...category,
     ...task,
+    ...job,
   },
   User,
   Project,
