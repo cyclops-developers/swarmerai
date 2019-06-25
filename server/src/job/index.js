@@ -1,0 +1,59 @@
+import { getQueue } from '../queue'
+import { getTaskId } from '../task'
+import { prisma } from '../generated/prisma-client'
+
+export const initializeJob = async project => {
+  const job = await prisma.createJob({
+    projectId: project.id,
+    validation: project.validation,
+  })
+
+  const queue = getQueue(job.id)
+  // TODO load image urls from s3
+  const imageUrls = ['11', '12', '13', '14', '15', '16']
+
+  for (let i = 0; i < imageUrls.length; i += 1) {
+    const imageUrl = imageUrls[i]
+    const name = getTaskId(job.id, imageUrl)
+    const data = {
+      jobId: job.id,
+      fileId: imageUrl,
+      type: project.type,
+      validations: project.validations,
+      question: project.question,
+      classes: project.classes,
+      width: project.width,
+      height: project.height,
+    }
+
+    queue.add(name, data, {
+      // this jobId references a queue job id and not the project job
+      jobId: name,
+      removeOnComplete: true,
+    })
+  }
+
+  return job
+}
+
+export const endJob = async jobId => {
+  let job = await prisma.job({ id: jobId })
+  if (!job) {
+    throw new Error(`Job ${jobId} not found`)
+  }
+
+  // TODO use enums instead of hardcoded strings
+  if (job.status === 'COMPLETED' || job.status === 'DELETED') {
+    throw new Error('Cannot end completed/deleted job')
+  }
+
+  job = await prisma.updateJob({
+    data: { status: 'COMPLETED', endDateTime: new Date().toISOString() },
+    where: { id: jobId },
+  })
+
+  const queue = getQueue(jobId)
+  queue.empty()
+
+  return job
+}

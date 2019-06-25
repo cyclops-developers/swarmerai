@@ -9,6 +9,7 @@ type Query {
 }
 
 type Mutation {
+  initializeJob: Boolean
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
   createProject(input: ProjectInput!): Project!
@@ -90,7 +91,7 @@ type Category {
 type Job {
   id: String!
   projectId: String!
-  startDateTime: String
+  startDateTime: String!
   endDateTime: String
   fileUrls: [String]
 }

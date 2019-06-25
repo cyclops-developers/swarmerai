@@ -1,12 +1,12 @@
-const { getUserId } = require('../../utils');
+import { endJob } from '../../job'
+const { getUserId } = require('../../utils')
 
 const job = {
-    async createJob(parent, input, context) {
-      // Check user
-      getUserId(context);
-
-      return context.prisma.createJob(input);
-    },
+  async endJob(parent, { id }, context) {
+    // TODO auth check
+    const job = await endJob(id)
+    return job
+  },
 }
 
 module.exports = { job }
