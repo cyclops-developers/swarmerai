@@ -6,9 +6,9 @@ import { Button } from 'antd'
 import get from 'lodash/get'
 import truncate from 'lodash/truncate'
 
-import { Flex } from '../Flex'
-import { Box } from '../Box'
-import { Text } from '../Text'
+import { Flex } from '../../components/Flex'
+import { Box } from '../../components/Box'
+import { Text } from '../../components/Text'
 
 import AnnotationCanvas from './AnnotationCanvas'
 import { UndoRedo } from './AnnotationCanvas/UndoRedo'
@@ -365,7 +365,13 @@ const TaskPage = () => {
           </Button>
         </Flex>
       )}
-      <Flex width="100%" border="1px solid #dbdbdb" borderRadius="4px" p="5px" alignItems="center">
+      <Flex
+        width="100%"
+        border="1px solid #dbdbdb"
+        borderRadius="4px"
+        p="5px"
+        alignItems="center"
+      >
         <Box ref={canvasContainer} flex={2}>
           <AnnotationCanvas
             url={task.fileUrl}

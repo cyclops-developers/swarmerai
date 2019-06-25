@@ -7,10 +7,8 @@ import {
   Redirect,
 } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
-import ProjectsPage from './ProjectsPage'
 import LoginPage from './LoginPage'
 import SignupPage from './SignupPage'
-import TaskPage from './TaskPage'
 import PageNotFound from './PageNotFound'
 import { AUTH_TOKEN } from '../constant'
 import { isTokenExpired } from '../helper/jwtHelper'
@@ -18,7 +16,11 @@ import { graphql } from 'react-apollo'
 import { gql } from 'apollo-boost'
 import { CreateProject } from '../modules/CreateProject'
 import 'antd/dist/antd.css'
+import TaskPage from '../pages/TaskPage'
 import ProjectPage from '../pages/ProjectPage'
+import ProjectsPage from './ProjectsPage'
+import JobsPage from '../pages/JobsPage'
+import JobDetailPage from '../pages/JobDetailPage'
 import theme from '../theme'
 import Header from '../modules/Header'
 import { Container } from './Container'
@@ -153,6 +155,16 @@ class RootContainer extends Component {
                   token={this.state.token}
                   path="/create"
                   component={CreateProject}
+                />
+                <ProtectedRoute
+                  token={this.state.token}
+                  path="/jobs"
+                  component={JobsPage}
+                />
+                <ProtectedRoute
+                  token={this.state.token}
+                  path="/job/:jobId"
+                  component={JobDetailPage}
                 />
                 <ProtectedRoute
                   token={this.state.token}

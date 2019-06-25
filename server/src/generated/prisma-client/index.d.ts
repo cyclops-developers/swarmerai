@@ -257,6 +257,10 @@ export interface ClientConstructor<T> {
  * Types
  */
 
+export type ProjectStatus = "PENDING" | "ACTIVE" | "COMPLETED" | "DELETED";
+
+export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+
 export type JobOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -264,12 +268,12 @@ export type JobOrderByInput =
   | "projectId_DESC"
   | "startDateTime_ASC"
   | "startDateTime_DESC"
+  | "status_ASC"
+  | "status_DESC"
   | "endDateTime_ASC"
-  | "endDateTime_DESC";
-
-export type MutationType = "CREATED" | "UPDATED" | "DELETED";
-
-export type ProjectType = "MULTI_CLASS" | "BINARY";
+  | "endDateTime_DESC"
+  | "validation_ASC"
+  | "validation_DESC";
 
 export type CategoryOrderByInput =
   | "id_ASC"
@@ -322,6 +326,8 @@ export type TaskOrderByInput =
   | "userId_DESC"
   | "fileId_ASC"
   | "fileId_DESC"
+  | "jobIdAndFileId_ASC"
+  | "jobIdAndFileId_DESC"
   | "type_ASC"
   | "type_DESC"
   | "labels_ASC"
@@ -337,7 +343,7 @@ export type UserOrderByInput =
   | "name_ASC"
   | "name_DESC";
 
-export type ProjectStatus = "PENDING" | "ACTIVE" | "COMPLETED" | "DELETED";
+export type ProjectType = "MULTI_CLASS" | "BINARY";
 
 export interface CategoryUpdateManyMutationInput {
   name?: Maybe<String>;
@@ -382,6 +388,7 @@ export interface TaskUpdateManyMutationInput {
   jobId?: Maybe<String>;
   userId?: Maybe<String>;
   fileId?: Maybe<String>;
+  jobIdAndFileId?: Maybe<String>;
   type?: Maybe<ProjectType>;
   labels?: Maybe<Json>;
 }
@@ -397,6 +404,7 @@ export interface TaskUpdateInput {
   jobId?: Maybe<String>;
   userId?: Maybe<String>;
   fileId?: Maybe<String>;
+  jobIdAndFileId?: Maybe<String>;
   type?: Maybe<ProjectType>;
   labels?: Maybe<Json>;
 }
@@ -406,19 +414,66 @@ export interface UserCreateOneInput {
   connect?: Maybe<UserWhereUniqueInput>;
 }
 
-export interface CategorySubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<CategoryWhereInput>;
-  AND?: Maybe<
-    CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput
-  >;
-  OR?: Maybe<CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput>;
-  NOT?: Maybe<
-    CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput
-  >;
+export interface JobWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  projectId?: Maybe<String>;
+  projectId_not?: Maybe<String>;
+  projectId_in?: Maybe<String[] | String>;
+  projectId_not_in?: Maybe<String[] | String>;
+  projectId_lt?: Maybe<String>;
+  projectId_lte?: Maybe<String>;
+  projectId_gt?: Maybe<String>;
+  projectId_gte?: Maybe<String>;
+  projectId_contains?: Maybe<String>;
+  projectId_not_contains?: Maybe<String>;
+  projectId_starts_with?: Maybe<String>;
+  projectId_not_starts_with?: Maybe<String>;
+  projectId_ends_with?: Maybe<String>;
+  projectId_not_ends_with?: Maybe<String>;
+  startDateTime?: Maybe<DateTimeInput>;
+  startDateTime_not?: Maybe<DateTimeInput>;
+  startDateTime_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  startDateTime_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  startDateTime_lt?: Maybe<DateTimeInput>;
+  startDateTime_lte?: Maybe<DateTimeInput>;
+  startDateTime_gt?: Maybe<DateTimeInput>;
+  startDateTime_gte?: Maybe<DateTimeInput>;
+  status?: Maybe<ProjectStatus>;
+  status_not?: Maybe<ProjectStatus>;
+  status_in?: Maybe<ProjectStatus[] | ProjectStatus>;
+  status_not_in?: Maybe<ProjectStatus[] | ProjectStatus>;
+  endDateTime?: Maybe<DateTimeInput>;
+  endDateTime_not?: Maybe<DateTimeInput>;
+  endDateTime_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  endDateTime_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  endDateTime_lt?: Maybe<DateTimeInput>;
+  endDateTime_lte?: Maybe<DateTimeInput>;
+  endDateTime_gt?: Maybe<DateTimeInput>;
+  endDateTime_gte?: Maybe<DateTimeInput>;
+  validation?: Maybe<Int>;
+  validation_not?: Maybe<Int>;
+  validation_in?: Maybe<Int[] | Int>;
+  validation_not_in?: Maybe<Int[] | Int>;
+  validation_lt?: Maybe<Int>;
+  validation_lte?: Maybe<Int>;
+  validation_gt?: Maybe<Int>;
+  validation_gte?: Maybe<Int>;
+  AND?: Maybe<JobWhereInput[] | JobWhereInput>;
+  OR?: Maybe<JobWhereInput[] | JobWhereInput>;
+  NOT?: Maybe<JobWhereInput[] | JobWhereInput>;
 }
 
 export interface TaskWhereInput {
@@ -478,6 +533,20 @@ export interface TaskWhereInput {
   fileId_not_starts_with?: Maybe<String>;
   fileId_ends_with?: Maybe<String>;
   fileId_not_ends_with?: Maybe<String>;
+  jobIdAndFileId?: Maybe<String>;
+  jobIdAndFileId_not?: Maybe<String>;
+  jobIdAndFileId_in?: Maybe<String[] | String>;
+  jobIdAndFileId_not_in?: Maybe<String[] | String>;
+  jobIdAndFileId_lt?: Maybe<String>;
+  jobIdAndFileId_lte?: Maybe<String>;
+  jobIdAndFileId_gt?: Maybe<String>;
+  jobIdAndFileId_gte?: Maybe<String>;
+  jobIdAndFileId_contains?: Maybe<String>;
+  jobIdAndFileId_not_contains?: Maybe<String>;
+  jobIdAndFileId_starts_with?: Maybe<String>;
+  jobIdAndFileId_not_starts_with?: Maybe<String>;
+  jobIdAndFileId_ends_with?: Maybe<String>;
+  jobIdAndFileId_not_ends_with?: Maybe<String>;
   type?: Maybe<ProjectType>;
   type_not?: Maybe<ProjectType>;
   type_in?: Maybe<ProjectType[] | ProjectType>;
@@ -487,20 +556,14 @@ export interface TaskWhereInput {
   NOT?: Maybe<TaskWhereInput[] | TaskWhereInput>;
 }
 
-export interface ProjectUpdateManyMutationInput {
-  name?: Maybe<String>;
-  description?: Maybe<String>;
-  validation?: Maybe<Int>;
-  bucketUrl?: Maybe<String>;
-  category?: Maybe<String>;
+export interface TaskCreateInput {
+  id?: Maybe<ID_Input>;
+  jobId: String;
+  userId: String;
+  fileId: String;
+  jobIdAndFileId: String;
   type?: Maybe<ProjectType>;
-  repeatable?: Maybe<Boolean>;
-  question?: Maybe<String>;
-  classes?: Maybe<ProjectUpdateclassesInput>;
-  width?: Maybe<Int>;
-  height?: Maybe<Int>;
-  status?: Maybe<ProjectStatus>;
-  currentJobId?: Maybe<String>;
+  labels?: Maybe<Json>;
 }
 
 export interface ProjectSubscriptionWhereInput {
@@ -514,9 +577,9 @@ export interface ProjectSubscriptionWhereInput {
   NOT?: Maybe<ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput>;
 }
 
-export type ProjectWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
+export interface ProjectUpdateclassesInput {
+  set?: Maybe<String[] | String>;
+}
 
 export interface ProjectCreateInput {
   id?: Maybe<ID_Input>;
@@ -536,17 +599,17 @@ export interface ProjectCreateInput {
   currentJobId?: Maybe<String>;
 }
 
-export interface UserUpdateDataInput {
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  name?: Maybe<String>;
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
 }
 
 export interface JobUpdateManyMutationInput {
   projectId?: Maybe<String>;
-  startDateTime?: Maybe<String>;
-  endDateTime?: Maybe<String>;
+  status?: Maybe<ProjectStatus>;
+  endDateTime?: Maybe<DateTimeInput>;
   fileIds?: Maybe<JobUpdatefileIdsInput>;
+  validation?: Maybe<Int>;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -655,28 +718,30 @@ export type JobWhereUniqueInput = AtLeastOne<{
 
 export interface JobUpdateInput {
   projectId?: Maybe<String>;
-  startDateTime?: Maybe<String>;
-  endDateTime?: Maybe<String>;
+  status?: Maybe<ProjectStatus>;
+  endDateTime?: Maybe<DateTimeInput>;
   fileIds?: Maybe<JobUpdatefileIdsInput>;
+  validation?: Maybe<Int>;
 }
 
-export interface TaskCreateInput {
-  id?: Maybe<ID_Input>;
-  jobId?: Maybe<String>;
-  userId?: Maybe<String>;
-  fileId?: Maybe<String>;
-  type?: Maybe<ProjectType>;
-  labels?: Maybe<Json>;
+export interface JobSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<JobWhereInput>;
+  AND?: Maybe<JobSubscriptionWhereInput[] | JobSubscriptionWhereInput>;
+  OR?: Maybe<JobSubscriptionWhereInput[] | JobSubscriptionWhereInput>;
+  NOT?: Maybe<JobSubscriptionWhereInput[] | JobSubscriptionWhereInput>;
 }
 
 export interface JobCreatefileIdsInput {
   set?: Maybe<String[] | String>;
 }
 
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
-}
+export type ProjectWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
 
 export interface ProjectWhereInput {
   id?: Maybe<ID_Input>;
@@ -845,9 +910,10 @@ export interface CategoryCreateInput {
 export interface JobCreateInput {
   id?: Maybe<ID_Input>;
   projectId: String;
-  startDateTime: String;
-  endDateTime?: Maybe<String>;
+  status?: Maybe<ProjectStatus>;
+  endDateTime?: Maybe<DateTimeInput>;
   fileIds?: Maybe<JobCreatefileIdsInput>;
+  validation: Int;
 }
 
 export interface CategoryWhereInput {
@@ -900,81 +966,41 @@ export interface CategoryWhereInput {
   NOT?: Maybe<CategoryWhereInput[] | CategoryWhereInput>;
 }
 
-export interface JobSubscriptionWhereInput {
+export interface UserUpdateDataInput {
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  name?: Maybe<String>;
+}
+
+export interface ProjectUpdateManyMutationInput {
+  name?: Maybe<String>;
+  description?: Maybe<String>;
+  validation?: Maybe<Int>;
+  bucketUrl?: Maybe<String>;
+  category?: Maybe<String>;
+  type?: Maybe<ProjectType>;
+  repeatable?: Maybe<Boolean>;
+  question?: Maybe<String>;
+  classes?: Maybe<ProjectUpdateclassesInput>;
+  width?: Maybe<Int>;
+  height?: Maybe<Int>;
+  status?: Maybe<ProjectStatus>;
+  currentJobId?: Maybe<String>;
+}
+
+export interface CategorySubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
   updatedFields_contains_every?: Maybe<String[] | String>;
   updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<JobWhereInput>;
-  AND?: Maybe<JobSubscriptionWhereInput[] | JobSubscriptionWhereInput>;
-  OR?: Maybe<JobSubscriptionWhereInput[] | JobSubscriptionWhereInput>;
-  NOT?: Maybe<JobSubscriptionWhereInput[] | JobSubscriptionWhereInput>;
-}
-
-export interface ProjectUpdateclassesInput {
-  set?: Maybe<String[] | String>;
-}
-
-export interface JobWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  projectId?: Maybe<String>;
-  projectId_not?: Maybe<String>;
-  projectId_in?: Maybe<String[] | String>;
-  projectId_not_in?: Maybe<String[] | String>;
-  projectId_lt?: Maybe<String>;
-  projectId_lte?: Maybe<String>;
-  projectId_gt?: Maybe<String>;
-  projectId_gte?: Maybe<String>;
-  projectId_contains?: Maybe<String>;
-  projectId_not_contains?: Maybe<String>;
-  projectId_starts_with?: Maybe<String>;
-  projectId_not_starts_with?: Maybe<String>;
-  projectId_ends_with?: Maybe<String>;
-  projectId_not_ends_with?: Maybe<String>;
-  startDateTime?: Maybe<String>;
-  startDateTime_not?: Maybe<String>;
-  startDateTime_in?: Maybe<String[] | String>;
-  startDateTime_not_in?: Maybe<String[] | String>;
-  startDateTime_lt?: Maybe<String>;
-  startDateTime_lte?: Maybe<String>;
-  startDateTime_gt?: Maybe<String>;
-  startDateTime_gte?: Maybe<String>;
-  startDateTime_contains?: Maybe<String>;
-  startDateTime_not_contains?: Maybe<String>;
-  startDateTime_starts_with?: Maybe<String>;
-  startDateTime_not_starts_with?: Maybe<String>;
-  startDateTime_ends_with?: Maybe<String>;
-  startDateTime_not_ends_with?: Maybe<String>;
-  endDateTime?: Maybe<String>;
-  endDateTime_not?: Maybe<String>;
-  endDateTime_in?: Maybe<String[] | String>;
-  endDateTime_not_in?: Maybe<String[] | String>;
-  endDateTime_lt?: Maybe<String>;
-  endDateTime_lte?: Maybe<String>;
-  endDateTime_gt?: Maybe<String>;
-  endDateTime_gte?: Maybe<String>;
-  endDateTime_contains?: Maybe<String>;
-  endDateTime_not_contains?: Maybe<String>;
-  endDateTime_starts_with?: Maybe<String>;
-  endDateTime_not_starts_with?: Maybe<String>;
-  endDateTime_ends_with?: Maybe<String>;
-  endDateTime_not_ends_with?: Maybe<String>;
-  AND?: Maybe<JobWhereInput[] | JobWhereInput>;
-  OR?: Maybe<JobWhereInput[] | JobWhereInput>;
-  NOT?: Maybe<JobWhereInput[] | JobWhereInput>;
+  node?: Maybe<CategoryWhereInput>;
+  AND?: Maybe<
+    CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput
+  >;
+  OR?: Maybe<CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput>;
+  NOT?: Maybe<
+    CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput
+  >;
 }
 
 export interface UserUpdateInput {
@@ -1082,17 +1108,21 @@ export interface BatchPayloadSubscription
 export interface Job {
   id: ID_Output;
   projectId: String;
-  startDateTime: String;
-  endDateTime?: String;
+  startDateTime: DateTimeOutput;
+  status?: ProjectStatus;
+  endDateTime?: DateTimeOutput;
   fileIds: String[];
+  validation: Int;
 }
 
 export interface JobPromise extends Promise<Job>, Fragmentable {
   id: () => Promise<ID_Output>;
   projectId: () => Promise<String>;
-  startDateTime: () => Promise<String>;
-  endDateTime: () => Promise<String>;
+  startDateTime: () => Promise<DateTimeOutput>;
+  status: () => Promise<ProjectStatus>;
+  endDateTime: () => Promise<DateTimeOutput>;
   fileIds: () => Promise<String[]>;
+  validation: () => Promise<Int>;
 }
 
 export interface JobSubscription
@@ -1100,17 +1130,21 @@ export interface JobSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   projectId: () => Promise<AsyncIterator<String>>;
-  startDateTime: () => Promise<AsyncIterator<String>>;
-  endDateTime: () => Promise<AsyncIterator<String>>;
+  startDateTime: () => Promise<AsyncIterator<DateTimeOutput>>;
+  status: () => Promise<AsyncIterator<ProjectStatus>>;
+  endDateTime: () => Promise<AsyncIterator<DateTimeOutput>>;
   fileIds: () => Promise<AsyncIterator<String[]>>;
+  validation: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface JobNullablePromise extends Promise<Job | null>, Fragmentable {
   id: () => Promise<ID_Output>;
   projectId: () => Promise<String>;
-  startDateTime: () => Promise<String>;
-  endDateTime: () => Promise<String>;
+  startDateTime: () => Promise<DateTimeOutput>;
+  status: () => Promise<ProjectStatus>;
+  endDateTime: () => Promise<DateTimeOutput>;
   fileIds: () => Promise<String[]>;
+  validation: () => Promise<Int>;
 }
 
 export interface ProjectPreviousValues {
@@ -1283,9 +1317,10 @@ export interface AggregateTaskSubscription
 
 export interface Task {
   id: ID_Output;
-  jobId?: String;
-  userId?: String;
-  fileId?: String;
+  jobId: String;
+  userId: String;
+  fileId: String;
+  jobIdAndFileId: String;
   type?: ProjectType;
   labels?: Json;
 }
@@ -1295,6 +1330,7 @@ export interface TaskPromise extends Promise<Task>, Fragmentable {
   jobId: () => Promise<String>;
   userId: () => Promise<String>;
   fileId: () => Promise<String>;
+  jobIdAndFileId: () => Promise<String>;
   type: () => Promise<ProjectType>;
   labels: () => Promise<Json>;
 }
@@ -1306,6 +1342,7 @@ export interface TaskSubscription
   jobId: () => Promise<AsyncIterator<String>>;
   userId: () => Promise<AsyncIterator<String>>;
   fileId: () => Promise<AsyncIterator<String>>;
+  jobIdAndFileId: () => Promise<AsyncIterator<String>>;
   type: () => Promise<AsyncIterator<ProjectType>>;
   labels: () => Promise<AsyncIterator<Json>>;
 }
@@ -1317,6 +1354,7 @@ export interface TaskNullablePromise
   jobId: () => Promise<String>;
   userId: () => Promise<String>;
   fileId: () => Promise<String>;
+  jobIdAndFileId: () => Promise<String>;
   type: () => Promise<ProjectType>;
   labels: () => Promise<Json>;
 }
@@ -1503,9 +1541,10 @@ export interface JobConnectionSubscription
 
 export interface TaskPreviousValues {
   id: ID_Output;
-  jobId?: String;
-  userId?: String;
-  fileId?: String;
+  jobId: String;
+  userId: String;
+  fileId: String;
+  jobIdAndFileId: String;
   type?: ProjectType;
   labels?: Json;
 }
@@ -1517,6 +1556,7 @@ export interface TaskPreviousValuesPromise
   jobId: () => Promise<String>;
   userId: () => Promise<String>;
   fileId: () => Promise<String>;
+  jobIdAndFileId: () => Promise<String>;
   type: () => Promise<ProjectType>;
   labels: () => Promise<Json>;
 }
@@ -1528,6 +1568,7 @@ export interface TaskPreviousValuesSubscription
   jobId: () => Promise<AsyncIterator<String>>;
   userId: () => Promise<AsyncIterator<String>>;
   fileId: () => Promise<AsyncIterator<String>>;
+  jobIdAndFileId: () => Promise<AsyncIterator<String>>;
   type: () => Promise<AsyncIterator<ProjectType>>;
   labels: () => Promise<AsyncIterator<Json>>;
 }
@@ -1631,9 +1672,11 @@ export interface TaskSubscriptionPayloadSubscription
 export interface JobPreviousValues {
   id: ID_Output;
   projectId: String;
-  startDateTime: String;
-  endDateTime?: String;
+  startDateTime: DateTimeOutput;
+  status?: ProjectStatus;
+  endDateTime?: DateTimeOutput;
   fileIds: String[];
+  validation: Int;
 }
 
 export interface JobPreviousValuesPromise
@@ -1641,9 +1684,11 @@ export interface JobPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   projectId: () => Promise<String>;
-  startDateTime: () => Promise<String>;
-  endDateTime: () => Promise<String>;
+  startDateTime: () => Promise<DateTimeOutput>;
+  status: () => Promise<ProjectStatus>;
+  endDateTime: () => Promise<DateTimeOutput>;
   fileIds: () => Promise<String[]>;
+  validation: () => Promise<Int>;
 }
 
 export interface JobPreviousValuesSubscription
@@ -1651,9 +1696,11 @@ export interface JobPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   projectId: () => Promise<AsyncIterator<String>>;
-  startDateTime: () => Promise<AsyncIterator<String>>;
-  endDateTime: () => Promise<AsyncIterator<String>>;
+  startDateTime: () => Promise<AsyncIterator<DateTimeOutput>>;
+  status: () => Promise<AsyncIterator<ProjectStatus>>;
+  endDateTime: () => Promise<AsyncIterator<DateTimeOutput>>;
   fileIds: () => Promise<AsyncIterator<String[]>>;
+  validation: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface JobSubscriptionPayload {

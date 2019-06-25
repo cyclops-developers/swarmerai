@@ -94,6 +94,7 @@ type Job {
   projectId: String!
   startDateTime: String!
   endDateTime: String
+  project: Project!
   fileUrls: [String]
 }
 
