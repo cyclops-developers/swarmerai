@@ -22,9 +22,14 @@ const project = {
 
   async startProject(parent, { id }, context) {
     const userId = getUserId(context);
-    const projectExists = await context.prisma.projects( { where: { id } } );
+    const projectExists = await context.prisma.projects({ 
+      where: { 
+        id ,
+        AND: [{ creator: { id: userId } }] 
+      }
+    });
 
-    if (!projectExists) {
+    if (!projectExists || Object.keys(projectExists).length === 0) {
       throw new Error(`Project not found or you're not the creator`)
     }
 

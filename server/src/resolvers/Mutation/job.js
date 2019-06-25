@@ -5,6 +5,8 @@ const job = {
       // Check user
       getUserId(context);
 
+      // TODO: Add queue creation here
+
       return context.prisma.createJob(input);
     },
 }
