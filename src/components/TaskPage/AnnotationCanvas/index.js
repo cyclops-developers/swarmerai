@@ -12,7 +12,7 @@ const AnnotationCanvas = ({
   showLabels,
   annotations,
   url,
-  canvasWidth = 400,
+  canvasWidth,
   setFocusedAnnotation,
   setAnnotations,
   setAddingPoints,
@@ -41,7 +41,7 @@ const AnnotationCanvas = ({
 
     // first add
     const annotationsCopy = { ...annotations }
-    if (!focusedAnnotation) {
+    if (!focusedAnnotation || !annotationsCopy[focusedAnnotation]) {
       vertices = []
       vertices.push({
         id: `${timeNow}`,
