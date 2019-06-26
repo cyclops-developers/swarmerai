@@ -151,16 +151,6 @@ class RootContainer extends Component {
                 />
                 <ProtectedRoute
                   token={this.state.token}
-                  path="/jobs"
-                  component={JobsPage}
-                />
-                <ProtectedRoute
-                  token={this.state.token}
-                  path="/job/:jobId"
-                  component={JobDetailPage}
-                />
-                <ProtectedRoute
-                  token={this.state.token}
                   path="/task/:jobId"
                   component={TaskPage}
                 />

@@ -1,13 +1,16 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import styled from 'styled-components'
-import { useQuery } from 'react-apollo-hooks'
+import { useQuery, useMutation } from 'react-apollo-hooks'
+
+import history from '../../history'
 
 import { Button, Spin } from 'antd'
 
 import get from 'lodash/get'
 import truncate from 'lodash/truncate'
+import isEmpty from 'lodash/isEmpty'
 
-import { GET_NEXT_TASK } from './queries'
+import { GET_NEXT_TASK, SUBMIT_TASK } from './queries'
 
 import { Flex } from '../../components/Flex'
 import { Box } from '../../components/Box'
@@ -51,73 +54,28 @@ const StyledClassButton = styled(Button)`
     }
   }
 `
-
-const mockClassTask = {
-  data: {
-    getNextTask: {
-      id: 'task1234',
-      fileId:
-        'https://buyxraysonline.com/wp-content/uploads/2017/12/BITEWING-XRAYS-7.jpg',
-      job: {
-        id: 'job1234',
-        project: {
-          projectId: 'project1234',
-          category: 'Tooth classification',
-          description: 'Find and label each tooth within the xray',
-          name: 'Tooth number labeling',
-          type: 'MULTI_CLASS',
-          question: null,
-          repeatable: true,
-          classes: [
-            'Green Part',
-            'Red Part',
-            'Seed',
-            'Purple Part',
-            'Brown Part',
-            'Shadow',
-            'Background',
-            'Overlapping Seed',
-            'Light reflection',
-            'Table',
-            'Green Part',
-            'Red Part',
-            'Seed',
-            'Purple Part',
-            'Brown Part',
-            'Shadow',
-            'Background',
-            'Overlapping Seed',
-            'Light reflection',
-            'Table',
-          ],
-          width: 800,
-          height: 625,
-        },
-      },
-    },
-  },
-}
-
 const TaskPage = ({ ...props }) => {
-  const [showLabels, setShowLabels] = useState(false)
+  const [showLabels, setShowLabels] = useState(true)
   const [addingPoints, setAddingPoints] = useState(true)
   const [magnifyingPower, setMagnifyingPower] = useState(1)
   const [focusedAnnotation, setFocusedAnnotation] = useState('')
   const [annotations, setAnnotations] = useState({})
+  const [task, setTask] = useState({})
+  const [project, setProject] = useState({})
+  const [jobFinished, setJobFinished] = useState(false)
 
-  // const jobId = get(props, 'match.params.jobId')
+  const jobId = get(props, 'match.params.jobId')
 
-  // const { data: taskData, error: taskError, loading: taskLoading } = useQuery(
-  //   GET_NEXT_TASK,
-  //   {
-  //     variables: { jobId },
-  //   },
-  // )
+  const { data: taskData, error: taskError, refetch: getNextTask } = useQuery(
+    GET_NEXT_TASK,
+    {
+      variables: { jobId },
+    },
+  )
 
-  // console.log('error loading task', taskError)
+  const submitTask = useMutation(SUBMIT_TASK)
 
-  const task = get(mockClassTask, 'data.getNextTask', null)
-  const project = get(task, 'job.project', null)
+  if (taskError) console.log('error loading task', taskError)
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeydown, false)
@@ -125,6 +83,26 @@ const TaskPage = ({ ...props }) => {
       document.removeEventListener('keydown', handleKeydown, false)
     }
   })
+
+  useEffect(() => {
+    if (!isEmpty(taskData)) {
+      const newTask = get(taskData, 'getNextTask')
+      if (newTask === null) setJobFinished(true)
+      setTask(newTask)
+      setProject(get(newTask, 'job.project', {}))
+    }
+  }, [taskData])
+
+  const handleGetNextTask = () => {
+    // reset all state to default
+    setShowLabels(true)
+    setAddingPoints(true)
+    setMagnifyingPower(1)
+    setFocusedAnnotation('')
+    setAnnotations({})
+
+    getNextTask()
+  }
 
   const handleKeydown = e => {
     if (project.type !== 'MULTI_CLASS') return
@@ -197,8 +175,8 @@ const TaskPage = ({ ...props }) => {
   const maxWidth = get(canvasContainer, 'current.clientWidth', 800)
   const maxHeight = window.innerHeight - 350
 
-  const projectWidth = get(project, 'width', 800)
-  const projectHeight = get(project, 'height', 800)
+  const projectWidth = get(project, 'width') || 800
+  const projectHeight = get(project, 'height') || 800
 
   const scaleByWidth = maxWidth / projectWidth
   const scaleByHeight = maxHeight / projectHeight
@@ -208,194 +186,240 @@ const TaskPage = ({ ...props }) => {
   const canvasWidth = projectWidth * maxScale
   const canvasScaling = maxScale
 
-  const handleSubmit = () => {
+  const handleClassSubmit = async () => {
     const adjustedAnnotations = Object.keys(annotations).map(anno => ({
       id: annotations[anno].id,
-      label: annotations[anno].className,
+      class: annotations[anno].className,
       vertices: annotations[anno].vertices.map(vertex => ({
         x: Math.round(vertex.x * (1 / canvasScaling)),
         y: Math.round(vertex.y * (1 / canvasScaling)),
       })),
     }))
 
-    console.log('adjustedAnnotations', adjustedAnnotations)
+    const filteredAnnotations = adjustedAnnotations.filter(
+      anno => !isEmpty(anno.class),
+    )
+
+    try {
+      await submitTask({
+        variables: { labels: filteredAnnotations, jobId, fileId: task.fileId },
+      })
+
+      handleGetNextTask()
+    } catch (e) {
+      console.log('Error submitting class answer', e)
+    }
   }
 
-  // if (taskLoading) return <Spin />
+  const handleBooleanSubmit = async answer => {
+    try {
+      await submitTask({
+        variables: {
+          labels: [{ id: task.fileId, class: answer }],
+          jobId,
+          fileId: task.fileId,
+        },
+      })
+
+      handleGetNextTask()
+    } catch (e) {
+      console.log('Error submitting boolean answer', e)
+    }
+  }
+
+  if (!jobFinished && (isEmpty(task) || isEmpty(project))) return <Spin />
 
   return (
-    <Flex
-      bg="rgb(246, 246, 246)"
-      flexDirection="column"
-      alignItems="center"
-      p={20}
-    >
-      <Flex width="100%" pt="15px" pb="35px">
-        <Flex flex={3} justifyContent="space-between" flexDirection="column">
-          {project.category && <Text fontSize={3}>{project.category}</Text>}
-          {project.name && (
-            <Text fontSize={2} mt={10}>
-              {project.name}
-            </Text>
-          )}
-          {project.description && (
-            <Text fontSize={0} mb={10}>
-              {project.description}
-            </Text>
-          )}
-          {project.question && <Text fontSize={3}>{project.question}</Text>}
-        </Flex>
-        <Flex
-          flex={1}
-          alignItems="flex-end"
-          justifyContent="space-around"
-          flexDirection="column"
-        >
-          {project.type === 'MULTI_CLASS' ? (
-            <Button
-              color="link"
-              onClick={() => handleSubmit()}
-              style={{
-                background: '#3181F8',
-                color: '#FFF',
-                width: '200px',
-                height: '40px',
-              }}
-            >
-              Finalize annotations
-            </Button>
-          ) : (
-            <Fragment>
-              <Button
-                color="link"
-                onClick={() => handleSubmit()}
-                style={{
-                  background: '#3181F8',
-                  color: '#FFF',
-                  width: '150px',
-                  height: '40px',
-                }}
-              >
-                Yes
-              </Button>
-              <Button
-                color="link"
-                onClick={() => handleSubmit()}
-                style={{
-                  background: '#3181F8',
-                  color: '#FFF',
-                  width: '150px',
-                  height: '40px',
-                }}
-              >
-                No
-              </Button>
-            </Fragment>
-          )}
-        </Flex>
-      </Flex>
-      {project.type === 'MULTI_CLASS' && (
-        <Flex
-          width={get(project, 'width') || '100%'}
-          justifyContent="space-between"
-          pb="35px"
-          maxWidth="800px"
-          minWidth="500px"
-          margin="0 auto"
-        >
-          <Button color="link" onClick={() => setShowLabels(!showLabels)}>
-            {showLabels ? 'Show labels - On' : 'Show labels - Off'}
-            <small>&nbsp;(shift)</small>
-          </Button>
-
-          <ButtonGroup>
-            <Button
-              disabled={UndoRedoState.previous.length === 0}
-              outline
-              onClick={handleUndo}
-            >
-              <small>Undo (z)</small>
-            </Button>
-            <Button
-              disabled={UndoRedoState.next.length === 0}
-              outline
-              onClick={handleRedo}
-            >
-              <small>Redo (x)</small>
-            </Button>
-          </ButtonGroup>
-
-          <ButtonGroup>
-            <Button
-              disabled={magnifyingPower >= 4}
-              outline
-              onClick={() => setMagnifyingPower(magnifyingPower + 1)}
-            >
-              <small>Zoom in (i)</small>
-            </Button>
-            <Button
-              disabled={magnifyingPower <= 1}
-              outline
-              onClick={() => setMagnifyingPower(magnifyingPower - 1)}
-            >
-              <small>Zoom out (o)</small>
-            </Button>
-          </ButtonGroup>
-
-          <Button
-            outline
-            color="primary"
-            onClick={() => handleToggleAdding()}
-            style={{ width: '165px' }}
+    <Fragment>
+      {jobFinished ? (
+        <Flex width="100%" flexDirection="column" alignItems="center">
+          <Text>This job has been finished, thank you!</Text>
+          <Text
+            onClick={() => history.push('/jobs')}
+            p={10}
+            style={{ textDecoration: 'underline', color: '#3181F8' }}
           >
-            {addingPoints ? 'Adding Annotation' : 'Add Annotation'}
-            <small style={{ paddingLeft: 5 }}>(c)</small>
-          </Button>
+            Click here to go back to job list
+          </Text>
+        </Flex>
+      ) : (
+        <Flex
+          bg="rgb(246, 246, 246)"
+          flexDirection="column"
+          alignItems="center"
+          p={20}
+        >
+          <Flex width="100%" pt="15px" pb="35px">
+            <Flex
+              flex={3}
+              justifyContent="space-between"
+              flexDirection="column"
+            >
+              {project.category && <Text fontSize={3}>{project.category}</Text>}
+              {project.name && (
+                <Text fontSize={2} mt={10}>
+                  {project.name}
+                </Text>
+              )}
+              {project.description && (
+                <Text fontSize={0} mb={10}>
+                  {project.description}
+                </Text>
+              )}
+              {project.question && <Text fontSize={3}>{project.question}</Text>}
+            </Flex>
+            <Flex
+              flex={1}
+              alignItems="flex-end"
+              justifyContent="space-around"
+              flexDirection="column"
+            >
+              {project.type === 'MULTI_CLASS' ? (
+                <Button
+                  color="link"
+                  onClick={() => handleClassSubmit()}
+                  style={{
+                    background: '#3181F8',
+                    color: '#FFF',
+                    width: '200px',
+                    height: '40px',
+                  }}
+                >
+                  Finalize annotations
+                </Button>
+              ) : (
+                <Fragment>
+                  <Button
+                    color="link"
+                    onClick={() => handleBooleanSubmit('Yes')}
+                    style={{
+                      background: '#3181F8',
+                      color: '#FFF',
+                      width: '150px',
+                      height: '40px',
+                    }}
+                  >
+                    Yes
+                  </Button>
+                  <Button
+                    color="link"
+                    onClick={() => handleBooleanSubmit('No')}
+                    style={{
+                      background: '#3181F8',
+                      color: '#FFF',
+                      width: '150px',
+                      height: '40px',
+                    }}
+                  >
+                    No
+                  </Button>
+                </Fragment>
+              )}
+            </Flex>
+          </Flex>
+          {project.type === 'MULTI_CLASS' && (
+            <Flex
+              width={get(project, 'width') || '100%'}
+              justifyContent="space-between"
+              pb="35px"
+              maxWidth="800px"
+              minWidth="500px"
+              margin="0 auto"
+            >
+              <Button color="link" onClick={() => setShowLabels(!showLabels)}>
+                {showLabels ? 'Show labels - On' : 'Show labels - Off'}
+                <small>&nbsp;(shift)</small>
+              </Button>
+
+              <ButtonGroup>
+                <Button
+                  disabled={UndoRedoState.previous.length === 0}
+                  outline
+                  onClick={handleUndo}
+                >
+                  <small>Undo (z)</small>
+                </Button>
+                <Button
+                  disabled={UndoRedoState.next.length === 0}
+                  outline
+                  onClick={handleRedo}
+                >
+                  <small>Redo (x)</small>
+                </Button>
+              </ButtonGroup>
+
+              <ButtonGroup>
+                <Button
+                  disabled={magnifyingPower >= 4}
+                  outline
+                  onClick={() => setMagnifyingPower(magnifyingPower + 1)}
+                >
+                  <small>Zoom in (i)</small>
+                </Button>
+                <Button
+                  disabled={magnifyingPower <= 1}
+                  outline
+                  onClick={() => setMagnifyingPower(magnifyingPower - 1)}
+                >
+                  <small>Zoom out (o)</small>
+                </Button>
+              </ButtonGroup>
+
+              <Button
+                outline
+                color="primary"
+                onClick={() => handleToggleAdding()}
+                style={{ width: '165px' }}
+              >
+                {addingPoints ? 'Adding Annotation' : 'Add Annotation'}
+                <small style={{ paddingLeft: 5 }}>(c)</small>
+              </Button>
+            </Flex>
+          )}
+          <Flex
+            width="100%"
+            border="1px solid #dbdbdb"
+            borderRadius="4px"
+            p="5px"
+            alignItems="center"
+          >
+            <Box ref={canvasContainer} flex={2}>
+              <AnnotationCanvas
+                url={task.fileId}
+                showLabels={showLabels}
+                magnifyingPower={magnifyingPower}
+                focusedAnnotation={focusedAnnotation}
+                annotations={annotations}
+                addingPoints={addingPoints}
+                setFocusedAnnotation={setFocusedAnnotation}
+                setAnnotations={handleSetAnnotation}
+                setAddingPoints={setAddingPoints}
+                canvasWidth={canvasWidth}
+              />
+            </Box>
+            {project.type === 'MULTI_CLASS' && (
+              <Flex
+                flex={1}
+                flexWrap="wrap"
+                justifyContent="space-around"
+                pl={20}
+                maxHeight={canvasScaling * projectHeight}
+                style={{ overflow: 'scroll' }}
+              >
+                {get(project, 'classes').map((className, index) => (
+                  <StyledClassButton
+                    key={index}
+                    onClick={() => handleChangeClass(className)}
+                  >
+                    {truncate(className, { length: 16 })}
+                  </StyledClassButton>
+                ))}
+              </Flex>
+            )}
+          </Flex>
         </Flex>
       )}
-      <Flex
-        width="100%"
-        border="1px solid #dbdbdb"
-        borderRadius="4px"
-        p="5px"
-        alignItems="center"
-      >
-        <Box ref={canvasContainer} flex={2}>
-          <AnnotationCanvas
-            url={task.fileId}
-            showLabels={showLabels}
-            magnifyingPower={magnifyingPower}
-            focusedAnnotation={focusedAnnotation}
-            annotations={annotations}
-            addingPoints={addingPoints}
-            setFocusedAnnotation={setFocusedAnnotation}
-            setAnnotations={handleSetAnnotation}
-            setAddingPoints={setAddingPoints}
-            canvasWidth={canvasWidth}
-          />
-        </Box>
-        {project.type === 'MULTI_CLASS' && (
-          <Flex
-            flex={1}
-            flexWrap="wrap"
-            justifyContent="space-around"
-            pl={20}
-            maxHeight={canvasScaling * project.height}
-            style={{ overflow: 'scroll' }}
-          >
-            {get(project, 'classes').map((className, index) => (
-              <StyledClassButton
-                key={index}
-                color="link"
-                onClick={() => handleChangeClass(className)}
-              >
-                {truncate(className, { length: 16 })}
-              </StyledClassButton>
-            ))}
-          </Flex>
-        )}
-      </Flex>
-    </Flex>
+    </Fragment>
   )
 }
 
