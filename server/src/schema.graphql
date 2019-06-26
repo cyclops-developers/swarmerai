@@ -94,7 +94,7 @@ type Job {
   projectId: String!
   startDateTime: String!
   endDateTime: String
-  fileUrls: [String]
+  fileIds: [String]
 }
 
 type Task {
