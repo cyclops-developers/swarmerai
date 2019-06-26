@@ -1,6 +1,7 @@
 import { getQueue } from '../queue'
 import { getTaskId } from '../task'
 import { prisma } from '../generated/prisma-client'
+import { listBucket } from '../utils/bucketUtils'
 
 export const initializeJob = async project => {
   const job = await prisma.createJob({
@@ -9,8 +10,8 @@ export const initializeJob = async project => {
   })
 
   const queue = getQueue(job.id)
-  // TODO load image urls from s3
-  const imageUrls = ['11', '12', '13', '14', '15', '16']
+  // TODO load imageurl from bucket name
+  const imageUrls = await listBucket('swarmerai-test')
 
   for (let i = 0; i < imageUrls.length; i += 1) {
     const imageUrl = imageUrls[i]
