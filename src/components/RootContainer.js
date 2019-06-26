@@ -1,75 +1,81 @@
-import React, { Component, Fragment } from 'react'
-import { Link, Router, Route, Switch, Redirect } from 'react-router-dom'
-import history from '../history'
-import { ThemeProvider } from 'styled-components'
-import ProjectsPage from '../pages/ProjectsPage'
-import LoginPage from './LoginPage'
-import SignupPage from './SignupPage'
-import TaskPage from '../pages/TaskPage'
-import JobsPage from '../pages/JobsPage'
-import JobDetailPage from '../pages/JobDetailPage'
-import PageNotFound from './PageNotFound'
-import { AUTH_TOKEN } from '../constant'
-import { isTokenExpired } from '../helper/jwtHelper'
-import { graphql } from 'react-apollo'
-import { gql } from 'apollo-boost'
-import 'antd/dist/antd.css'
-import theme from '../theme'
-import Header from '../modules/Header'
-import { Container } from './Container'
+import React, { Component, Fragment } from 'react';
+import { Link, Router, Route, Switch, Redirect } from 'react-router-dom';
+import history from '../history';
+import { ThemeProvider } from 'styled-components';
+import AllProjectsPage from '../pages/AllProjectsPage';
+import SignupPage from './SignupPage';
+import TaskPage from '../pages/TaskPage';
+import JobsPage from '../pages/JobsPage';
+import JobDetailPage from '../pages/JobDetailPage';
+import PageNotFound from './PageNotFound';
+import { AUTH_TOKEN } from '../constant';
+import { isTokenExpired } from '../helper/jwtHelper';
+import { graphql } from 'react-apollo';
+import { gql } from 'apollo-boost';
+import 'antd/dist/antd.css';
+import theme from '../theme';
+import Header from '../modules/Header';
+import { Container } from './Container';
+import ProjectDashboardPage from '../pages/ProjectDashboardPage';
+import LoginPage from '../pages/LoginPage';
+import {
+  ALL_JOBS_PAGE_URL,
+  ALL_PROJECTS_DASHBOARD_PAGE_URL,
+} from '../strings/urlStrings';
+import { _isNull } from '../util/lodashUtils';
 
 const ProtectedRoute = ({ component: Component, token, ...rest }) => {
   return token ? (
     <Route {...rest} render={matchProps => <Component {...matchProps} />} />
   ) : (
     <Redirect to="/login" />
-  )
-}
+  );
+};
 
 class RootContainer extends Component {
   constructor(props) {
-    super(props)
-    this.refreshTokenFn = this.refreshTokenFn.bind(this)
+    super(props);
+    this.refreshTokenFn = this.refreshTokenFn.bind(this);
 
     this.state = {
       token: props.token,
-    }
+    };
   }
 
   refreshTokenFn(data = {}) {
-    const token = data[AUTH_TOKEN]
+    const token = data[AUTH_TOKEN];
 
     if (token) {
-      localStorage.setItem(AUTH_TOKEN, token)
+      localStorage.setItem(AUTH_TOKEN, token);
     } else {
-      localStorage.removeItem(AUTH_TOKEN)
+      localStorage.removeItem(AUTH_TOKEN);
     }
 
     this.setState({
       token: data[AUTH_TOKEN],
-    })
+    });
   }
 
   bootStrapData() {
     try {
-      const token = localStorage.getItem(AUTH_TOKEN)
+      const token = localStorage.getItem(AUTH_TOKEN);
       if (token !== null && token !== undefined) {
-        const expired = isTokenExpired(token)
+        const expired = isTokenExpired(token);
         if (!expired) {
-          this.setState({ token: token })
+          this.setState({ token: token });
         } else {
-          localStorage.removeItem(AUTH_TOKEN)
-          this.setState({ token: null })
+          localStorage.removeItem(AUTH_TOKEN);
+          this.setState({ token: null });
         }
       }
     } catch (e) {
-      console.log('')
+      console.log('');
     }
   }
 
   //verify localStorage check
   componentDidMount() {
-    this.bootStrapData()
+    this.bootStrapData();
   }
 
   render() {
@@ -80,7 +86,7 @@ class RootContainer extends Component {
           {this.renderRoute()}
         </Fragment>
       </Router>
-    )
+    );
   }
 
   renderNavBar() {
@@ -92,8 +98,8 @@ class RootContainer extends Component {
               this.refreshTokenFn &&
                 this.refreshTokenFn({
                   [AUTH_TOKEN]: null,
-                })
-              window.location.href = '/'
+                });
+              window.location.href = '/';
             }}
             className="f6 link dim br1 ba ph3 pv2 fr mb2 dib black"
           >
@@ -108,10 +114,11 @@ class RootContainer extends Component {
           </Link>
         )}
       </nav>
-    )
+    );
   }
 
   renderRoute() {
+    const hasUser = !_isNull(this.state.token);
     return (
       <div className="fl w-100">
         <ThemeProvider theme={theme}>
@@ -125,10 +132,11 @@ class RootContainer extends Component {
               <Switch>
                 <Route
                   token={this.state.token}
-                  path={['/login', '/']}
+                  path={'/login'}
                   render={props => (
                     <LoginPage
                       refreshTokenFn={this.refreshTokenFn}
+                      hasUser={hasUser}
                       {...props}
                     />
                   )}
@@ -136,13 +144,14 @@ class RootContainer extends Component {
                 />
                 <ProtectedRoute
                   token={this.state.token}
-                  path="/projects"
-                  component={ProjectsPage}
+                  path={ALL_PROJECTS_DASHBOARD_PAGE_URL}
+                  component={AllProjectsPage}
                 />
                 <ProtectedRoute
                   token={this.state.token}
-                  path="/jobs"
+                  path={['/', ALL_JOBS_PAGE_URL]}
                   component={JobsPage}
+                  exact
                 />
                 <ProtectedRoute
                   token={this.state.token}
@@ -153,6 +162,11 @@ class RootContainer extends Component {
                   token={this.state.token}
                   path="/task/:jobId"
                   component={TaskPage}
+                />
+                <ProtectedRoute
+                  token={this.state.token}
+                  path="/project/:id"
+                  component={ProjectDashboardPage}
                 />
                 <Route
                   token={this.state.token}
@@ -167,7 +181,7 @@ class RootContainer extends Component {
           </div>
         </ThemeProvider>
       </div>
-    )
+    );
   }
 }
 
@@ -179,10 +193,10 @@ const ME_QUERY = gql`
       name
     }
   }
-`
+`;
 
 export default graphql(ME_QUERY, {
   options: {
     errorPolicy: 'all',
   },
-})(RootContainer)
+})(RootContainer);

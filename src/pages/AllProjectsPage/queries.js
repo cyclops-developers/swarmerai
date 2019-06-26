@@ -13,7 +13,7 @@ export const GET_PROJECTS_QUERY = gql`
       }
       category
       validation
-      bucketUrl
+      bucketName
       type
       repeatable
       question
@@ -30,6 +30,16 @@ export const DELETE_PROJECT_ENDPOINT_NAME = 'deleteProject'
 export const DELETE_PROJECT_MUTATION = gql`
   mutation ${DELETE_PROJECT_ENDPOINT_NAME}($id: ID!) {
    ${DELETE_PROJECT_ENDPOINT_NAME}(id: $id) {
+     id
+   }
+  }
+`
+
+export const DUPLICATE_PROJECT_ENDPOINT_NAME = 'duplicateProject'
+
+export const DUPLICATE_PROJECT_MUTATION = gql`
+  mutation ${DUPLICATE_PROJECT_ENDPOINT_NAME}($id: ID!) {
+   ${DUPLICATE_PROJECT_ENDPOINT_NAME}(id: $id) {
      id
    }
   }
