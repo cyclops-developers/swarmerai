@@ -13,6 +13,8 @@ type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
   createProject(input: ProjectInput!): Project!
+  updateProject(input: UpdateProjectInput!): Project!
+  duplicateProject(id: ID!): Project!
   startProject(id: ID!): String!
   deleteProject(id: ID!): Project!
 
@@ -75,6 +77,21 @@ input ProjectInput {
   classes: [String!]
   width: Int
   height: Int
+}
+
+input UpdateProjectInput {
+  id: ID!
+  description: String
+  validation: Int
+  bucketUrl: String
+  category: String
+  type: ProjectType
+  repeatable: Boolean
+  question: String
+  classes: [String!]
+  width: Int
+  height: Int
+  status: ProjectStatus
 }
 
 enum ProjectType {
