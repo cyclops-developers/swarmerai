@@ -95,6 +95,7 @@ type Job {
   startDateTime: String!
   endDateTime: String
   fileIds: [String]
+  project: Project!
 }
 
 type Task {
@@ -106,6 +107,7 @@ type Task {
   fileId: String
   type: ProjectType
   labels: [Label]
+  job: Job!
 }
 
 type Label {
