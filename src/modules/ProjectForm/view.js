@@ -3,7 +3,7 @@ import _isEmpty from 'lodash/isEmpty'
 import _find from 'lodash/find'
 import _capitalize from 'lodash/capitalize'
 import { Form, withFormik, Field } from 'formik'
-import { Button, message, Radio, Select } from 'antd'
+import { Button, message, Radio, Select, AutoComplete } from 'antd'
 import { Grid } from '../../components/Grid'
 import { Flex } from '../../components/Flex'
 import {
@@ -19,7 +19,7 @@ import {
   defaultImageBuckets,
 } from '../../helperModules/FieldComponents'
 import { renderFields } from '../../helperModules/RenderField'
-import { AutoComplete } from '@jbuschke/formik-antd'
+// import { AutoComplete } from '@jbuschke/formik-antd'
 import {
   CLASSIFICATION_TYPE_FIELD_NAME,
   IS_CLASS_REPEATABLE_FIELD_NAME,
