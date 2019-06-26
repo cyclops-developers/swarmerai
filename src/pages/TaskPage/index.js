@@ -1,14 +1,17 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import styled from 'styled-components'
+import { useQuery } from 'react-apollo-hooks'
 
-import { Button } from 'antd'
+import { Button, Spin } from 'antd'
 
 import get from 'lodash/get'
 import truncate from 'lodash/truncate'
 
-import { Flex } from '../Flex'
-import { Box } from '../Box'
-import { Text } from '../Text'
+import { GET_NEXT_TASK } from './queries'
+
+import { Flex } from '../../components/Flex'
+import { Box } from '../../components/Box'
+import { Text } from '../../components/Text'
 
 import AnnotationCanvas from './AnnotationCanvas'
 import { UndoRedo } from './AnnotationCanvas/UndoRedo'
@@ -49,88 +52,96 @@ const StyledClassButton = styled(Button)`
   }
 `
 
-const mockClassTask = {
-  data: {
-    getTask: {
-      id: 'task1234',
-      fileUrl:
-        'https://buyxraysonline.com/wp-content/uploads/2017/12/BITEWING-XRAYS-7.jpg',
-      job: {
-        id: 'job1234',
-        project: {
-          projectId: 'project1234',
-          category: 'Tooth classification',
-          description: 'Find and label each tooth within the xray',
-          name: 'Tooth number labeling',
-          type: 'MULTI_CLASS',
-          question: null,
-          repeatable: true,
-          classes: [
-            'Green Part',
-            'Red Part',
-            'Seed',
-            'Purple Part',
-            'Brown Part',
-            'Shadow',
-            'Background',
-            'Overlapping Seed',
-            'Light reflection',
-            'Table',
-            'Green Part',
-            'Red Part',
-            'Seed',
-            'Purple Part',
-            'Brown Part',
-            'Shadow',
-            'Background',
-            'Overlapping Seed',
-            'Light reflection',
-            'Table',
-          ],
-          width: 800,
-          height: 625,
-        },
-      },
-    },
-  },
-}
+// const mockClassTask = {
+//   data: {
+//     getTask: {
+//       id: 'task1234',
+//       fileId:
+//         'https://buyxraysonline.com/wp-content/uploads/2017/12/BITEWING-XRAYS-7.jpg',
+//       job: {
+//         id: 'job1234',
+//         project: {
+//           projectId: 'project1234',
+//           category: 'Tooth classification',
+//           description: 'Find and label each tooth within the xray',
+//           name: 'Tooth number labeling',
+//           type: 'MULTI_CLASS',
+//           question: null,
+//           repeatable: true,
+//           classes: [
+//             'Green Part',
+//             'Red Part',
+//             'Seed',
+//             'Purple Part',
+//             'Brown Part',
+//             'Shadow',
+//             'Background',
+//             'Overlapping Seed',
+//             'Light reflection',
+//             'Table',
+//             'Green Part',
+//             'Red Part',
+//             'Seed',
+//             'Purple Part',
+//             'Brown Part',
+//             'Shadow',
+//             'Background',
+//             'Overlapping Seed',
+//             'Light reflection',
+//             'Table',
+//           ],
+//           width: 800,
+//           height: 625,
+//         },
+//       },
+//     },
+//   },
+// }
+//
+// const mockBinaryTask = {
+//   data: {
+//     getTask: {
+//       id: 'task1234',
+//       fileId:
+//         'https://buyxraysonline.com/wp-content/uploads/2017/12/BITEWING-XRAYS-7.jpg',
+//       job: {
+//         id: 'job1234',
+//         project: {
+//           projectId: 'project1234',
+//           category: 'Tooth identification',
+//           description: 'Find xrays with the given tooth',
+//           name: 'Molar bitewing identification',
+//           type: 'BINARY',
+//           question: 'Does the image contain tooth #1?',
+//           repeatable: null,
+//           classes: null,
+//           width: 800,
+//           height: 625,
+//         },
+//       },
+//     },
+//   },
+// }
 
-const mockBinaryTask = {
-  data: {
-    getTask: {
-      id: 'task1234',
-      fileUrl:
-        'https://buyxraysonline.com/wp-content/uploads/2017/12/BITEWING-XRAYS-7.jpg',
-      job: {
-        id: 'job1234',
-        project: {
-          projectId: 'project1234',
-          category: 'Tooth identification',
-          description: 'Find xrays with the given tooth',
-          name: 'Molar bitewing identification',
-          type: 'BINARY',
-          question: 'Does the image contain tooth #1?',
-          repeatable: null,
-          classes: null,
-          width: 800,
-          height: 625,
-        },
-      },
-    },
-  },
-}
-
-const TaskPage = () => {
+const TaskPage = ({ ...props }) => {
   const [showLabels, setShowLabels] = useState(false)
   const [addingPoints, setAddingPoints] = useState(true)
   const [magnifyingPower, setMagnifyingPower] = useState(1)
   const [focusedAnnotation, setFocusedAnnotation] = useState('')
   const [annotations, setAnnotations] = useState({})
 
-  // class version
-  const task = get(mockClassTask, 'data.getTask', null)
-  // binary version
-  // const task = get(mockBinaryTask, 'data.getTask', null)
+  const jobId = get(props, 'match.params.jobId')
+
+  const { data: taskData, error: taskError, loading: taskLoading } = useQuery(
+    GET_NEXT_TASK,
+    {
+      variables: { jobId },
+    },
+  )
+
+  console.log('error loading task', taskError)
+
+  const task = get(taskData, 'data.getNextTask', null)
   const project = get(task, 'job.project', null)
 
   useEffect(() => {
@@ -234,6 +245,8 @@ const TaskPage = () => {
 
     console.log('adjustedAnnotations', adjustedAnnotations)
   }
+
+  if (taskLoading) return <Spin />
 
   return (
     <Flex
@@ -365,10 +378,16 @@ const TaskPage = () => {
           </Button>
         </Flex>
       )}
-      <Flex width="100%" border="1px solid #dbdbdb" borderRadius="4px" p="5px" alignItems="center">
+      <Flex
+        width="100%"
+        border="1px solid #dbdbdb"
+        borderRadius="4px"
+        p="5px"
+        alignItems="center"
+      >
         <Box ref={canvasContainer} flex={2}>
           <AnnotationCanvas
-            url={task.fileUrl}
+            url={task.fileId}
             showLabels={showLabels}
             magnifyingPower={magnifyingPower}
             focusedAnnotation={focusedAnnotation}

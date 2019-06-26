@@ -7,6 +7,7 @@ import { getMainDefinition } from 'apollo-utilities'
 import { AUTH_TOKEN } from './constant'
 import RootContainer from './components/RootContainer'
 import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 
 import 'tachyons'
 import './index.css'
@@ -59,7 +60,9 @@ const token = localStorage.getItem(AUTH_TOKEN)
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <RootContainer token={token} />
+    <ApolloHooksProvider client={client}>
+      <RootContainer token={token} />
+    </ApolloHooksProvider>
   </ApolloProvider>,
   document.getElementById('root'),
 )
