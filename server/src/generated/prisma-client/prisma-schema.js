@@ -153,9 +153,11 @@ scalar DateTime
 type Job {
   id: ID!
   projectId: String!
-  startDateTime: String!
-  endDateTime: String
+  startDateTime: DateTime!
+  status: ProjectStatus
+  endDateTime: DateTime
   fileIds: [String!]!
+  validation: Int!
 }
 
 type JobConnection {
@@ -171,9 +173,10 @@ input JobCreatefileIdsInput {
 input JobCreateInput {
   id: ID
   projectId: String!
-  startDateTime: String!
-  endDateTime: String
+  status: ProjectStatus
+  endDateTime: DateTime
   fileIds: JobCreatefileIdsInput
+  validation: Int!
 }
 
 type JobEdge {
@@ -188,16 +191,22 @@ enum JobOrderByInput {
   projectId_DESC
   startDateTime_ASC
   startDateTime_DESC
+  status_ASC
+  status_DESC
   endDateTime_ASC
   endDateTime_DESC
+  validation_ASC
+  validation_DESC
 }
 
 type JobPreviousValues {
   id: ID!
   projectId: String!
-  startDateTime: String!
-  endDateTime: String
+  startDateTime: DateTime!
+  status: ProjectStatus
+  endDateTime: DateTime
   fileIds: [String!]!
+  validation: Int!
 }
 
 type JobSubscriptionPayload {
@@ -224,16 +233,18 @@ input JobUpdatefileIdsInput {
 
 input JobUpdateInput {
   projectId: String
-  startDateTime: String
-  endDateTime: String
+  status: ProjectStatus
+  endDateTime: DateTime
   fileIds: JobUpdatefileIdsInput
+  validation: Int
 }
 
 input JobUpdateManyMutationInput {
   projectId: String
-  startDateTime: String
-  endDateTime: String
+  status: ProjectStatus
+  endDateTime: DateTime
   fileIds: JobUpdatefileIdsInput
+  validation: Int
 }
 
 input JobWhereInput {
@@ -265,34 +276,34 @@ input JobWhereInput {
   projectId_not_starts_with: String
   projectId_ends_with: String
   projectId_not_ends_with: String
-  startDateTime: String
-  startDateTime_not: String
-  startDateTime_in: [String!]
-  startDateTime_not_in: [String!]
-  startDateTime_lt: String
-  startDateTime_lte: String
-  startDateTime_gt: String
-  startDateTime_gte: String
-  startDateTime_contains: String
-  startDateTime_not_contains: String
-  startDateTime_starts_with: String
-  startDateTime_not_starts_with: String
-  startDateTime_ends_with: String
-  startDateTime_not_ends_with: String
-  endDateTime: String
-  endDateTime_not: String
-  endDateTime_in: [String!]
-  endDateTime_not_in: [String!]
-  endDateTime_lt: String
-  endDateTime_lte: String
-  endDateTime_gt: String
-  endDateTime_gte: String
-  endDateTime_contains: String
-  endDateTime_not_contains: String
-  endDateTime_starts_with: String
-  endDateTime_not_starts_with: String
-  endDateTime_ends_with: String
-  endDateTime_not_ends_with: String
+  startDateTime: DateTime
+  startDateTime_not: DateTime
+  startDateTime_in: [DateTime!]
+  startDateTime_not_in: [DateTime!]
+  startDateTime_lt: DateTime
+  startDateTime_lte: DateTime
+  startDateTime_gt: DateTime
+  startDateTime_gte: DateTime
+  status: ProjectStatus
+  status_not: ProjectStatus
+  status_in: [ProjectStatus!]
+  status_not_in: [ProjectStatus!]
+  endDateTime: DateTime
+  endDateTime_not: DateTime
+  endDateTime_in: [DateTime!]
+  endDateTime_not_in: [DateTime!]
+  endDateTime_lt: DateTime
+  endDateTime_lte: DateTime
+  endDateTime_gt: DateTime
+  endDateTime_gte: DateTime
+  validation: Int
+  validation_not: Int
+  validation_in: [Int!]
+  validation_not_in: [Int!]
+  validation_lt: Int
+  validation_lte: Int
+  validation_gt: Int
+  validation_gte: Int
   AND: [JobWhereInput!]
   OR: [JobWhereInput!]
   NOT: [JobWhereInput!]
@@ -716,9 +727,10 @@ type Subscription {
 
 type Task {
   id: ID!
-  jobId: String
-  userId: String
-  fileId: String
+  jobId: String!
+  userId: String!
+  fileId: String!
+  jobIdAndFileId: String!
   type: ProjectType
   labels: Json
 }
@@ -731,9 +743,10 @@ type TaskConnection {
 
 input TaskCreateInput {
   id: ID
-  jobId: String
-  userId: String
-  fileId: String
+  jobId: String!
+  userId: String!
+  fileId: String!
+  jobIdAndFileId: String!
   type: ProjectType
   labels: Json
 }
@@ -752,6 +765,8 @@ enum TaskOrderByInput {
   userId_DESC
   fileId_ASC
   fileId_DESC
+  jobIdAndFileId_ASC
+  jobIdAndFileId_DESC
   type_ASC
   type_DESC
   labels_ASC
@@ -760,9 +775,10 @@ enum TaskOrderByInput {
 
 type TaskPreviousValues {
   id: ID!
-  jobId: String
-  userId: String
-  fileId: String
+  jobId: String!
+  userId: String!
+  fileId: String!
+  jobIdAndFileId: String!
   type: ProjectType
   labels: Json
 }
@@ -789,6 +805,7 @@ input TaskUpdateInput {
   jobId: String
   userId: String
   fileId: String
+  jobIdAndFileId: String
   type: ProjectType
   labels: Json
 }
@@ -797,6 +814,7 @@ input TaskUpdateManyMutationInput {
   jobId: String
   userId: String
   fileId: String
+  jobIdAndFileId: String
   type: ProjectType
   labels: Json
 }
@@ -858,6 +876,20 @@ input TaskWhereInput {
   fileId_not_starts_with: String
   fileId_ends_with: String
   fileId_not_ends_with: String
+  jobIdAndFileId: String
+  jobIdAndFileId_not: String
+  jobIdAndFileId_in: [String!]
+  jobIdAndFileId_not_in: [String!]
+  jobIdAndFileId_lt: String
+  jobIdAndFileId_lte: String
+  jobIdAndFileId_gt: String
+  jobIdAndFileId_gte: String
+  jobIdAndFileId_contains: String
+  jobIdAndFileId_not_contains: String
+  jobIdAndFileId_starts_with: String
+  jobIdAndFileId_not_starts_with: String
+  jobIdAndFileId_ends_with: String
+  jobIdAndFileId_not_ends_with: String
   type: ProjectType
   type_not: ProjectType
   type_in: [ProjectType!]

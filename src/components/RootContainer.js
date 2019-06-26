@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Link, Router, Route, Switch, Redirect } from 'react-router-dom'
 import history from '../history'
 import { ThemeProvider } from 'styled-components'
-import ProjectsPage from './ProjectsPage'
+import ProjectsPage from '../pages/ProjectsPage'
 import LoginPage from './LoginPage'
 import SignupPage from './SignupPage'
 import TaskPage from './TaskPage'
@@ -11,9 +11,7 @@ import { AUTH_TOKEN } from '../constant'
 import { isTokenExpired } from '../helper/jwtHelper'
 import { graphql } from 'react-apollo'
 import { gql } from 'apollo-boost'
-import { CreateProject } from '../modules/CreateProject'
 import 'antd/dist/antd.css'
-import ProjectPage from '../pages/ProjectPage'
 import theme from '../theme'
 import Header from '../modules/Header'
 import { Container } from './Container'
@@ -138,16 +136,6 @@ class RootContainer extends Component {
                   token={this.state.token}
                   path="/projects"
                   component={ProjectsPage}
-                />
-                <ProtectedRoute
-                  token={this.state.token}
-                  path="/project/:id"
-                  component={ProjectPage}
-                />
-                <ProtectedRoute
-                  token={this.state.token}
-                  path="/create"
-                  component={CreateProject}
                 />
                 <ProtectedRoute
                   token={this.state.token}

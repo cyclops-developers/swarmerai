@@ -9,14 +9,15 @@ import {
   BUCKET_NAME_FIELD_NAME,
   DESCRIPTION_FIELD_NAME,
   CATEGORY_FIELD_NAME,
-  LABEL_TYPE_FIELD_NAME,
+  CLASSIFICATION_TYPE_FIELD_NAME,
   QUESTION_FIELD_NAME,
-  IS_LABEL_REPEATABLE_FIELD_NAME,
-  LABELS_FIELD_NAME,
-} from '../ProjectForm'
+  IS_CLASS_REPEATABLE_FIELD_NAME,
+  CLASSES_FIELD_NAME,
+} from '../../util/projectUtils'
 import { Box } from '../../components/Box'
-import { ProjectForm } from '../ProjectForm'
 import { H2 } from '../../helperModules/Texts'
+import ProjectForm from '../ProjectForm'
+import { execute } from '../../util/networkUtils'
 
 const Composed = adopt({
   [CREATE_PROJECT_ENDPOINT_NAME]: ({ render }) => (
@@ -38,26 +39,33 @@ class CreateProject extends PureComponent {
     return (
       <Composed>
         {props => {
-          const handleSubmit = async values => {
+          const handleSubmit = async ({ values, onSuccess, onError }) => {
             const imageUrl = values[BUCKET_NAME_FIELD_NAME]
             const imageDimensions = await getImageDimensions(imageUrl)
 
-            _get(props, `${CREATE_PROJECT_ENDPOINT_NAME}`)({
-              variables: {
-                input: {
-                  name: values[NAME_FIELD_NAME],
-                  description: values[DESCRIPTION_FIELD_NAME],
-                  validation: values[NUM_VALIDATION_FIELD_NAME],
-                  bucketUrl: values[BUCKET_NAME_FIELD_NAME],
-                  category: values[CATEGORY_FIELD_NAME],
-                  type: values[LABEL_TYPE_FIELD_NAME],
-                  repeatable: values[IS_LABEL_REPEATABLE_FIELD_NAME],
-                  question: values[QUESTION_FIELD_NAME],
-                  classes: values[LABELS_FIELD_NAME],
-                  width: imageDimensions[0],
-                  height: imageDimensions[1],
-                },
+            await execute({
+              action: async () => {
+                await _get(props, `${CREATE_PROJECT_ENDPOINT_NAME}`)({
+                  variables: {
+                    input: {
+                      name: values[NAME_FIELD_NAME],
+                      description: values[DESCRIPTION_FIELD_NAME],
+                      validation: values[NUM_VALIDATION_FIELD_NAME],
+                      bucketUrl: values[BUCKET_NAME_FIELD_NAME],
+                      category: values[CATEGORY_FIELD_NAME],
+                      type: values[CLASSIFICATION_TYPE_FIELD_NAME],
+                      repeatable: values[IS_CLASS_REPEATABLE_FIELD_NAME],
+                      question: values[QUESTION_FIELD_NAME],
+                      classes: values[CLASSES_FIELD_NAME],
+                      width: imageDimensions[0],
+                      height: imageDimensions[1],
+                    },
+                  },
+                })
+                this.props.onSuccess()
+                onSuccess()
               },
+              onError,
             })
           }
 

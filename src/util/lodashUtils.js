@@ -6,6 +6,8 @@ import _mapKeys from 'lodash/mapKeys'
 import _capitalize from 'lodash/capitalize'
 import _uniq from 'lodash/uniq'
 import _uniqBy from 'lodash/uniqBy'
+import _isArray from 'lodash/isArray'
+import _isNull from 'lodash/isNull'
 
 export { _get }
 export { _isEmpty }
@@ -15,3 +17,5 @@ export { _mapValues }
 export { _capitalize }
 export { _uniq }
 export { _uniqBy }
+export { _isArray }
+export { _isNull }
