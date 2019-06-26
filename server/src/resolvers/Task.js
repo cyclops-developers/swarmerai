@@ -1,6 +1,6 @@
 const Task = {
   job: ({ jobId }, args, context) => {
-    return context.prisma.project({ id: jobId })
+    return context.prisma.job({ id: jobId })
   },
 }
 
