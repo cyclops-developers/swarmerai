@@ -52,76 +52,51 @@ const StyledClassButton = styled(Button)`
   }
 `
 
-// const mockClassTask = {
-//   data: {
-//     getTask: {
-//       id: 'task1234',
-//       fileId:
-//         'https://buyxraysonline.com/wp-content/uploads/2017/12/BITEWING-XRAYS-7.jpg',
-//       job: {
-//         id: 'job1234',
-//         project: {
-//           projectId: 'project1234',
-//           category: 'Tooth classification',
-//           description: 'Find and label each tooth within the xray',
-//           name: 'Tooth number labeling',
-//           type: 'MULTI_CLASS',
-//           question: null,
-//           repeatable: true,
-//           classes: [
-//             'Green Part',
-//             'Red Part',
-//             'Seed',
-//             'Purple Part',
-//             'Brown Part',
-//             'Shadow',
-//             'Background',
-//             'Overlapping Seed',
-//             'Light reflection',
-//             'Table',
-//             'Green Part',
-//             'Red Part',
-//             'Seed',
-//             'Purple Part',
-//             'Brown Part',
-//             'Shadow',
-//             'Background',
-//             'Overlapping Seed',
-//             'Light reflection',
-//             'Table',
-//           ],
-//           width: 800,
-//           height: 625,
-//         },
-//       },
-//     },
-//   },
-// }
-//
-// const mockBinaryTask = {
-//   data: {
-//     getTask: {
-//       id: 'task1234',
-//       fileId:
-//         'https://buyxraysonline.com/wp-content/uploads/2017/12/BITEWING-XRAYS-7.jpg',
-//       job: {
-//         id: 'job1234',
-//         project: {
-//           projectId: 'project1234',
-//           category: 'Tooth identification',
-//           description: 'Find xrays with the given tooth',
-//           name: 'Molar bitewing identification',
-//           type: 'BINARY',
-//           question: 'Does the image contain tooth #1?',
-//           repeatable: null,
-//           classes: null,
-//           width: 800,
-//           height: 625,
-//         },
-//       },
-//     },
-//   },
-// }
+const mockClassTask = {
+  data: {
+    getNextTask: {
+      id: 'task1234',
+      fileId:
+        'https://buyxraysonline.com/wp-content/uploads/2017/12/BITEWING-XRAYS-7.jpg',
+      job: {
+        id: 'job1234',
+        project: {
+          projectId: 'project1234',
+          category: 'Tooth classification',
+          description: 'Find and label each tooth within the xray',
+          name: 'Tooth number labeling',
+          type: 'MULTI_CLASS',
+          question: null,
+          repeatable: true,
+          classes: [
+            'Green Part',
+            'Red Part',
+            'Seed',
+            'Purple Part',
+            'Brown Part',
+            'Shadow',
+            'Background',
+            'Overlapping Seed',
+            'Light reflection',
+            'Table',
+            'Green Part',
+            'Red Part',
+            'Seed',
+            'Purple Part',
+            'Brown Part',
+            'Shadow',
+            'Background',
+            'Overlapping Seed',
+            'Light reflection',
+            'Table',
+          ],
+          width: 800,
+          height: 625,
+        },
+      },
+    },
+  },
+}
 
 const TaskPage = ({ ...props }) => {
   const [showLabels, setShowLabels] = useState(false)
@@ -130,18 +105,18 @@ const TaskPage = ({ ...props }) => {
   const [focusedAnnotation, setFocusedAnnotation] = useState('')
   const [annotations, setAnnotations] = useState({})
 
-  const jobId = get(props, 'match.params.jobId')
+  // const jobId = get(props, 'match.params.jobId')
 
-  const { data: taskData, error: taskError, loading: taskLoading } = useQuery(
-    GET_NEXT_TASK,
-    {
-      variables: { jobId },
-    },
-  )
+  // const { data: taskData, error: taskError, loading: taskLoading } = useQuery(
+  //   GET_NEXT_TASK,
+  //   {
+  //     variables: { jobId },
+  //   },
+  // )
 
-  console.log('error loading task', taskError)
+  // console.log('error loading task', taskError)
 
-  const task = get(taskData, 'data.getNextTask', null)
+  const task = get(mockClassTask, 'data.getNextTask', null)
   const project = get(task, 'job.project', null)
 
   useEffect(() => {
@@ -246,7 +221,7 @@ const TaskPage = ({ ...props }) => {
     console.log('adjustedAnnotations', adjustedAnnotations)
   }
 
-  if (taskLoading) return <Spin />
+  // if (taskLoading) return <Spin />
 
   return (
     <Flex

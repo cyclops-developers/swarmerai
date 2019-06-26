@@ -6,7 +6,8 @@ import ProjectsPage from '../pages/ProjectsPage'
 import LoginPage from './LoginPage'
 import SignupPage from './SignupPage'
 import TaskPage from '../pages/TaskPage'
-
+import JobsPage from '../pages/JobsPage'
+import JobDetailPage from '../pages/JobDetailPage'
 import PageNotFound from './PageNotFound'
 import { AUTH_TOKEN } from '../constant'
 import { isTokenExpired } from '../helper/jwtHelper'
@@ -137,6 +138,16 @@ class RootContainer extends Component {
                   token={this.state.token}
                   path="/projects"
                   component={ProjectsPage}
+                />
+                <ProtectedRoute
+                  token={this.state.token}
+                  path="/jobs"
+                  component={JobsPage}
+                />
+                <ProtectedRoute
+                  token={this.state.token}
+                  path="/job/:jobId"
+                  component={JobDetailPage}
                 />
                 <ProtectedRoute
                   token={this.state.token}
