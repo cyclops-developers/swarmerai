@@ -1,11 +1,6 @@
 import React, { Component, Fragment } from 'react'
-import {
-  Link,
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from 'react-router-dom'
+import { Link, Router, Route, Switch, Redirect } from 'react-router-dom'
+import history from '../history'
 import { ThemeProvider } from 'styled-components'
 import ProjectsPage from './ProjectsPage'
 import LoginPage from './LoginPage'
@@ -79,7 +74,7 @@ class RootContainer extends Component {
 
   render() {
     return (
-      <Router>
+      <Router history={history}>
         <Fragment>
           {/* {this.renderNavBar()} */}
           {this.renderRoute()}
