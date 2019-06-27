@@ -1,9 +1,9 @@
-import { getNextTask } from '../task'
-const { getUserId } = require('../utils')
+import { getNextTask } from '../task';
+const { getUserId } = require('../utils');
 
 const Query = {
   projects(parent, args, context) {
-    const id = getUserId(context)
+    const id = getUserId(context);
     const where = {
       creator: {
         id,
@@ -25,8 +25,6 @@ const Query = {
     // Check user
     getUserId(context);
 
-    console.log(id);
-
     // Get Project Id
     const where = {
       projectId: id,
@@ -34,12 +32,11 @@ const Query = {
     return context.prisma.jobs({ where });
   },
   getActiveJobs(parent, args, context) {
-    // TODO: Query only active jobs
-    return context.prisma.jobs();
+    return context.prisma.jobs({ where: { status: 'ACTIVE' } });
   },
   getNextTask(parent, { jobId }, context) {
     return getNextTask(jobId);
   },
-}
+};
 
-module.exports = { Query }
+module.exports = { Query };

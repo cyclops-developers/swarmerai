@@ -114,7 +114,6 @@ type Job {
   endDateTime: String
   fileIds: [String]
   project: Project!
-
   description: String!
   validation: Int!
   bucketName: String!
@@ -125,6 +124,7 @@ type Job {
   classes: [String!]!
   width: Int!
   height: Int!
+  status: ProjectStatus
 }
 
 type Task {
