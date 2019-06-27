@@ -1,5 +1,4 @@
 const category = {
-
     async saveCategory(parent, input, context) {
         try {
             return context.prisma.createCategory({ name: input.category } );
@@ -18,9 +17,8 @@ const category = {
               console.log(err);
               return null;
           }
-  
+
         },
+};
 
-}
-
-module.exports = { category }
+module.exports = { category };

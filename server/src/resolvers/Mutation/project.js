@@ -103,6 +103,6 @@ const project = {
     // if not delete the project
     return context.prisma.deleteProject({ id });
   },
-}
+};
 
 module.exports = { project };
