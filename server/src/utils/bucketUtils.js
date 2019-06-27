@@ -11,9 +11,9 @@ export const listBucket = async bucketName => {
   let response = await s3
     .listObjectsV2({
       Bucket: bucketName,
-      MaxKeys: 1,
     })
     .promise()
+
   fileUrls.push(...response.Contents.map(x => getFileUrl(bucketName, x.Key)))
 
   while (response.NextContinuationToken) {
@@ -24,7 +24,7 @@ export const listBucket = async bucketName => {
       })
       .promise()
     fileUrls.push(...response.Contents.map(x => getFileUrl(bucketName, x.Key)))
-
-    return fileUrls
   }
+
+  return fileUrls
 }

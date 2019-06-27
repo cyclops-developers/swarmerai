@@ -6,7 +6,16 @@ import { listBucket } from '../utils/bucketUtils'
 export const initializeJob = async project => {
   const job = await prisma.createJob({
     projectId: project.id,
+    description: project.description,
     validation: project.validation,
+    bucketName: project.bucketName,
+    category: project.category,
+    type: project.type,
+    repeatable: project.repeatable,
+    question: project.question,
+    classes: { set: project.classes },
+    width: project.width,
+    height: project.height,
   })
 
   const queue = getQueue(job.id)
@@ -20,7 +29,7 @@ export const initializeJob = async project => {
       jobId: job.id,
       fileId: imageUrl,
       type: project.type,
-      validations: project.validations,
+      validation: project.validation,
       question: project.question,
       classes: project.classes,
       width: project.width,

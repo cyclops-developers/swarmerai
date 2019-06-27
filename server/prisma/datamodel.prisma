@@ -13,7 +13,7 @@ type Project {
   name: String!
   description: String!
   validation: Int!
-  bucketUrl: String!
+  bucketName: String!
   category: String!
   type: ProjectType
   repeatable: Boolean! @default(value: false)
@@ -41,7 +41,16 @@ type Job {
   fileIds: [String]
 
   # redundantly store fields
+  description: String!
   validation: Int!
+  bucketName: String!
+  category: String!
+  type: ProjectType!
+  repeatable: Boolean!
+  question: String!
+  classes: [String!]!
+  width: Int!
+  height: Int!
 }
 
 type Task {
