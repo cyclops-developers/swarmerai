@@ -4,7 +4,7 @@ type Query {
   me: User
 
   getCategories: [Category]
-  getJobs(id: ID!): [Job!]!
+  getJobs(projectId: ID!): [Job!]!
   getActiveJobs: [Job!]!
   getNextTask(jobId: String!): Task
 }

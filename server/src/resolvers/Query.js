@@ -21,13 +21,13 @@ const Query = {
   getCategories(parent, args, context) {
     return context.prisma.categories();
   },
-  async getJobs(parent, { id }, context) {
+  async getJobs(parent, { projectId }, context) {
     // Check user
     getUserId(context);
 
     // Get Project Id
     const where = {
-      projectId: id,
+      projectId,
     };
     return context.prisma.jobs({ where });
   },
