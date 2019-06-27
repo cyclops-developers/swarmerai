@@ -45,7 +45,7 @@ type Project {
   name: String!
   description: String!
   validation: Int!
-  bucketUrl: String!
+  bucketName: String!
   category: String!
   type: ProjectType!
   repeatable: Boolean
@@ -69,7 +69,7 @@ input ProjectInput {
   name: String!
   description: String!
   validation: Int!
-  bucketUrl: String!
+  bucketName: String!
   category: String!
   type: ProjectType!
   repeatable: Boolean
@@ -83,7 +83,7 @@ input UpdateProjectInput {
   id: ID!
   description: String
   validation: Int
-  bucketUrl: String
+  bucketName: String
   category: String
   type: ProjectType
   repeatable: Boolean
@@ -113,6 +113,17 @@ type Job {
   endDateTime: String
   fileIds: [String]
   project: Project!
+
+  description: String!
+  validation: Int!
+  bucketName: String!
+  category: String!
+  type: ProjectType!
+  repeatable: Boolean!
+  question: String!
+  classes: [String!]!
+  width: Int!
+  height: Int!
 }
 
 type Task {
