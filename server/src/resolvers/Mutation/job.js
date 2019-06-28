@@ -1,5 +1,4 @@
 import { endJob } from '../../job';
-const { getUserId } = require('../../utils');
 
 const job = {
   async endJob(parent, { id }, context) {

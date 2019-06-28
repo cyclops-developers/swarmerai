@@ -5,7 +5,7 @@
     "jsx-quotes": ["error", "prefer-double"],
     "no-console": 0,
     "semi": [2, "always"],
-    "indent": ["error", 4],
+    "indent": ["error", 2],
     "no-tabs": 0
   }
 }

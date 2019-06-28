@@ -1,5 +1,5 @@
 import { submitTask } from '../../task';
-const { getUserId } = require('../../utils');
+import { getUserId } from '../../utils';
 
 const task = {
   submitTask: async (parent, args, context) => {
