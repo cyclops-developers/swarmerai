@@ -291,7 +291,9 @@ export type JobOrderByInput =
   | "width_ASC"
   | "width_DESC"
   | "height_ASC"
-  | "height_DESC";
+  | "height_DESC"
+  | "expectedSubmissions_ASC"
+  | "expectedSubmissions_DESC";
 
 export type CategoryOrderByInput =
   | "id_ASC"
@@ -532,6 +534,7 @@ export interface JobCreateInput {
   classes?: Maybe<JobCreateclassesInput>;
   width: Int;
   height: Int;
+  expectedSubmissions?: Maybe<Int>;
 }
 
 export interface ProjectCreateclassesInput {
@@ -789,6 +792,14 @@ export interface JobWhereInput {
   height_lte?: Maybe<Int>;
   height_gt?: Maybe<Int>;
   height_gte?: Maybe<Int>;
+  expectedSubmissions?: Maybe<Int>;
+  expectedSubmissions_not?: Maybe<Int>;
+  expectedSubmissions_in?: Maybe<Int[] | Int>;
+  expectedSubmissions_not_in?: Maybe<Int[] | Int>;
+  expectedSubmissions_lt?: Maybe<Int>;
+  expectedSubmissions_lte?: Maybe<Int>;
+  expectedSubmissions_gt?: Maybe<Int>;
+  expectedSubmissions_gte?: Maybe<Int>;
   AND?: Maybe<JobWhereInput[] | JobWhereInput>;
   OR?: Maybe<JobWhereInput[] | JobWhereInput>;
   NOT?: Maybe<JobWhereInput[] | JobWhereInput>;
@@ -852,6 +863,7 @@ export interface JobUpdateManyMutationInput {
   classes?: Maybe<JobUpdateclassesInput>;
   width?: Maybe<Int>;
   height?: Maybe<Int>;
+  expectedSubmissions?: Maybe<Int>;
 }
 
 export interface UserUpsertNestedInput {
@@ -985,6 +997,7 @@ export interface JobUpdateInput {
   classes?: Maybe<JobUpdateclassesInput>;
   width?: Maybe<Int>;
   height?: Maybe<Int>;
+  expectedSubmissions?: Maybe<Int>;
 }
 
 export interface JobSubscriptionWhereInput {
@@ -1159,6 +1172,7 @@ export interface Job {
   classes: String[];
   width: Int;
   height: Int;
+  expectedSubmissions?: Int;
 }
 
 export interface JobPromise extends Promise<Job>, Fragmentable {
@@ -1178,6 +1192,7 @@ export interface JobPromise extends Promise<Job>, Fragmentable {
   classes: () => Promise<String[]>;
   width: () => Promise<Int>;
   height: () => Promise<Int>;
+  expectedSubmissions: () => Promise<Int>;
 }
 
 export interface JobSubscription
@@ -1199,6 +1214,7 @@ export interface JobSubscription
   classes: () => Promise<AsyncIterator<String[]>>;
   width: () => Promise<AsyncIterator<Int>>;
   height: () => Promise<AsyncIterator<Int>>;
+  expectedSubmissions: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface JobNullablePromise extends Promise<Job | null>, Fragmentable {
@@ -1218,6 +1234,7 @@ export interface JobNullablePromise extends Promise<Job | null>, Fragmentable {
   classes: () => Promise<String[]>;
   width: () => Promise<Int>;
   height: () => Promise<Int>;
+  expectedSubmissions: () => Promise<Int>;
 }
 
 export interface UserPreviousValues {
@@ -1881,6 +1898,7 @@ export interface JobPreviousValues {
   classes: String[];
   width: Int;
   height: Int;
+  expectedSubmissions?: Int;
 }
 
 export interface JobPreviousValuesPromise
@@ -1902,6 +1920,7 @@ export interface JobPreviousValuesPromise
   classes: () => Promise<String[]>;
   width: () => Promise<Int>;
   height: () => Promise<Int>;
+  expectedSubmissions: () => Promise<Int>;
 }
 
 export interface JobPreviousValuesSubscription
@@ -1923,6 +1942,7 @@ export interface JobPreviousValuesSubscription
   classes: () => Promise<AsyncIterator<String[]>>;
   width: () => Promise<AsyncIterator<Int>>;
   height: () => Promise<AsyncIterator<Int>>;
+  expectedSubmissions: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface JobSubscriptionPayload {

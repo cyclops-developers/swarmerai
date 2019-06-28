@@ -51,6 +51,7 @@ type Job {
   classes: [String!]!
   width: Int!
   height: Int!
+  expectedSubmissions: Int
 }
 
 type Task {

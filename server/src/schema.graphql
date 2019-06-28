@@ -128,6 +128,7 @@ type Job {
   height: Int!
   status: ProjectStatus
   taskCompleted: Int
+  expectedSubmissions: Int
 }
 
 type Task {
