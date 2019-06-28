@@ -2,8 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Link, Router, Route, Switch, Redirect } from 'react-router-dom'
 import history from '../history'
 import { ThemeProvider } from 'styled-components'
-import ProjectsPage from '../pages/ProjectsPage'
-import LoginPage from './LoginPage'
+import AllProjectsPage from '../pages/AllProjectsPage'
 import SignupPage from './SignupPage'
 import TaskPage from '../pages/TaskPage'
 import JobsPage from '../pages/JobsPage'
@@ -17,6 +16,13 @@ import 'antd/dist/antd.css'
 import theme from '../theme'
 import Header from '../modules/Header'
 import { Container } from './Container'
+import ProjectDashboardPage from '../pages/ProjectDashboardPage'
+import LoginPage from '../pages/LoginPage'
+import {
+  ALL_JOBS_PAGE_URL,
+  ALL_PROJECTS_DASHBOARD_PAGE_URL,
+} from '../strings/urlStrings'
+import { _isNull } from '../util/lodashUtils'
 
 const ProtectedRoute = ({ component: Component, token, ...rest }) => {
   return token ? (
@@ -112,6 +118,7 @@ class RootContainer extends Component {
   }
 
   renderRoute() {
+    const hasUser = !_isNull(this.state.token)
     return (
       <div className="fl w-100">
         <ThemeProvider theme={theme}>
@@ -125,10 +132,11 @@ class RootContainer extends Component {
               <Switch>
                 <Route
                   token={this.state.token}
-                  path={['/login', '/']}
+                  path={'/login'}
                   render={props => (
                     <LoginPage
                       refreshTokenFn={this.refreshTokenFn}
+                      hasUser={hasUser}
                       {...props}
                     />
                   )}
@@ -136,12 +144,12 @@ class RootContainer extends Component {
                 />
                 <ProtectedRoute
                   token={this.state.token}
-                  path="/projects"
-                  component={ProjectsPage}
+                  path={ALL_PROJECTS_DASHBOARD_PAGE_URL}
+                  component={AllProjectsPage}
                 />
                 <ProtectedRoute
                   token={this.state.token}
-                  path="/jobs"
+                  path={['/', ALL_JOBS_PAGE_URL]}
                   component={JobsPage}
                 />
                 <ProtectedRoute
@@ -153,6 +161,11 @@ class RootContainer extends Component {
                   token={this.state.token}
                   path="/task/:jobId"
                   component={TaskPage}
+                />
+                <ProtectedRoute
+                  token={this.state.token}
+                  path="/project/:id"
+                  component={ProjectDashboardPage}
                 />
                 <Route
                   token={this.state.token}

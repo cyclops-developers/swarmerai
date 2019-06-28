@@ -25,14 +25,14 @@ const Composed = adopt({
   ),
 })
 
-const getImageDimensions = src => {
-  return new Promise((resolve, reject) => {
-    let img = new Image()
-    img.onload = () => resolve([img.width, img.height])
-    img.onerror = reject
-    img.src = src
-  })
-}
+// const getImageDimensions = src => {
+//   return new Promise((resolve, reject) => {
+//     let img = new Image()
+//     img.onload = () => resolve([img.width, img.height])
+//     img.onerror = reject
+//     img.src = src
+//   })
+// }
 
 class CreateProject extends PureComponent {
   render() {
@@ -40,8 +40,8 @@ class CreateProject extends PureComponent {
       <Composed>
         {props => {
           const handleSubmit = async ({ values, onSuccess, onError }) => {
-            const imageUrl = values[BUCKET_NAME_FIELD_NAME]
-            const imageDimensions = await getImageDimensions(imageUrl)
+            // const imageUrl = values[BUCKET_NAME_FIELD_NAME]
+            // const imageDimensions = await getImageDimensions(imageUrl)
 
             await execute({
               action: async () => {
@@ -51,14 +51,14 @@ class CreateProject extends PureComponent {
                       name: values[NAME_FIELD_NAME],
                       description: values[DESCRIPTION_FIELD_NAME],
                       validation: values[NUM_VALIDATION_FIELD_NAME],
-                      bucketUrl: values[BUCKET_NAME_FIELD_NAME],
+                      bucketName: values[BUCKET_NAME_FIELD_NAME],
                       category: values[CATEGORY_FIELD_NAME],
                       type: values[CLASSIFICATION_TYPE_FIELD_NAME],
                       repeatable: values[IS_CLASS_REPEATABLE_FIELD_NAME],
                       question: values[QUESTION_FIELD_NAME],
                       classes: values[CLASSES_FIELD_NAME],
-                      width: imageDimensions[0],
-                      height: imageDimensions[1],
+                      // width: imageDimensions[0],
+                      // height: imageDimensions[1],
                     },
                   },
                 })
