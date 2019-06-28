@@ -157,13 +157,26 @@ type Job {
   status: ProjectStatus
   endDateTime: DateTime
   fileIds: [String!]!
+  description: String!
   validation: Int!
+  bucketName: String!
+  category: String!
+  type: ProjectType!
+  repeatable: Boolean!
+  question: String!
+  classes: [String!]!
+  width: Int!
+  height: Int!
 }
 
 type JobConnection {
   pageInfo: PageInfo!
   edges: [JobEdge]!
   aggregate: AggregateJob!
+}
+
+input JobCreateclassesInput {
+  set: [String!]
 }
 
 input JobCreatefileIdsInput {
@@ -176,7 +189,16 @@ input JobCreateInput {
   status: ProjectStatus
   endDateTime: DateTime
   fileIds: JobCreatefileIdsInput
+  description: String!
   validation: Int!
+  bucketName: String!
+  category: String!
+  type: ProjectType!
+  repeatable: Boolean!
+  question: String!
+  classes: JobCreateclassesInput
+  width: Int!
+  height: Int!
 }
 
 type JobEdge {
@@ -195,8 +217,24 @@ enum JobOrderByInput {
   status_DESC
   endDateTime_ASC
   endDateTime_DESC
+  description_ASC
+  description_DESC
   validation_ASC
   validation_DESC
+  bucketName_ASC
+  bucketName_DESC
+  category_ASC
+  category_DESC
+  type_ASC
+  type_DESC
+  repeatable_ASC
+  repeatable_DESC
+  question_ASC
+  question_DESC
+  width_ASC
+  width_DESC
+  height_ASC
+  height_DESC
 }
 
 type JobPreviousValues {
@@ -206,7 +244,16 @@ type JobPreviousValues {
   status: ProjectStatus
   endDateTime: DateTime
   fileIds: [String!]!
+  description: String!
   validation: Int!
+  bucketName: String!
+  category: String!
+  type: ProjectType!
+  repeatable: Boolean!
+  question: String!
+  classes: [String!]!
+  width: Int!
+  height: Int!
 }
 
 type JobSubscriptionPayload {
@@ -227,6 +274,10 @@ input JobSubscriptionWhereInput {
   NOT: [JobSubscriptionWhereInput!]
 }
 
+input JobUpdateclassesInput {
+  set: [String!]
+}
+
 input JobUpdatefileIdsInput {
   set: [String!]
 }
@@ -236,7 +287,16 @@ input JobUpdateInput {
   status: ProjectStatus
   endDateTime: DateTime
   fileIds: JobUpdatefileIdsInput
+  description: String
   validation: Int
+  bucketName: String
+  category: String
+  type: ProjectType
+  repeatable: Boolean
+  question: String
+  classes: JobUpdateclassesInput
+  width: Int
+  height: Int
 }
 
 input JobUpdateManyMutationInput {
@@ -244,7 +304,16 @@ input JobUpdateManyMutationInput {
   status: ProjectStatus
   endDateTime: DateTime
   fileIds: JobUpdatefileIdsInput
+  description: String
   validation: Int
+  bucketName: String
+  category: String
+  type: ProjectType
+  repeatable: Boolean
+  question: String
+  classes: JobUpdateclassesInput
+  width: Int
+  height: Int
 }
 
 input JobWhereInput {
@@ -296,6 +365,20 @@ input JobWhereInput {
   endDateTime_lte: DateTime
   endDateTime_gt: DateTime
   endDateTime_gte: DateTime
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
   validation: Int
   validation_not: Int
   validation_in: [Int!]
@@ -304,6 +387,70 @@ input JobWhereInput {
   validation_lte: Int
   validation_gt: Int
   validation_gte: Int
+  bucketName: String
+  bucketName_not: String
+  bucketName_in: [String!]
+  bucketName_not_in: [String!]
+  bucketName_lt: String
+  bucketName_lte: String
+  bucketName_gt: String
+  bucketName_gte: String
+  bucketName_contains: String
+  bucketName_not_contains: String
+  bucketName_starts_with: String
+  bucketName_not_starts_with: String
+  bucketName_ends_with: String
+  bucketName_not_ends_with: String
+  category: String
+  category_not: String
+  category_in: [String!]
+  category_not_in: [String!]
+  category_lt: String
+  category_lte: String
+  category_gt: String
+  category_gte: String
+  category_contains: String
+  category_not_contains: String
+  category_starts_with: String
+  category_not_starts_with: String
+  category_ends_with: String
+  category_not_ends_with: String
+  type: ProjectType
+  type_not: ProjectType
+  type_in: [ProjectType!]
+  type_not_in: [ProjectType!]
+  repeatable: Boolean
+  repeatable_not: Boolean
+  question: String
+  question_not: String
+  question_in: [String!]
+  question_not_in: [String!]
+  question_lt: String
+  question_lte: String
+  question_gt: String
+  question_gte: String
+  question_contains: String
+  question_not_contains: String
+  question_starts_with: String
+  question_not_starts_with: String
+  question_ends_with: String
+  question_not_ends_with: String
+  width: Int
+  width_not: Int
+  width_in: [Int!]
+  width_not_in: [Int!]
+  width_lt: Int
+  width_lte: Int
+  width_gt: Int
+  width_gte: Int
+  height: Int
+  height_not: Int
+  height_in: [Int!]
+  height_not_in: [Int!]
+  height_lt: Int
+  height_lte: Int
+  height_gt: Int
+  height_gte: Int
   AND: [JobWhereInput!]
   OR: [JobWhereInput!]
   NOT: [JobWhereInput!]
@@ -375,7 +522,7 @@ type Project {
   name: String!
   description: String!
   validation: Int!
-  bucketUrl: String!
+  bucketName: String!
   category: String!
   type: ProjectType
   repeatable: Boolean!
@@ -403,7 +550,7 @@ input ProjectCreateInput {
   name: String!
   description: String!
   validation: Int!
-  bucketUrl: String!
+  bucketName: String!
   category: String!
   type: ProjectType
   repeatable: Boolean
@@ -433,8 +580,8 @@ enum ProjectOrderByInput {
   description_DESC
   validation_ASC
   validation_DESC
-  bucketUrl_ASC
-  bucketUrl_DESC
+  bucketName_ASC
+  bucketName_DESC
   category_ASC
   category_DESC
   type_ASC
@@ -460,7 +607,7 @@ type ProjectPreviousValues {
   name: String!
   description: String!
   validation: Int!
-  bucketUrl: String!
+  bucketName: String!
   category: String!
   type: ProjectType
   repeatable: Boolean!
@@ -511,7 +658,7 @@ input ProjectUpdateInput {
   name: String
   description: String
   validation: Int
-  bucketUrl: String
+  bucketName: String
   category: String
   type: ProjectType
   repeatable: Boolean
@@ -527,7 +674,7 @@ input ProjectUpdateManyMutationInput {
   name: String
   description: String
   validation: Int
-  bucketUrl: String
+  bucketName: String
   category: String
   type: ProjectType
   repeatable: Boolean
@@ -607,20 +754,20 @@ input ProjectWhereInput {
   validation_lte: Int
   validation_gt: Int
   validation_gte: Int
-  bucketUrl: String
-  bucketUrl_not: String
-  bucketUrl_in: [String!]
-  bucketUrl_not_in: [String!]
-  bucketUrl_lt: String
-  bucketUrl_lte: String
-  bucketUrl_gt: String
-  bucketUrl_gte: String
-  bucketUrl_contains: String
-  bucketUrl_not_contains: String
-  bucketUrl_starts_with: String
-  bucketUrl_not_starts_with: String
-  bucketUrl_ends_with: String
-  bucketUrl_not_ends_with: String
+  bucketName: String
+  bucketName_not: String
+  bucketName_in: [String!]
+  bucketName_not_in: [String!]
+  bucketName_lt: String
+  bucketName_lte: String
+  bucketName_gt: String
+  bucketName_gte: String
+  bucketName_contains: String
+  bucketName_not_contains: String
+  bucketName_starts_with: String
+  bucketName_not_starts_with: String
+  bucketName_ends_with: String
+  bucketName_not_ends_with: String
   category: String
   category_not: String
   category_in: [String!]
