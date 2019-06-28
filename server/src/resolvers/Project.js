@@ -1,6 +1,6 @@
 const Project = {
   creator: ({ id }, args, context) => {
-    return context.prisma.project({ id }).creator()
+    return context.prisma.project({ id }).creator();
   },
   currentJob: async ({ id }, args, context) => {
     const project = await context.prisma.project({ id });
@@ -15,8 +15,8 @@ const Project = {
     }
     return null;
   },
-}
+};
 
 module.exports = {
   Project,
-}
+};

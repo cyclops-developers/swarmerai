@@ -1,20 +1,20 @@
-import AWS from 'aws-sdk'
+import AWS from 'aws-sdk';
 
-const s3 = new AWS.S3()
+const s3 = new AWS.S3();
 
 const getFileUrl = (bucketName, key) =>
-  `https://${bucketName}.s3.amazonaws.com/${key}`
+  `https://${bucketName}.s3.amazonaws.com/${key}`;
 
 export const listBucket = async bucketName => {
-  const fileUrls = []
+  const fileUrls = [];
 
   let response = await s3
     .listObjectsV2({
       Bucket: bucketName,
     })
-    .promise()
+    .promise();
 
-  fileUrls.push(...response.Contents.map(x => getFileUrl(bucketName, x.Key)))
+  fileUrls.push(...response.Contents.map(x => getFileUrl(bucketName, x.Key)));
 
   while (response.NextContinuationToken) {
     response = await s3
@@ -22,9 +22,9 @@ export const listBucket = async bucketName => {
         Bucket: bucketName,
         ContinuationToken: response.NextContinuationToken,
       })
-      .promise()
-    fileUrls.push(...response.Contents.map(x => getFileUrl(bucketName, x.Key)))
+      .promise();
+    fileUrls.push(...response.Contents.map(x => getFileUrl(bucketName, x.Key)));
   }
 
-  return fileUrls
-}
+  return fileUrls;
+};
