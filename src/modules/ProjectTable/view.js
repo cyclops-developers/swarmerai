@@ -16,6 +16,7 @@ import { _uniqBy } from '../../util/lodashUtils'
 import { Box } from '../../components/Box'
 import { Text } from '../../components/Text'
 import { Flex } from '../../components/Flex'
+import { ClickableContainer } from '../../components/ClickableContainer'
 
 const getUniqFilters = filters => _uniqBy(filters, 'text')
 const getSorter = fieldName => (a, b) =>
@@ -30,19 +31,20 @@ const getFilters = ({ projects, fieldName }) =>
 const getUniqFiltersFromProjects = ({ projects, fieldName }) =>
   getUniqFilters(getFilters({ projects, fieldName }))
 
-export const ProjectsTableView = ({ projects, ...props }) => {
+export const ProjectTableView = ({ projects, ...props }) => {
   const columns = [
     {
       title: 'Project name',
       dataIndex: PROJECT_NAME_FIELD_NAME,
       render: (projectName, project) => (
-        <Box
+        <ClickableContainer
+          color="text.link"
           onClick={() =>
             props.handleProjectNameClick(getIdFromGqlObject(project))
           }
         >
-          <Text color="cornflowerblue">{projectName}</Text>
-        </Box>
+          <Text>{projectName}</Text>
+        </ClickableContainer>
       ),
       filters: getUniqFiltersFromProjects({
         projects,
@@ -107,11 +109,26 @@ export const ProjectsTableView = ({ projects, ...props }) => {
         return (
           <Flex>
             <Box mr={8}>
-              <Button>Duplicate</Button>
+              <Popconfirm
+                title="Are you sure you want to duplicate this project?"
+                onConfirm={() =>
+                  props.handleDuplicateProject({
+                    values: { projectId: project.getId() },
+                  })
+                }
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button>Duplicate</Button>
+              </Popconfirm>
             </Box>
             <Popconfirm
               title="Are you sure you want to delete this project?"
-              onConfirm={() => props.handleDeleteProject(project.getId())}
+              onConfirm={() =>
+                props.handleDeleteProject({
+                  values: { projectId: project.getId() },
+                })
+              }
               okText="Yes"
               cancelText="No"
             >

@@ -30,6 +30,7 @@
     "konva": "^3.3.3",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "query-string": "^6.8.1",
     "react": "^16.8.6",
     "react-adopt": "^0.6.0",
     "react-apollo": "^2.5.6",

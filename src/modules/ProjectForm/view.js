@@ -1,11 +1,10 @@
-import React from 'react'
-import _isEmpty from 'lodash/isEmpty'
-import _find from 'lodash/find'
-import _capitalize from 'lodash/capitalize'
-import { Form, withFormik, Field } from 'formik'
-import { Button, message, Radio, Select, AutoComplete } from 'antd'
-import { Grid } from '../../components/Grid'
-import { Flex } from '../../components/Flex'
+import React from 'react';
+import _isEmpty from 'lodash/isEmpty';
+import _capitalize from 'lodash/capitalize';
+import { Form, withFormik } from 'formik';
+import { Button, message, AutoComplete } from 'antd';
+import { Grid } from '../../components/Grid';
+import { Flex } from '../../components/Flex';
 import {
   FieldInput,
   FieldTextArea,
@@ -17,9 +16,8 @@ import {
   MULTI_LABEL,
   defaultCategories,
   defaultImageBuckets,
-} from '../../helperModules/FieldComponents'
-import { renderFields } from '../../helperModules/RenderField'
-// import { AutoComplete } from '@jbuschke/formik-antd'
+} from '../../helperModules/FieldComponents';
+import { renderFields } from '../../helperModules/RenderField';
 import {
   CLASSIFICATION_TYPE_FIELD_NAME,
   IS_CLASS_REPEATABLE_FIELD_NAME,
@@ -30,89 +28,20 @@ import {
   NAME_FIELD_NAME,
   CATEGORY_FIELD_NAME,
   BUCKET_NAME_FIELD_NAME,
-  LABEL_FIELD_NAME,
-} from '../../util/projectUtils'
+  IMAGE_WIDTH_FIELD_NAME,
+  IMAGE_HEIGHT_FIELD_NAME,
+} from '../../util/projectUtils';
+import { _omit } from '../../util/lodashUtils';
 
-const DEFAULT_LABELS_STORAGE_ITEM_NAME = 'defaultLabels'
-
-const LABEL_NAME = 'label-name'
-
-const radioStyle = {
-  display: 'block',
-  height: '30px',
-  lineHeight: '30px',
-}
-
-// remove later
-localStorage.setItem(
-  DEFAULT_LABELS_STORAGE_ITEM_NAME,
-  JSON.stringify([
-    {
-      [LABEL_NAME]: 'Tooth number',
-      [CLASSIFICATION_TYPE_FIELD_NAME]: MULTI_LABEL,
-      [IS_CLASS_REPEATABLE_FIELD_NAME]: false,
-      [QUESTION_FIELD_NAME]: 'Please outline a tooth and select tooth number.',
-      [CLASSES_FIELD_NAME]: ['1', '2', '3', '4'],
-      [NUM_VALIDATION_FIELD_NAME]: 3,
-      [DESCRIPTION_FIELD_NAME]: 'this is to train tooth numbering model',
-      [NAME_FIELD_NAME]: 'Tooth Numbering trial #[enter number here]',
-      [CATEGORY_FIELD_NAME]: 'Tooth number detection',
-      [BUCKET_NAME_FIELD_NAME]: 'https://bit.ly/laguro-tina',
-    },
-  ]),
-)
-// remove above
-
-const DEFAULT_LABELS = JSON.parse(
-  localStorage.getItem(DEFAULT_LABELS_STORAGE_ITEM_NAME),
-)
-
-const FieldLabelNameRadioGroup = props => (
-  <Radio.Group
-    {...props.field}
-    onChange={e => {
-      props.form.setFieldValue(LABEL_FIELD_NAME, e.target.value)
-      const label = _find(DEFAULT_LABELS, [LABEL_NAME, e.target.value])
-
-      if (label) {
-        Object.keys(label)
-          .filter(key => key !== LABEL_NAME)
-          .map(fieldName =>
-            props.form.setFieldValue(fieldName, label[fieldName]),
-          )
-      } else {
-        ;[
-          CLASSIFICATION_TYPE_FIELD_NAME,
-          IS_CLASS_REPEATABLE_FIELD_NAME,
-          QUESTION_FIELD_NAME,
-          CLASSES_FIELD_NAME,
-          NUM_VALIDATION_FIELD_NAME,
-          DESCRIPTION_FIELD_NAME,
-          NAME_FIELD_NAME,
-          CATEGORY_FIELD_NAME,
-          BUCKET_NAME_FIELD_NAME,
-        ].map(fieldName => props.form.setFieldValue(fieldName, undefined))
-      }
-      return null
-    }}
-  >
-    {DEFAULT_LABELS.map(label => (
-      <Radio style={radioStyle} value={label[LABEL_NAME]}>
-        {getFieldNameText(label[LABEL_NAME])}
-      </Radio>
-    ))}
-  </Radio.Group>
-)
-
-const getFieldNameText = fieldName => _capitalize(fieldName.replace(/-/g, ' '))
+const getFieldNameText = fieldName => _capitalize(fieldName.replace(/-/g, ' '));
 
 const getFieldValue = ({ props, fieldName }) => {
-  return props.values[fieldName]
-}
+  return props.values[fieldName];
+};
 
 class ProjectFormViewComponent extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.FieldCategoryAutocomplete = ({ field, form }) => (
       <AutoComplete
         {...field}
@@ -125,7 +54,7 @@ class ProjectFormViewComponent extends React.Component {
         }
         dataSource={this.props.categories}
       />
-    )
+    );
   }
 
   render() {
@@ -134,11 +63,6 @@ class ProjectFormViewComponent extends React.Component {
         <Grid gridTemplateColumns={'auto auto auto'}>
           {renderFields({
             fields: [
-              {
-                onlyVisibleIf: !_isEmpty(DEFAULT_LABELS),
-                name: LABEL_FIELD_NAME,
-                component: FieldLabelNameRadioGroup,
-              },
               {
                 name: CATEGORY_FIELD_NAME,
                 component: _isEmpty(defaultCategories)
@@ -158,6 +82,14 @@ class ProjectFormViewComponent extends React.Component {
                 component: _isEmpty(defaultImageBuckets)
                   ? FieldInput
                   : FieldBucketNameRadioGroup,
+              },
+              {
+                name: IMAGE_WIDTH_FIELD_NAME,
+                component: FieldInputNumber,
+              },
+              {
+                name: IMAGE_HEIGHT_FIELD_NAME,
+                component: FieldInputNumber,
               },
               {
                 name: NUM_VALIDATION_FIELD_NAME,
@@ -203,20 +135,20 @@ class ProjectFormViewComponent extends React.Component {
           </Button>
         </Flex>
       </Form>
-    )
+    );
   }
 }
 
 export const ProjectFormView = withFormik({
   mapPropsToValues: props => {
-    const { data } = props
-    return { ...data, categories: props.categories }
+    const { data } = props;
+    return { ...data, categories: props.categories };
   },
   handleSubmit: async (values, actions) => {
     await actions.props.onSubmit({
-      values,
-      onSuccess: () => message.success('Project successfully created!'),
-    })
-    actions.setSubmitting(false)
+      values: _omit(values, 'categories'),
+      onSuccess: async () => message.success('Project successfully saved!'),
+    });
+    actions.setSubmitting(false);
   },
-})(ProjectFormViewComponent)
+})(ProjectFormViewComponent);
