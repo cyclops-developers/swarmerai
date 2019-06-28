@@ -95,7 +95,6 @@ input UpdateProjectInput {
   width: Int
   height: Int
   status: ProjectStatus
-  name: String
 }
 
 enum ProjectType {

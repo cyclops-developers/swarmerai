@@ -5,7 +5,7 @@ import {
   PROJECT_CATEGORY_FIELD_NAME,
 } from '../../util/projectUtils'
 import { InternalLink } from '../../util/linkUtils'
-import { JOB_DETAILS_PAGE_URL_PREFIX } from '../../strings/urlStrings'
+import { JOB_DETAILS_PAGE_PREFIX } from '../../strings/urlStrings'
 import { getUserName } from '../../util/userUtils'
 import { Table } from 'antd'
 import { GQL_OBJECT_DATE_CREATED_FIELD_NAME } from '../../util/gqlObjectUtils'
@@ -32,7 +32,7 @@ export const JobsTableView = ({ jobs }) => {
       dataIndex: PROJECT_NAME_FIELD_NAME,
       render: (projectName, project) => (
         <InternalLink
-          to={`${JOB_DETAILS_PAGE_URL_PREFIX}/${_get(project, 'id')}`}
+          to={`${JOB_DETAILS_PAGE_PREFIX}/${_get(project, 'id')}`}
         >
           {projectName}
         </InternalLink>
@@ -93,5 +93,5 @@ export const JobsTableView = ({ jobs }) => {
         getUserName(record[PROJECT_CREATOR_FIELD_NAME]).indexOf(value) === 0,
     },
   ]
-  return <Table pagination={false} columns={columns} dataSource={jobs} />
+  return <Table pagination={false} columns={columns} dataSource={jobs}  />
 }

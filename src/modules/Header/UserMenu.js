@@ -5,8 +5,6 @@ import { Text } from '../../components/Text'
 import { Flex } from '../../components/Flex'
 import { getUser } from '../../util/authUtils'
 import { getUserName } from '../../util/userUtils'
-import { ClickableContainer } from '../../components/ClickableContainer'
-import { Link } from 'react-router-dom'
 
 const UserMenu = ({ logout }) => {
   const menu = (
@@ -14,30 +12,23 @@ const UserMenu = ({ logout }) => {
       <Menu.Item key="0" onClick={logout}>
         <Text>Logout</Text>
       </Menu.Item>
-      <Menu.Item key="0" onClick={logout}>
-        <Link>
-          <Text>Logout</Text>
-        </Link>
-      </Menu.Item>
     </Menu>
   )
 
   return (
     <Dropdown overlay={menu} trigger={['click']}>
-      <ClickableContainer>
-        <Flex alignItems="center">
-          <Text
-            mr={12}
-            className="ant-dropdown-link"
-            fontWeight="medium"
-            color="white"
-            style={{ cursor: 'pointer' }}
-          >
-            {getUserName(getUser())}
-          </Text>
-          <Icon type="down" style={{ 'margin-top': '-1px', color: 'white' }} />
-        </Flex>
-      </ClickableContainer>
+      <Flex width={120} alignItems="center">
+        <Text
+          mr={12}
+          className="ant-dropdown-link"
+          fontWeight="medium"
+          color="white"
+          style={{ cursor: 'pointer' }}
+        >
+          {getUserName(getUser())}
+        </Text>
+        <Icon type="down" style={{ 'margin-top': '-1px', color: 'white' }} />
+      </Flex>
     </Dropdown>
   )
 }
