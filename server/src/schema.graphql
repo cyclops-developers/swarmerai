@@ -8,7 +8,7 @@ type Query {
   getActiveJobs: [Job!]!
   getNextTask(jobId: String!): Task
 
-  getTopContributors(projectId: String!, quantity: Int = 5): [Contributor]
+  getTopContributors(projectId: String!, jobId:String, quantity: Int = 5): [Contributor]
 }
 
 type Mutation {
