@@ -8,18 +8,20 @@ const { Project } = require('./Project');
 const { job } = require('./Mutation/job');
 const { Job } = require('./Job');
 const { Task } = require('./Task');
+const { Contributor } = require('./Contributor').default.default;
 
 module.exports = {
-  Query,
-  Mutation: {
-    ...auth,
-    ...project,
-    ...category,
-    ...task,
-    ...job,
-  },
-  User,
-  Project,
-  Job,
-  Task,
+    Query,
+    Mutation: {
+        ...auth,
+        ...project,
+        ...category,
+        ...task,
+        ...job,
+    },
+    User,
+    Project,
+    Job,
+    Task,
+    Contributor,
 };

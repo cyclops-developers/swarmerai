@@ -8,7 +8,7 @@ type Query {
   getActiveJobs: [Job!]!
   getNextTask(jobId: String!): Task
 
-  getTopContributors(projectId: String, quantity: Int = 0): String
+  getTopContributors(projectId: String!, quantity: Int = 5): [Contributor]
 }
 
 type Mutation {
@@ -169,4 +169,10 @@ input LabelInput {
 input VertexInput {
   x: Int
   y: Int
+}
+
+type Contributor {
+  userId: String!
+  total: Int!
+  user: User
 }

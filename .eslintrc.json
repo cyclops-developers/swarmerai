@@ -4,6 +4,8 @@
     "quotes": ["error", "single", { "allowTemplateLiterals": true }],
     "jsx-quotes": ["error", "prefer-double"],
     "no-console": 0,
-    "semi": [2, "always"]
+    "semi": [2, "always"],
+    "indent": ["error", 4],
+    "no-tabs": 0
   }
 }
