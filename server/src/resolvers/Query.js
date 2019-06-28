@@ -37,6 +37,13 @@ const Query = {
   getNextTask(parent, { jobId }, context) {
     return getNextTask(jobId);
   },
+  getTopContributors(parent, { projectId, quantity }, context) {
+    //return getNextTask(jobId);
+    console.log(projectId);
+    console.log(quantity);
+
+    return null;
+  },
 };
 
 module.exports = { Query };

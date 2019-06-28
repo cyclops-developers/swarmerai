@@ -7,6 +7,8 @@ type Query {
   getJobs(projectId: ID!): [Job!]!
   getActiveJobs: [Job!]!
   getNextTask(jobId: String!): Task
+
+  getTopContributors(projectId: String, quantity: Int = 0): String
 }
 
 type Mutation {
@@ -125,7 +127,6 @@ type Job {
   width: Int!
   height: Int!
   status: ProjectStatus
-  taskTotal: Int
   taskCompleted: Int
 }
 
