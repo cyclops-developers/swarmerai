@@ -363,12 +363,6 @@ export type UserOrderByInput =
   | "name_ASC"
   | "name_DESC";
 
-export type MutationType = "CREATED" | "UPDATED" | "DELETED";
-
-export type ProjectWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
 export interface ProjectWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
@@ -524,7 +518,6 @@ export interface ProjectWhereInput {
   NOT?: Maybe<ProjectWhereInput[] | ProjectWhereInput>;
 }
 
-
 export interface JobCreateInput {
   id?: Maybe<ID_Input>;
   projectId: String;
@@ -542,13 +535,11 @@ export interface JobCreateInput {
   width: Int;
   height: Int;
   expectedSubmissions?: Maybe<Int>;
-
 }
 
 export interface ProjectCreateclassesInput {
   set?: Maybe<String[] | String>;
 }
-
 
 export type CategoryWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
@@ -1121,7 +1112,6 @@ export interface UserUpdateDataInput {
 }
 
 export interface ProjectUpdateManyMutationInput {
-
   name?: Maybe<String>;
   description?: Maybe<String>;
   validation?: Maybe<Int>;
@@ -1482,7 +1472,6 @@ export interface CategorySubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-
 export interface CategoryNullablePromise
   extends Promise<Category | null>,
     Fragmentable {
@@ -1627,7 +1616,6 @@ export interface Project {
   id: ID_Output;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
-
   name: String;
   description: String;
   validation: Int;
@@ -1642,7 +1630,6 @@ export interface Project {
   status?: ProjectStatus;
   currentJobId?: String;
 }
-
 
 export interface ProjectPromise extends Promise<Project>, Fragmentable {
   id: () => Promise<ID_Output>;
@@ -1895,7 +1882,6 @@ export interface TaskSubscriptionPayloadSubscription
 }
 
 export interface JobPreviousValues {
-
   id: ID_Output;
   projectId: String;
   startDateTime: DateTimeOutput;
@@ -1915,11 +1901,9 @@ export interface JobPreviousValues {
   expectedSubmissions?: Int;
 }
 
-
 export interface JobPreviousValuesPromise
   extends Promise<JobPreviousValues>,
     Fragmentable {
-
   id: () => Promise<ID_Output>;
   projectId: () => Promise<String>;
   startDateTime: () => Promise<DateTimeOutput>;
@@ -1939,10 +1923,8 @@ export interface JobPreviousValuesPromise
   expectedSubmissions: () => Promise<Int>;
 }
 
-=
 export interface JobPreviousValuesSubscription
   extends Promise<AsyncIterator<JobPreviousValues>>,
-
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   projectId: () => Promise<AsyncIterator<String>>;
@@ -1988,70 +1970,6 @@ export interface JobSubscriptionPayloadSubscription
   previousValues: <T = JobPreviousValuesSubscription>() => T;
 }
 
-export interface ProjectNullablePromise
-  extends Promise<Project | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-  description: () => Promise<String>;
-  validation: () => Promise<Int>;
-  bucketUrl: () => Promise<String>;
-  category: () => Promise<String>;
-  currentJobId: () => Promise<String>;
-  type: () => Promise<ProjectType>;
-  repeatable: () => Promise<Boolean>;
-  question: () => Promise<String>;
-  classes: () => Promise<String[]>;
-  width: () => Promise<Int>;
-  height: () => Promise<Int>;
-}
-
-export interface ProjectConnection {
-  pageInfo: PageInfo;
-  edges: ProjectEdge[];
-}
-
-export interface ProjectConnectionPromise
-  extends Promise<ProjectConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ProjectEdge>>() => T;
-  aggregate: <T = AggregateProjectPromise>() => T;
-}
-
-export interface ProjectConnectionSubscription
-  extends Promise<AsyncIterator<ProjectConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ProjectEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateProjectSubscription>() => T;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
 export interface ProjectEdge {
   node: Project;
   cursor: String;
@@ -2069,20 +1987,18 @@ export interface ProjectEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-
 export interface TaskConnection {
   pageInfo: PageInfo;
   edges: TaskEdge[];
 }
 
 export interface TaskConnectionPromise
-
+  extends Promise<TaskConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
   edges: <T = FragmentableArray<TaskEdge>>() => T;
   aggregate: <T = AggregateTaskPromise>() => T;
 }
-
 
 export interface TaskConnectionSubscription
   extends Promise<AsyncIterator<TaskConnection>>,
@@ -2093,7 +2009,6 @@ export interface TaskConnectionSubscription
 }
 
 export interface UserEdge {
-
   node: User;
   cursor: String;
 }
@@ -2109,7 +2024,6 @@ export interface UserEdgeSubscription
   node: <T = UserSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
-
 
 export interface AggregateJob {
   count: Int;
@@ -2128,12 +2042,10 @@ export interface AggregateJobSubscription
 }
 
 export interface User {
-
   id: ID_Output;
   email: String;
   password: String;
   name: String;
-
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -2154,7 +2066,6 @@ export interface UserSubscription
 
 export interface UserNullablePromise
   extends Promise<User | null>,
-
     Fragmentable {
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
@@ -2162,9 +2073,7 @@ export interface UserNullablePromise
   name: () => Promise<String>;
 }
 
-
 export type Long = string;
-
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -2172,21 +2081,17 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 export type ID_Input = string | number;
 export type ID_Output = string;
 
-
 export type Json = any;
 
-
 /*
-DateTime scalar input type, allowing Date
+The `Boolean` scalar type represents `true` or `false`.
 */
-
 export type Boolean = boolean;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
 export type Int = number;
-
 
 /*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
@@ -2194,16 +2099,14 @@ The `String` scalar type represents textual data, represented as UTF-8 character
 export type String = string;
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+DateTime scalar input type, allowing Date
 */
-export type Int = number;
+export type DateTimeInput = Date | string;
 
 /*
-The `Boolean` scalar type represents `true` or `false`.
+DateTime scalar output type, which is always a string
 */
-export type Boolean = boolean;
-
-export type Long = string;
+export type DateTimeOutput = string;
 
 /**
  * Model Metadata
