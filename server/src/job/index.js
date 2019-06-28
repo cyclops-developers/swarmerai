@@ -20,10 +20,10 @@ export const initializeJob = async project => {
 
   const queue = getQueue(job.id);
   // TODO load imageurl from bucket name
-  const imageUrls = await listBucket('swarmerai-test');
+  const fileUrls = await listBucket(project.bucketName);
 
-  for (let i = 0; i < imageUrls.length; i += 1) {
-    const imageUrl = imageUrls[i];
+  for (let i = 0; i < fileUrls.length; i += 1) {
+    const imageUrl = fileUrls[i];
     const name = getTaskId(job.id, imageUrl);
     const data = {
       jobId: job.id,
@@ -43,8 +43,10 @@ export const initializeJob = async project => {
     });
   }
 
+  const expectedSubmissions = fileUrls.length * project.validation;
+
   await prisma.updateJob({
-    data: { status: 'ACTIVE' },
+    data: { status: 'ACTIVE', expectedSubmissions},
     where: { id: job.id },
   });
 

@@ -167,6 +167,7 @@ type Job {
   classes: [String!]!
   width: Int!
   height: Int!
+  expectedSubmissions: Int
 }
 
 type JobConnection {
@@ -199,6 +200,7 @@ input JobCreateInput {
   classes: JobCreateclassesInput
   width: Int!
   height: Int!
+  expectedSubmissions: Int
 }
 
 type JobEdge {
@@ -235,6 +237,8 @@ enum JobOrderByInput {
   width_DESC
   height_ASC
   height_DESC
+  expectedSubmissions_ASC
+  expectedSubmissions_DESC
 }
 
 type JobPreviousValues {
@@ -254,6 +258,7 @@ type JobPreviousValues {
   classes: [String!]!
   width: Int!
   height: Int!
+  expectedSubmissions: Int
 }
 
 type JobSubscriptionPayload {
@@ -297,6 +302,7 @@ input JobUpdateInput {
   classes: JobUpdateclassesInput
   width: Int
   height: Int
+  expectedSubmissions: Int
 }
 
 input JobUpdateManyMutationInput {
@@ -314,6 +320,7 @@ input JobUpdateManyMutationInput {
   classes: JobUpdateclassesInput
   width: Int
   height: Int
+  expectedSubmissions: Int
 }
 
 input JobWhereInput {
@@ -451,6 +458,14 @@ input JobWhereInput {
   height_lte: Int
   height_gt: Int
   height_gte: Int
+  expectedSubmissions: Int
+  expectedSubmissions_not: Int
+  expectedSubmissions_in: [Int!]
+  expectedSubmissions_not_in: [Int!]
+  expectedSubmissions_lt: Int
+  expectedSubmissions_lte: Int
+  expectedSubmissions_gt: Int
+  expectedSubmissions_gte: Int
   AND: [JobWhereInput!]
   OR: [JobWhereInput!]
   NOT: [JobWhereInput!]

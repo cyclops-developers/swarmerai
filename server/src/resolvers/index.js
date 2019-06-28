@@ -8,6 +8,7 @@ const { Project } = require('./Project');
 const { job } = require('./Mutation/job');
 const { Job } = require('./Job');
 const { Task } = require('./Task');
+const { Contributor } = require('./Contributor');
 
 module.exports = {
   Query,
@@ -22,4 +23,5 @@ module.exports = {
   Project,
   Job,
   Task,
+  Contributor,
 };
