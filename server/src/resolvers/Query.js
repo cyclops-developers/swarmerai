@@ -25,8 +25,8 @@ const Query = {
   getCategories(parent, args, context) {
     return context.prisma.categories();
   },
-
   getJobs: async (parent, { projectId }, context) => {
+
     // Check user
     getUserId(context);
 
