@@ -3,7 +3,6 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-
 /* GraphQL */ `type AggregateCategory {
   count: Int!
 }
@@ -703,7 +702,6 @@ input ProjectUpdateManyMutationInput {
 }
 
 input ProjectWhereInput {
-
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -718,7 +716,6 @@ input ProjectWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -736,7 +733,6 @@ input ProjectWhereInput {
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
   creator: UserWhereInput
-
   name: String
   name_not: String
   name_in: [String!]
@@ -751,7 +747,6 @@ input ProjectWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-
   description: String
   description_not: String
   description_in: [String!]
@@ -1232,7 +1227,6 @@ input UserWhereUniqueInput {
   id: ID
   email: String
 }
-
 `
       }
     
