@@ -1,21 +1,3 @@
-type Project {
-  id: ID! @id
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-  name: String!
-  description: String!
-  validation: Int!
-  bucketUrl: String!
-  category: String!
-  currentJobId: String
-  type: ProjectType
-  repeatable: Boolean
-  question: String
-  classes: [String]
-  width: Int
-  height: Int
-}
-
 type User {
   id: ID! @id
   email: String! @unique
@@ -23,7 +5,73 @@ type User {
   name: String!
 }
 
-enum ProjectType{
-  CLASS
+type Project {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  creator: User! @relation(link: INLINE)
+  name: String!
+  description: String!
+  validation: Int!
+  bucketName: String!
+  category: String!
+  type: ProjectType
+  repeatable: Boolean! @default(value: false)
+  question: String
+  classes: [String]
+  width: Int
+  height: Int
+  status: ProjectStatus @default(value: PENDING)
+  currentJobId: String
+}
+
+type Category {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  name: String
+}
+
+type Job {
+  id: ID! @id
+  projectId: String!
+  startDateTime: DateTime! @createdAt
+  status: ProjectStatus @default(value: PENDING)
+  endDateTime: DateTime
+  fileIds: [String]
+
+  # redundantly store fields
+  description: String!
+  validation: Int!
+  bucketName: String!
+  category: String!
+  type: ProjectType!
+  repeatable: Boolean!
+  question: String!
+  classes: [String!]!
+  width: Int!
+  height: Int!
+  expectedSubmissions: Int
+}
+
+type Task {
+  id: ID! @id
+  jobId: String!
+  userId: String!
+  fileId: String!
+  jobIdAndFileId: String!
+  type: ProjectType
+  labels: Json
+}
+
+enum ProjectType {
+  MULTI_CLASS
   BINARY
+}
+
+enum ProjectStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  DELETED
 }

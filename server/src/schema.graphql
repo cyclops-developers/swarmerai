@@ -4,18 +4,25 @@ type Query {
   me: User
 
   getCategories: [Category]
+  getJobs(projectId: ID!): [Job!]!
   getActiveJobs: [Job!]!
-  getTask(jobId: String!): Task
+  getNextTask(jobId: String!): Task
+
+  getTopContributors(projectId: String!, jobId:String, quantity: Int = 5): [Contributor]
 }
 
 type Mutation {
+  initializeJob: Boolean
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
   createProject(input: ProjectInput!): Project!
+  updateProject(input: UpdateProjectInput!): Project!
+  duplicateProject(id: ID!): Project!
   startProject(id: ID!): String!
   deleteProject(id: ID!): Project!
 
-  saveCategory(category: String!): Boolean
+  saveCategory(category: String!): Category
+  deleteCategory(id: String!): Category
 
   endJob(id: ID!): Job
 
@@ -36,10 +43,22 @@ type User {
 
 type Project {
   id: ID!
+  createdAt: String
+  updatedAt: String
   name: String!
   description: String!
+  validation: Int!
+  bucketName: String!
+  category: String!
+  type: ProjectType!
+  repeatable: Boolean
+  question: String
+  classes: [String!]
+  width: Int
+  height: Int
   creator: User!
   status: ProjectStatus
+  currentJob: Job
 }
 
 enum ProjectStatus {
@@ -53,9 +72,9 @@ input ProjectInput {
   name: String!
   description: String!
   validation: Int!
-  bucketUrl: String!
+  bucketName: String!
   category: String!
-  type: ProjectType
+  type: ProjectType!
   repeatable: Boolean
   question: String
   classes: [String!]
@@ -63,33 +82,68 @@ input ProjectInput {
   height: Int
 }
 
+input UpdateProjectInput {
+  id: ID!
+  description: String
+  validation: Int
+  bucketName: String
+  category: String
+  type: ProjectType
+  repeatable: Boolean
+  question: String
+  classes: [String!]
+  width: Int
+  height: Int
+  status: ProjectStatus
+}
+
 enum ProjectType {
-  CLASS
+  MULTI_CLASS
   BINARY
 }
 
 type Category {
-  name: String
+  id: ID!
+  name: String!
+  createdAt: String
+  updatedAt: String
 }
 
 type Job {
   id: String!
   projectId: String!
   startDateTime: String!
-  endDateTime: String!
-  fileUrls: [String]
+  endDateTime: String
+  fileIds: [String]
+  project: Project!
+  description: String!
+  validation: Int!
+  bucketName: String!
+  category: String!
+  type: ProjectType!
+  repeatable: Boolean!
+  question: String!
+  classes: [String!]!
+  width: Int!
+  height: Int!
+  status: ProjectStatus
+  taskCompleted: Int
+  expectedSubmissions: Int
 }
 
 type Task {
   id: String
+  createdAt: String
+  updatedAt: String
   jobId: String
   userId: String
-  fileUrl: String
+  fileId: String
   type: ProjectType
-  answers: [Answer]
+  labels: [Label]
+  job: Job!
 }
 
-type Answer {
+type Label {
   id: String
   class: String
   vertices: [Vertex]
@@ -101,14 +155,13 @@ type Vertex {
 }
 
 input TaskInput {
-  id: String
   jobId: String
-  userId: String
-  fileUrl: String
-  answers: [AnswerInput!]!
+  fileId: String
+  type: ProjectType
+  labels: [LabelInput]
 }
 
-input AnswerInput {
+input LabelInput {
   id: String!
   class: String!
   vertices: [VertexInput]
@@ -117,4 +170,10 @@ input AnswerInput {
 input VertexInput {
   x: Int
   y: Int
+}
+
+type Contributor {
+  userId: String!
+  total: Int!
+  user: User
 }
