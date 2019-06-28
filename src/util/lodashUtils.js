@@ -8,8 +8,6 @@ import _uniq from 'lodash/uniq'
 import _uniqBy from 'lodash/uniqBy'
 import _isArray from 'lodash/isArray'
 import _isNull from 'lodash/isNull'
-import _pick from 'lodash/pick'
-import _omit from 'lodash/omit'
 
 export { _get }
 export { _isEmpty }
@@ -21,5 +19,3 @@ export { _uniq }
 export { _uniqBy }
 export { _isArray }
 export { _isNull }
-export { _pick }
-export { _omit }

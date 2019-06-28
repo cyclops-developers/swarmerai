@@ -1,8 +1,6 @@
 import React from 'react'
 import { _get } from './lodashUtils'
 
-import { execute } from './networkUtils'
-
 export const getDataFromReactAdoptProps = ({ props, endpointName }) =>
   _get(props, `${endpointName}.data.${endpointName}`)
 
@@ -36,27 +34,4 @@ export const getComponentToRender = ({
   } else {
     return componentOnSuccess
   }
-}
-
-export class GqlEndpointsHelper {
-  constructor(gqlProps) {
-    this.props = gqlProps
-  }
-
-  get = endpointName => _get(this.props, `${endpointName}`)
-}
-
-export const getHandleBackendCall = ({
-  backendCall,
-  refetch = () => {},
-  afterRefetch = () => {},
-}) => async ({ values, onSuccess = () => {} }) => {
-  await execute({
-    action: async () => {
-      await backendCall(values) // the backend call called with values from form or other child component
-      await refetch() // e.g. refetch projects after creating new project
-      onSuccess() // used to display messages
-      await afterRefetch() // e.g. hide form modal
-    },
-  })
 }

@@ -20,7 +20,11 @@ const JobsPage = () => {
 
   if (jobsError) console.log('error loading jobs', jobsError)
 
-  return <JobsTable jobs={parsedJobs} />
+  return (
+    <JobsTable
+      jobs={parsedJobs}
+    />
+  )
 }
 
 export default JobsPage
