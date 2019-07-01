@@ -16,6 +16,9 @@
 -->
 
 # SWARMER-AI
+[![GitHub license](https://img.shields.io/badge/License-Apache%202.0-red.svg)](https://github.com/laguro-developers/swarmerai/LICENSE) 
+![Build Status](https://travis-ci.org/laguro-developers/swarmerai.svg?branch=master) 
+![Last Commit](https://img.shields.io/github/last-commit/laguro-developers/swarmerai/master.svg)
 
 ## Laguro Medical Images Labeler
 
