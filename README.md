@@ -15,12 +15,14 @@
  */
 -->
 
-# SWARMER-AI
+![](assets/img_SwarmerAI_white.png)
+
 [![GitHub license](https://img.shields.io/badge/License-Apache%202.0-red.svg)](https://github.com/laguro-developers/swarmerai/LICENSE) 
 ![Build Status](https://travis-ci.org/laguro-developers/swarmerai.svg?branch=master) 
 ![Last Commit](https://img.shields.io/github/last-commit/laguro-developers/swarmerai/master.svg)
 
-## Laguro Medical Images Labeler
+
+## Swammer-Ai : Laguro Medical Images Labeler
 
 **Swarmer-Ai** is an open source project focused on Labeling. Its goal is to manage the entire flow of creation, maintenance and automation of labeling jobs for all the contributors involved. Its purpose is to simplify the process of creating workflows making the process simple for data collection and extraction.
 
