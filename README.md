@@ -19,12 +19,56 @@
 
 ## Laguro Medical Images Labeler
 
-Quick description about the project...
+**Swarmer-Ai** is an open source project focused on Labeling. Its goal is to manage the entire flow of creation, maintenance and automation of labeling jobs for all the contributors involved. Its purpose is to simplify the process of creating workflows making the process simple for data collection and extraction.
 
-## Available Scripts
+## Environment
 
-### Server
-- **start**: Start the Node Graphql Server
+**Swarmer-Ai** is divided into two parts: Front-End and API.
+
+With this it is possible to split and install the parts in different service providers. Flexibility here is the key word, giving freedom for every release process whether in a virtualized, containerized or cloud environment
+
+## Scripts
+
+### Prerequisites
+- Docker : Install docker current version - https://www.docker.com/
+- Yarn : Our package management of choice. - https://yarnpkg.com
+
+### Start
+To check all the current support commands just run: **make**
+```
+make
+  __    _____ _____ _____ _____ _____ 
+ |  |  |  _  |   __|  |  | __  |     |
+ |  |__|     |  |  |  |  |    -|  |  |
+ |_____|__|__|_____|_____|__|__|_____|
+ Swamerai commands to make your life 'really easy peasy!'
+   
+ start, stop, build and clean
+```
+
+Starting build the base images
+```
+make build
+```
+
+To easily start the project run
+```
+make start
+```
+This will start the project dependencies in a Docker with : 
+- Redis - https://redis.io/
+- AWS S3 (localstack) - https://github.com/localstack/localstack
+- MongoDB - https://www.mongodb.com/
+
+
+
+
+### Front-End
+- **start**: Start the React App Server
+- **build**: Build the React App for deploy
+
+### API
+- **start**: Start the Babek=l Node Graphql Server
 - **debug**: Start in debug mode
 - **deploy-prisma:local**: Deploy the changes in Prisma to mongo and Startup the Prisma Admin
 
