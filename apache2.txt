@@ -13,14 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { endJob } from '../../job';
-
-const job = {
-  async endJob(parent, { id }, context) {
-    // TODO auth check
-    const job = await endJob(id);
-    return job;
-  },
-};
-
-module.exports = { job };
