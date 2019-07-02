@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,10 +82,10 @@ const Query = {
     if (!jobs || jobs.length === 0) {
       return null;
     }
-    
+
     // Get Contributors
     const returnContributors = await getContributors(context, jobs);
-    return returnContributors.slice(0,quantity);
+    return returnContributors.slice(0, quantity);
   },
 };
 

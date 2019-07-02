@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { gql } from 'apollo-boost'
+import { gql } from 'apollo-boost';
 
-export const GET_CATEGORIES_ENDPOINT_NAME = 'getCategories'
+export const CATEGORIES_ENDPOINT_NAME = 'categories';
 
-export const getCategoriesQuery = gql`
-  query ${GET_CATEGORIES_ENDPOINT_NAME} {
-    ${GET_CATEGORIES_ENDPOINT_NAME} {
+export const GET_CATEGORIES_QUERY = gql`
+  query ${CATEGORIES_ENDPOINT_NAME} {
+    ${CATEGORIES_ENDPOINT_NAME} {
       id
       name
     }
   }
-`
+`;

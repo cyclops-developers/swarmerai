@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 import React from 'react';
 import { Box } from '../../components/Box';
-import { H2, P1, H3 } from '../../helperModules/Texts';
+import { H2, P2, H3 } from '../../helperModules/Texts';
 import { ClickableContainer } from '../../components/ClickableContainer';
-import { Modal, Icon, List, Button, Popconfirm } from 'antd';
+import { Icon, List, Button, Popconfirm, message } from 'antd';
 import { _isEmpty } from '../../util/lodashUtils';
 import ProjectForm from '../../modules/ProjectForm';
 import { Flex } from '../../components/Flex';
@@ -25,11 +25,13 @@ import { ProjectJobsTable } from '../../modules/ProjectJobsTable';
 import { Block } from '../../components/Block';
 import { ALL_PROJECTS_DASHBOARD_PAGE_URL } from '../../strings/urlStrings';
 import { redirect } from '../../util/redirectUtils';
+import { Modal } from '../../components/Modal';
+import { TopContributorList } from '../../modules/TopContributorList';
 
 export const ProjectDashboardPageView = props => (
   <Box>
     <ClickableContainer>
-      <P1>
+      <P2>
         <Flex alignItems="center">
           <Icon type="arrow-left" />
           <Box
@@ -39,10 +41,10 @@ export const ProjectDashboardPageView = props => (
             Back to all projects
           </Box>
         </Flex>
-      </P1>
+      </P2>
     </ClickableContainer>
     <H2 mr={5}>
-      {props.project.getName()}
+      {`Project dashboard: ${props.project.getName()}`}
       <ClickableContainer
         ml={14}
         is="span"
@@ -60,6 +62,7 @@ export const ProjectDashboardPageView = props => (
       destroyOnClose
       footer={null}
     >
+      <H3>Edit project details</H3>
       {!_isEmpty(props.projectForForm) && (
         <ProjectForm
           data={props.projectForForm}
@@ -71,48 +74,44 @@ export const ProjectDashboardPageView = props => (
       <Flex justifyContent="space-between">
         <H3>All jobs for this project</H3>
         <Popconfirm
-          title="Are you sure you want to duplicate this project?"
-          onConfirm={() => props.handleStartProject()}
+          title="Are you sure you want to start a new job for this project?"
+          onConfirm={() =>
+            props.handlestartNewJobForProject({
+              onSuccess: () => {
+                message.success(
+                  'A new job successfully created for this project!',
+                );
+              },
+            })
+          }
           okText="Yes"
           cancelText="No"
         >
-          <Button>Start new job</Button>
+          <Button loading={props.startNewJobForProjectIsLoading} icon="plus">
+            Start new job
+          </Button>
         </Popconfirm>
       </Flex>
       <ProjectJobsTable
         handleViewDetails={props.showJobDetailsModal}
+        handleEndJob={props.handleEndJob}
+        getEndJobForProjectIsLoading={props.getEndJobForProjectIsLoading}
         jobs={props.jobs}
       />
       <Modal
         onCancel={props.handleJobDetailsModalCancel}
         width={620}
         visible={props.jobDetailsModalIsVisible}
-        destroyOnClose
-        footer={null}
       >
-        <List
-          bordered
-          dataSource={props.jobForJobDetailsModal.topContributors}
-          renderItem={item => (
-            <List.Item>
-              {`${props.jobForJobDetailsModal.topContributors.indexOf(item) +
-                1}. ${item}`}
-            </List.Item>
-          )}
-        ></List>
+        <H3>Top contributors</H3>
+        <TopContributorList
+          data={props.jobForJobDetailsModal.topContributors}
+        />
       </Modal>
     </Block>
     <Block>
       <H3>Top contributors for this project</H3>
-      <List
-        bordered
-        dataSource={props.project.getTopContributors()}
-        renderItem={item => (
-          <List.Item>
-            {`${props.project.getTopContributors().indexOf(item) + 1}. ${item}`}
-          </List.Item>
-        )}
-      ></List>
+      <TopContributorList data={props.project.getTopContributors()} />
     </Block>
   </Box>
 );

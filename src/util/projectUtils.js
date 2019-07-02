@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ export const NAME_FIELD_NAME = 'name';
 export const DESCRIPTION_FIELD_NAME = 'description';
 export const LABEL_FIELD_NAME = 'default configurations';
 export const NUM_VALIDATION_FIELD_NAME = 'number-of-validations';
-export const BUCKET_NAME_FIELD_NAME = 'image-bucket-url';
+export const BUCKET_NAME_FIELD_NAME = 'image-bucket-name';
 export const CLASSIFICATION_TYPE_FIELD_NAME = 'classification-type';
 export const IS_CLASS_REPEATABLE_FIELD_NAME = 'is-class-repeatable?';
 export const QUESTION_FIELD_NAME = 'question';
@@ -39,6 +39,8 @@ export const BACKEND_PROJECT_TYPE_FIELD_NAME = 'type';
 export const BACKEND_PROJECT_REPEATABLE_FIELD_NAME = 'repeatable';
 export const BACKEND_PROJECT_WIDTH_FIELD_NAME = 'width';
 export const BACKEND_PROJECT_HEIGHT_FIELD_NAME = 'height';
+export const BACKEND_PROJECT_JOBS_FIELD_NAME = 'jobs';
+export const BACKEND_PROJECT_TOP_CONTRIBUTORS_FIELD_NAME = 'topContributors';
 
 export const GQL_OBJECT_FIELD_NAME_TO_FORM_FIELD_NAME = {
   [BACKEND_PROJECT_VALIDATION_FIELD_NAME]: NUM_VALIDATION_FIELD_NAME,
@@ -101,5 +103,7 @@ export class Project {
     _get(this.content, `${PROJECT_CURRENT_JOB_FIELD_NAME}.id`)
   getCurrentJob = () => _get(this.content, `${PROJECT_CURRENT_JOB_FIELD_NAME}`)
   hasCurrentJob = () => !_isNull(this.getCurrentJob())
-  getTopContributors = () => ['a', 'b', 'c']
+  getTopContributors = () =>
+    this.content[BACKEND_PROJECT_TOP_CONTRIBUTORS_FIELD_NAME]
+  getJobs = () => this.content[BACKEND_PROJECT_JOBS_FIELD_NAME]
 }

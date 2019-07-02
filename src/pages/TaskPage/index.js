@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,31 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState, useEffect, Fragment } from 'react'
-import styled from 'styled-components'
-import { useQuery, useMutation } from 'react-apollo-hooks'
+import React, { useState, useEffect, Fragment } from 'react';
+import styled from 'styled-components';
+import { useQuery, useMutation } from 'react-apollo-hooks';
+import { Button, Spin } from 'antd';
+import get from 'lodash/get';
+import truncate from 'lodash/truncate';
+import isEmpty from 'lodash/isEmpty';
+import { NEXT_TASK, SUBMIT_TASK } from './queries';
+import { Flex } from '../../components/Flex';
+import { Box } from '../../components/Box';
+import { Text } from '../../components/Text';
+import AnnotationCanvas from './AnnotationCanvas';
+import { UndoRedo } from './AnnotationCanvas/UndoRedo';
+import { Details } from '../../modules/Details';
+import { H3 } from '../../helperModules/Texts';
+import { Link } from '../../components/Link';
+import { ALL_JOBS_PAGE_URL } from '../../strings/urlStrings';
 
-import history from '../../history'
+const ButtonGroup = Button.Group;
 
-import { Button, Spin } from 'antd'
-
-import get from 'lodash/get'
-import truncate from 'lodash/truncate'
-import isEmpty from 'lodash/isEmpty'
-
-import { GET_NEXT_TASK, SUBMIT_TASK } from './queries'
-
-import { Flex } from '../../components/Flex'
-import { Box } from '../../components/Box'
-import { Text } from '../../components/Text'
-
-import AnnotationCanvas from './AnnotationCanvas'
-import { UndoRedo } from './AnnotationCanvas/UndoRedo'
-
-const ButtonGroup = Button.Group
-
-const UndoRedoState = new UndoRedo()
-const canvasContainer = React.createRef()
+const UndoRedoState = new UndoRedo();
+const canvasContainer = React.createRef();
 
 // -10 for inter-button margin
 const StyledClassButton = styled(Button)`
@@ -68,138 +65,138 @@ const StyledClassButton = styled(Button)`
       margin-right: 0;
     }
   }
-`
+`;
 const TaskPage = ({ ...props }) => {
-  const [showLabels, setShowLabels] = useState(true)
-  const [addingPoints, setAddingPoints] = useState(true)
-  const [magnifyingPower, setMagnifyingPower] = useState(1)
-  const [focusedAnnotation, setFocusedAnnotation] = useState('')
-  const [annotations, setAnnotations] = useState({})
-  const [task, setTask] = useState({})
-  const [project, setProject] = useState({})
-  const [jobFinished, setJobFinished] = useState(false)
+  const [showLabels, setShowLabels] = useState(true);
+  const [addingPoints, setAddingPoints] = useState(true);
+  const [magnifyingPower, setMagnifyingPower] = useState(1);
+  const [focusedAnnotation, setFocusedAnnotation] = useState('');
+  const [annotations, setAnnotations] = useState({});
+  const [task, setTask] = useState({});
+  const [project, setProject] = useState({});
+  const [jobFinished, setJobFinished] = useState(false);
 
-  const jobId = get(props, 'match.params.jobId')
+  const jobId = get(props, 'match.params.jobId');
 
-  const { data: taskData, error: taskError, refetch: getNextTask } = useQuery(
-    GET_NEXT_TASK,
+  const { data: taskData, error: taskError, refetch: nextTask } = useQuery(
+    NEXT_TASK,
     {
       variables: { jobId },
     },
-  )
+  );
 
-  const submitTask = useMutation(SUBMIT_TASK)
+  const submitTask = useMutation(SUBMIT_TASK);
 
-  if (taskError) console.log('error loading task', taskError)
+  if (taskError) console.log('error loading task', taskError);
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeydown, false)
+    document.addEventListener('keydown', handleKeydown, false);
     return () => {
-      document.removeEventListener('keydown', handleKeydown, false)
-    }
-  })
+      document.removeEventListener('keydown', handleKeydown, false);
+    };
+  });
 
   useEffect(() => {
     if (!isEmpty(taskData)) {
-      const newTask = get(taskData, 'getNextTask')
-      if (newTask === null) setJobFinished(true)
-      setTask(newTask)
-      setProject(get(newTask, 'job.project', {}))
+      const newTask = get(taskData, 'nextTask');
+      if (newTask === null) setJobFinished(true);
+      setTask(newTask);
+      setProject(get(newTask, 'job.project', {}));
     }
-  }, [taskData])
+  }, [taskData]);
 
   const handleGetNextTask = () => {
     // reset all state to default
-    setShowLabels(true)
-    setAddingPoints(true)
-    setMagnifyingPower(1)
-    setFocusedAnnotation('')
-    setAnnotations({})
+    setShowLabels(true);
+    setAddingPoints(true);
+    setMagnifyingPower(1);
+    setFocusedAnnotation('');
+    setAnnotations({});
 
-    getNextTask()
-  }
+    nextTask();
+  };
 
   const handleKeydown = e => {
-    if (project.type !== 'MULTI_CLASS') return
+    if (project.type !== 'MULTI_CLASS') return;
     switch (e.keyCode) {
-      case 90:
-        // 'z'
-        handleUndo()
-        break
-      case 88:
-        // 'x'
-        handleRedo()
-        break
-      case 16:
-        // shift
-        setShowLabels(!showLabels)
-        break
-      case 67:
-        // 'c'
-        handleToggleAdding()
-        break
-      case 73:
-        // 'i'
-        if (magnifyingPower <= 3) {
-          setMagnifyingPower(magnifyingPower + 1)
-        }
-        break
-      case 79:
-        // 'o'
-        if (magnifyingPower >= 2) {
-          setMagnifyingPower(magnifyingPower - 1)
-        }
-        break
+    case 90:
+      // 'z'
+      handleUndo();
+      break;
+    case 88:
+      // 'x'
+      handleRedo();
+      break;
+    case 16:
+      // shift
+      setShowLabels(!showLabels);
+      break;
+    case 67:
+      // 'c'
+      handleToggleAdding();
+      break;
+    case 73:
+      // 'i'
+      if (magnifyingPower <= 3) {
+        setMagnifyingPower(magnifyingPower + 1);
+      }
+      break;
+    case 79:
+      // 'o'
+      if (magnifyingPower >= 2) {
+        setMagnifyingPower(magnifyingPower - 1);
+      }
+      break;
 
-      default:
+    default:
     }
-  }
+  };
 
   const handleUndo = () => {
-    if (UndoRedoState.previous.length === 0) return
+    if (UndoRedoState.previous.length === 0) return;
 
-    const newAnnotations = UndoRedoState.undo(annotations)
-    setAnnotations(newAnnotations)
-  }
+    const newAnnotations = UndoRedoState.undo(annotations);
+    setAnnotations(newAnnotations);
+  };
 
   const handleRedo = () => {
-    if (UndoRedoState.next.length === 0) return
+    if (UndoRedoState.next.length === 0) return;
 
-    const newAnnotations = UndoRedoState.redo(annotations)
-    setAnnotations(newAnnotations)
-  }
+    const newAnnotations = UndoRedoState.redo(annotations);
+    setAnnotations(newAnnotations);
+  };
 
   const handleToggleAdding = () => {
-    setAddingPoints(!addingPoints)
-    setFocusedAnnotation('')
-  }
+    setAddingPoints(!addingPoints);
+    setFocusedAnnotation('');
+  };
 
   const handleSetAnnotation = newAnnotations => {
-    UndoRedoState.save(annotations)
-    setAnnotations(newAnnotations)
-  }
+    UndoRedoState.save(annotations);
+    setAnnotations(newAnnotations);
+  };
 
   const handleChangeClass = className => {
-    if (!focusedAnnotation) return
-    const annotationsCopy = { ...annotations }
-    annotationsCopy[focusedAnnotation].className = className
+    if (!focusedAnnotation) return;
+    const annotationsCopy = { ...annotations };
+    annotationsCopy[focusedAnnotation].className = className;
 
-    setAnnotations(annotationsCopy)
-  }
+    setAnnotations(annotationsCopy);
+  };
 
-  const maxWidth = get(canvasContainer, 'current.clientWidth', 800)
-  const maxHeight = window.innerHeight - 350
+  const maxWidth = get(canvasContainer, 'current.clientWidth', 800);
+  const maxHeight = window.innerHeight - 350;
 
-  const projectWidth = get(project, 'width') || 800
-  const projectHeight = get(project, 'height') || 800
+  const projectWidth = get(project, 'width') || 800;
+  const projectHeight = get(project, 'height') || 800;
 
-  const scaleByWidth = maxWidth / projectWidth
-  const scaleByHeight = maxHeight / projectHeight
+  const scaleByWidth = maxWidth / projectWidth;
+  const scaleByHeight = maxHeight / projectHeight;
 
-  const maxScale = Math.min(scaleByHeight, scaleByWidth)
+  const maxScale = Math.min(scaleByHeight, scaleByWidth);
 
-  const canvasWidth = projectWidth * maxScale
-  const canvasScaling = maxScale
+  const canvasWidth = projectWidth * maxScale;
+  const canvasScaling = maxScale;
 
   const handleClassSubmit = async () => {
     const adjustedAnnotations = Object.keys(annotations).map(anno => ({
@@ -209,22 +206,21 @@ const TaskPage = ({ ...props }) => {
         x: Math.round(vertex.x * (1 / canvasScaling)),
         y: Math.round(vertex.y * (1 / canvasScaling)),
       })),
-    }))
+    }));
 
     const filteredAnnotations = adjustedAnnotations.filter(
       anno => !isEmpty(anno.class),
-    )
+    );
 
     try {
       await submitTask({
         variables: { labels: filteredAnnotations, jobId, fileId: task.fileId },
-      })
-
-      handleGetNextTask()
+      });
+      handleGetNextTask();
     } catch (e) {
-      console.log('Error submitting class answer', e)
+      console.log('Error submitting class answer', e);
     }
-  }
+  };
 
   const handleBooleanSubmit = async answer => {
     try {
@@ -234,28 +230,29 @@ const TaskPage = ({ ...props }) => {
           jobId,
           fileId: task.fileId,
         },
-      })
-
-      handleGetNextTask()
+      });
+      handleGetNextTask();
     } catch (e) {
-      console.log('Error submitting boolean answer', e)
+      console.log('Error submitting boolean answer', e);
     }
-  }
+  };
 
-  if (!jobFinished && (isEmpty(task) || isEmpty(project))) return <Spin />
+  if (!jobFinished && (isEmpty(task) || isEmpty(project))) return <Spin />;
 
   return (
     <Fragment>
       {jobFinished ? (
         <Flex width="100%" flexDirection="column" alignItems="center">
-          <Text>This job has been finished, thank you!</Text>
-          <Text
-            onClick={() => history.push('/jobs')}
-            p={10}
-            style={{ textDecoration: 'underline', color: '#3181F8' }}
-          >
-            Click here to go back to job list
-          </Text>
+          <H3>Hooray!</H3>
+          <Text>This job has been finished, thank you.</Text>
+          <Link to={ALL_JOBS_PAGE_URL}>
+            <Text
+              p={10}
+              style={{ textDecoration: 'underline', color: '#3181F8' }}
+            >
+              Click here to go back to job list
+            </Text>
+          </Link>
         </Flex>
       ) : (
         <Flex
@@ -264,24 +261,23 @@ const TaskPage = ({ ...props }) => {
           alignItems="center"
           p={20}
         >
-          <Flex width="100%" pt="15px" pb="35px">
+          <Flex width="100%" pb="15px">
             <Flex
               flex={3}
               justifyContent="space-between"
               flexDirection="column"
             >
-              {project.category && <Text fontSize={3}>{project.category}</Text>}
-              {project.name && (
-                <Text fontSize={2} mt={10}>
-                  {project.name}
-                </Text>
-              )}
-              {project.description && (
-                <Text fontSize={0} mb={10}>
-                  {project.description}
-                </Text>
-              )}
-              {project.question && <Text fontSize={3}>{project.question}</Text>}
+              <Details
+                data={[
+                  {
+                    text: 'Project',
+                    data: project.name,
+                  },
+                  { text: 'Description', data: project.description },
+
+                  { text: 'Question', data: project.question },
+                ]}
+              />
             </Flex>
             <Flex
               flex={1}
@@ -435,7 +431,7 @@ const TaskPage = ({ ...props }) => {
         </Flex>
       )}
     </Fragment>
-  )
-}
+  );
+};
 
-export default TaskPage
+export default TaskPage;

@@ -60,6 +60,7 @@ type Project {
   status: ProjectStatus
   currentJob: Job
   topContributors: [Contributor]
+  jobs: [Job]
 }
 
 enum ProjectStatus {

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react'
-import { withRouter } from 'react-router-dom'
+import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 const LogoutPage = () => (
   <div className="pa4 flex justify-center bg-white">
@@ -22,6 +22,6 @@ const LogoutPage = () => (
       <h1>You are currently logged out. To see the projects, please login.</h1>
     </form>
   </div>
-)
+);
 
-export default withRouter(LogoutPage)
+export default withRouter(LogoutPage);

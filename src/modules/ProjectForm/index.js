@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 import React from 'react';
 import { ProjectFormView } from './view';
 import { adopt } from 'react-adopt';
-import { GET_CATEGORIES_ENDPOINT_NAME, getCategoriesQuery } from './queries';
+import { CATEGORIES_ENDPOINT_NAME, GET_CATEGORIES_QUERY } from './queries';
 import { Query } from 'react-apollo';
 import {
   getComponentToRender,
@@ -24,8 +24,8 @@ import {
 } from '../../util/gqlUtils';
 
 const Composed = adopt({
-  [GET_CATEGORIES_ENDPOINT_NAME]: ({ render }) => (
-    <Query query={getCategoriesQuery}>{render}</Query>
+  [CATEGORIES_ENDPOINT_NAME]: ({ render }) => (
+    <Query query={GET_CATEGORIES_QUERY}>{render}</Query>
   ),
 });
 
@@ -37,7 +37,7 @@ class ProjectForm extends React.Component {
           const categories =
             getDataFromReactAdoptProps({
               props,
-              endpointName: GET_CATEGORIES_ENDPOINT_NAME,
+              endpointName: CATEGORIES_ENDPOINT_NAME,
             }) || [];
 
           const componentOnSuccess = (

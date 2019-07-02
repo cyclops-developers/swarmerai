@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { Fragment } from 'react'
-import { Modal, Button } from 'antd'
-import { CreateProject } from '../../modules/CreateProject'
-import { Flex } from '../../components/Flex'
-import { ProjectTable } from '../../modules/ProjectTable'
-import { H3 } from '../../helperModules/Texts'
+import React, { Fragment } from 'react';
+import { Modal, Button, Icon } from 'antd';
+import { CreateProject } from '../../modules/CreateProject';
+import { Flex } from '../../components/Flex';
+import { ProjectTable } from '../../modules/ProjectTable';
+import { H3 } from '../../helperModules/Texts';
 
 export const AllProjectsPageView = props => {
   return (
@@ -26,7 +26,8 @@ export const AllProjectsPageView = props => {
       <Flex justifyContent="space-between">
         <H3>All projects</H3>
         <Button onClick={props.showCreateProjectModal}>
-          Create new project
+          <Icon type="plus" />
+          New project
         </Button>
       </Flex>
       <Modal
@@ -38,17 +39,17 @@ export const AllProjectsPageView = props => {
       >
         <CreateProject
           onSuccess={async () => {
-            await props.hideCreateProjectModal()
-            await props.refetchProjects()
+            await props.hideCreateProjectModal();
+            await props.refetchProjects();
           }}
         />
       </Modal>
       <ProjectTable
-        handleProjectNameClick={props.handleProjectNameClick}
         projects={props.projects}
         handleDeleteProject={props.handleDeleteProject}
         handleDuplicateProject={props.handleDuplicateProject}
+        getDuplicateProjectIsLoading={props.getDuplicateProjectIsLoading}
       />
     </Fragment>
-  )
-}
+  );
+};

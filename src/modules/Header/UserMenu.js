@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,22 @@ import { Flex } from '../../components/Flex';
 import { getUser } from '../../util/authUtils';
 import { getUserName } from '../../util/userUtils';
 import { ClickableContainer } from '../../components/ClickableContainer';
+import {
+  ALL_JOBS_PAGE_URL,
+  ALL_PROJECTS_DASHBOARD_PAGE_URL,
+} from '../../strings/urlStrings';
+import { Link } from '../../components/Link';
 
 const UserMenu = ({ logout }) => {
   const menu = (
     <Menu>
-      <Menu.Item key="0" onClick={logout}>
+      <Menu.Item>
+        <Link to={ALL_JOBS_PAGE_URL}>All jobs</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to={ALL_PROJECTS_DASHBOARD_PAGE_URL}>All projects</Link>
+      </Menu.Item>
+      <Menu.Item onClick={logout}>
         <Text>Logout</Text>
       </Menu.Item>
     </Menu>

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ export const initializeJob = async project => {
   });
 
   const queue = getQueue(job.id);
+
   // TODO load imageurl from bucket name
   const fileUrls = await listBucket(project.bucketName);
 
@@ -61,7 +62,7 @@ export const initializeJob = async project => {
   const expectedSubmissions = fileUrls.length * project.validation;
 
   await prisma.updateJob({
-    data: { status: 'ACTIVE', expectedSubmissions},
+    data: { status: 'ACTIVE', expectedSubmissions },
     where: { id: job.id },
   });
 

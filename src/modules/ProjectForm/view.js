@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,11 @@ import { Flex } from '../../components/Flex';
 import {
   FieldInput,
   FieldTextArea,
-  FieldBucketNameRadioGroup,
   FieldInputNumber,
   FieldLabelTypeRadioGroup,
   FieldIsLabelRepeatable,
   FieldLabelsSelect,
   MULTI_LABEL,
-  defaultCategories,
-  defaultImageBuckets,
 } from '../../helperModules/FieldComponents';
 import { renderFields } from '../../helperModules/RenderField';
 import {
@@ -75,14 +72,12 @@ class ProjectFormViewComponent extends React.Component {
   render() {
     return (
       <Form>
-        <Grid gridTemplateColumns={'auto auto auto'}>
+        <Grid gridTemplateColumns={'auto auto'}>
           {renderFields({
             fields: [
               {
                 name: CATEGORY_FIELD_NAME,
-                component: _isEmpty(defaultCategories)
-                  ? FieldInput
-                  : this.FieldCategoryAutocomplete,
+                component: FieldInput,
               },
               {
                 name: NAME_FIELD_NAME,
@@ -94,17 +89,17 @@ class ProjectFormViewComponent extends React.Component {
               },
               {
                 name: BUCKET_NAME_FIELD_NAME,
-                component: _isEmpty(defaultImageBuckets)
-                  ? FieldInput
-                  : FieldBucketNameRadioGroup,
+                component: FieldInput,
               },
               {
                 name: IMAGE_WIDTH_FIELD_NAME,
                 component: FieldInputNumber,
+                gridColumn: '1/2',
               },
               {
                 name: IMAGE_HEIGHT_FIELD_NAME,
                 component: FieldInputNumber,
+                gridColumn: '2/3',
               },
               {
                 name: NUM_VALIDATION_FIELD_NAME,

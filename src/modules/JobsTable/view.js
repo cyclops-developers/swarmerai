@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,32 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react'
+import React from 'react';
 import {
   PROJECT_NAME_FIELD_NAME,
   PROJECT_CREATOR_FIELD_NAME,
   PROJECT_CATEGORY_FIELD_NAME,
-} from '../../util/projectUtils'
-import { InternalLink } from '../../util/linkUtils'
-import { JOB_DETAILS_PAGE_URL_PREFIX } from '../../strings/urlStrings'
-import { getUserName } from '../../util/userUtils'
-import { Table } from 'antd'
-import { GQL_OBJECT_DATE_CREATED_FIELD_NAME } from '../../util/gqlObjectUtils'
-import { moment } from '../../util/libraryUtils'
-import { _uniqBy, _get } from '../../util/lodashUtils'
+} from '../../util/projectUtils';
+import { JOB_DETAILS_PAGE_URL_PREFIX } from '../../strings/urlStrings';
+import { getUserName } from '../../util/userUtils';
+import { Table } from 'antd';
+import { GQL_OBJECT_DATE_CREATED_FIELD_NAME } from '../../util/gqlObjectUtils';
+import { _uniqBy, _get } from '../../util/lodashUtils';
+import { BlueLink } from '../../components/Link';
+import moment from 'moment';
 
-const getUniqFilters = filters => _uniqBy(filters, 'text')
+const getUniqFilters = filters => _uniqBy(filters, 'text');
 const getSorter = fieldName => (a, b) =>
-  a[fieldName].localeCompare(b[fieldName])
+  a[fieldName].localeCompare(b[fieldName]);
 const getOnFilter = fieldName => (value, record) =>
-  record[fieldName].indexOf(value) === 0
+  record[fieldName].indexOf(value) === 0;
 const getFilters = ({ jobs, fieldName }) =>
   jobs.map(p => ({
     text: p[fieldName],
     value: p[fieldName],
-  }))
+  }));
 const getUniqFiltersFromProjects = ({ jobs, fieldName }) =>
-  getUniqFilters(getFilters({ jobs, fieldName }))
+  getUniqFilters(getFilters({ jobs, fieldName }));
 
 export const JobsTableView = ({ jobs }) => {
   const columns = [
@@ -46,11 +46,9 @@ export const JobsTableView = ({ jobs }) => {
       title: 'Project name',
       dataIndex: PROJECT_NAME_FIELD_NAME,
       render: (projectName, project) => (
-        <InternalLink
-          to={`${JOB_DETAILS_PAGE_URL_PREFIX}/${_get(project, 'id')}`}
-        >
+        <BlueLink to={`${JOB_DETAILS_PAGE_URL_PREFIX}/${_get(project, 'id')}`}>
           {projectName}
-        </InternalLink>
+        </BlueLink>
       ),
       filters: getUniqFiltersFromProjects({
         jobs,
@@ -107,6 +105,6 @@ export const JobsTableView = ({ jobs }) => {
       onFilter: (value, record) =>
         getUserName(record[PROJECT_CREATOR_FIELD_NAME]).indexOf(value) === 0,
     },
-  ]
-  return <Table pagination={false} columns={columns} dataSource={jobs} />
-}
+  ];
+  return <Table pagination={false} columns={columns} dataSource={jobs} />;
+};

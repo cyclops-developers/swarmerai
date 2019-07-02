@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 import React, { Component, Fragment } from 'react';
-import { Link, Router, Route, Switch, Redirect } from 'react-router-dom';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import history from '../history';
 import { ThemeProvider } from 'styled-components';
 import AllProjectsPage from '../pages/AllProjectsPage';
-import SignupPage from './SignupPage';
 import TaskPage from '../pages/TaskPage';
-import JobsPage from '../pages/JobsPage';
+import AllJobsPage from '../pages/AllJobsPage';
 import JobDetailPage from '../pages/JobDetailPage';
 import PageNotFound from './PageNotFound';
 import { AUTH_TOKEN } from '../constant';
@@ -36,8 +35,11 @@ import LoginPage from '../pages/LoginPage';
 import {
   ALL_JOBS_PAGE_URL,
   ALL_PROJECTS_DASHBOARD_PAGE_URL,
+  SIGN_UP_PAGE_URL,
+  LOG_IN_PAGE_URL,
 } from '../strings/urlStrings';
 import { _isNull } from '../util/lodashUtils';
+import SignupPage from '../pages/SignupPage';
 
 const ProtectedRoute = ({ component: Component, token, ...rest }) => {
   return token ? (
@@ -96,39 +98,8 @@ class RootContainer extends Component {
   render() {
     return (
       <Router history={history}>
-        <Fragment>
-          {/* {this.renderNavBar()} */}
-          {this.renderRoute()}
-        </Fragment>
+        <Fragment>{this.renderRoute()}</Fragment>
       </Router>
-    );
-  }
-
-  renderNavBar() {
-    return (
-      <nav className="pa3 pa4-ns">
-        {this.state.token ? (
-          <div
-            onClick={() => {
-              this.refreshTokenFn &&
-                this.refreshTokenFn({
-                  [AUTH_TOKEN]: null,
-                });
-              window.location.href = '/';
-            }}
-            className="f6 link dim br1 ba ph3 pv2 fr mb2 dib black"
-          >
-            Logout
-          </div>
-        ) : (
-          <Link
-            to="/login"
-            className="f6 link dim br1 ba ph3 pv2 fr mb2 dib black"
-          >
-            Login
-          </Link>
-        )}
-      </nav>
     );
   }
 
@@ -147,7 +118,7 @@ class RootContainer extends Component {
               <Switch>
                 <Route
                   token={this.state.token}
-                  path={'/login'}
+                  path={LOG_IN_PAGE_URL}
                   render={props => (
                     <LoginPage
                       refreshTokenFn={this.refreshTokenFn}
@@ -165,7 +136,7 @@ class RootContainer extends Component {
                 <ProtectedRoute
                   token={this.state.token}
                   path={['/', ALL_JOBS_PAGE_URL]}
-                  component={JobsPage}
+                  component={AllJobsPage}
                   exact
                 />
                 <ProtectedRoute
@@ -185,8 +156,8 @@ class RootContainer extends Component {
                 />
                 <Route
                   token={this.state.token}
-                  path="/signup"
-                  render={props => (
+                  path={SIGN_UP_PAGE_URL}
+                  render={() => (
                     <SignupPage refreshTokenFn={this.refreshTokenFn} />
                   )}
                 />

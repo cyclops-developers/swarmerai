@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 export default {
-  color: {
+  colors: {
     text: {
-      link: 'cornflower',
+      blue: 'cornflowerblue',
+      black: '#000000',
     },
   },
   fontSizes: ['12px', '14px', '16px', '18px', '20px', '30px', '45px', '55px'],
@@ -36,4 +37,4 @@ export default {
   },
   space: n => `${n}px`,
   fontFamily: '\'Silka\', sans-serif',
-}
+};

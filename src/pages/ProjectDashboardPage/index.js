@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
 import React, { Component } from 'react';
 import { adopt } from 'react-adopt';
 import {
-  GET_PROJECT_ENDPOINT_NAME,
+  PROJECT_ENDPOINT_NAME,
   GET_PROJECT_QUERY,
   UPDATE_PROJECT_MUTATION,
   UPDATE_PROJECT_ENDPOINT_NAME,
   START_PROJECT_ENDPOINT_NAME,
   START_PROJECT_MUTATION,
+  END_JOB_ENDPOINT_NAME,
+  END_JOB_MUTATION,
 } from './queries';
 import { Query, Mutation } from 'react-apollo';
 import {
-  getComponentToRender,
   getDataFromReactAdoptProps,
   getMutationFromReactAdoptProps,
-  getRefetchFromReactAdoptProps,
   getHandleBackendCall,
   GqlEndpointsHelper,
 } from '../../util/gqlUtils';
@@ -38,11 +38,10 @@ import {
   getProjectForGqlCall,
 } from '../../util/projectUtils';
 import { ProjectDashboardPageView } from './view';
-import moment from 'moment';
 import { _find } from '../../util/lodashUtils';
 
 const Composed = adopt({
-  [GET_PROJECT_ENDPOINT_NAME]: ({ render, projectId }) => (
+  [PROJECT_ENDPOINT_NAME]: ({ render, projectId }) => (
     <Query query={GET_PROJECT_QUERY} variables={{ id: projectId }}>
       {render}
     </Query>
@@ -52,9 +51,14 @@ const Composed = adopt({
       {render}
     </Mutation>
   ),
-  [START_PROJECT_ENDPOINT_NAME]: ({ render, projectId }) => (
-    <Mutation mutation={START_PROJECT_MUTATION} variables={{ id: projectId }}>
-      {render}
+  [START_PROJECT_ENDPOINT_NAME]: ({ render }) => (
+    <Mutation mutation={START_PROJECT_MUTATION}>
+      {(mutation, result) => render({ mutation, result })}
+    </Mutation>
+  ),
+  [END_JOB_ENDPOINT_NAME]: ({ render }) => (
+    <Mutation mutation={END_JOB_MUTATION}>
+      {(mutation, result) => render({ mutation, result })}
     </Mutation>
   ),
 });
@@ -64,6 +68,7 @@ class ProjectDashboardPage extends Component {
     projectFormModalIsVisible: false,
     jobDetailsModalIsVisible: false,
     jobIdForJobDetailsModal: null,
+    jobIdForEndJob: null,
   }
 
   showProjectFormModal = () =>
@@ -93,7 +98,7 @@ class ProjectDashboardPage extends Component {
           const gqlProject =
             getDataFromReactAdoptProps({
               props,
-              endpointName: GET_PROJECT_ENDPOINT_NAME,
+              endpointName: PROJECT_ENDPOINT_NAME,
             }) || {};
 
           const project = new Project(gqlProject);
@@ -101,22 +106,22 @@ class ProjectDashboardPage extends Component {
 
           const gqlEndpointsHelper = new GqlEndpointsHelper(props);
 
-          const refetchProject = getRefetchFromReactAdoptProps({
-            props,
-            endpointName: GET_PROJECT_ENDPOINT_NAME,
-          });
+          const refetchProject = gqlEndpointsHelper.getRefetchFromReactAdoptProps(
+            PROJECT_ENDPOINT_NAME,
+          );
+
           const updateProject = getMutationFromReactAdoptProps({
             props,
             endpointName: UPDATE_PROJECT_ENDPOINT_NAME,
           });
 
           const handleSubmit = getHandleBackendCall({
-            backendCall: async values =>
+            backendCall: async args =>
               await updateProject({
                 variables: {
                   input: {
                     id: project.getId(),
-                    ...getProjectForGqlCall(values),
+                    ...getProjectForGqlCall(args),
                   },
                 },
               }),
@@ -124,13 +129,14 @@ class ProjectDashboardPage extends Component {
             afterRefetch: this.hideProjectFormModal,
           });
 
-          const startProject = gqlEndpointsHelper.get(
+          const startNewJobForProject = gqlEndpointsHelper.getMutation(
             START_PROJECT_ENDPOINT_NAME,
           );
+          const endJob = gqlEndpointsHelper.getMutation(END_JOB_ENDPOINT_NAME);
 
-          const handleStartProject = getHandleBackendCall({
-            backendCall: async values =>
-              await startProject({
+          const handlestartNewJobForProject = getHandleBackendCall({
+            backendCall: async () =>
+              await startNewJobForProject({
                 variables: {
                   id: project.getId(),
                 },
@@ -138,36 +144,19 @@ class ProjectDashboardPage extends Component {
             refetch: refetchProject,
           });
 
-          const jobs = [
-            {
-              id: 'jobId',
-              project: {
-                name: 'Project name',
-                creator: {
-                  name: 'project creator name',
+          const handleEndJob = getHandleBackendCall({
+            backendCall: async args => {
+              await this.setState({ jobIdForEndJob: args.jobId });
+              await endJob({
+                variables: {
+                  id: args.jobId,
                 },
-              },
-              category: 'project category',
-              startDateTime: moment().format(),
-              status: 'ACTIVE',
-              topContributors: ['a', 'b', 'c'],
+              });
             },
-            {
-              id: 'jobId',
-              project: {
-                name: 'Project name2',
-                creator: {
-                  name: 'project creator name2',
-                },
-              },
-              category: 'project category2',
-              startDateTime: moment()
-                .subtract(1, 'day')
-                .format(),
-              status: 'STOPPED',
-              topContributors: ['a', 'b', 'c'],
-            },
-          ];
+            refetch: refetchProject,
+          });
+
+          const jobs = project.getJobs() || [];
 
           const componentOnSuccess = (
             <ProjectDashboardPageView
@@ -184,11 +173,21 @@ class ProjectDashboardPage extends Component {
               jobForJobDetailsModal={
                 _find(jobs, ['id', this.state.jobIdForJobDetailsModal]) || {}
               }
-              handleStartProject={handleStartProject}
+              handlestartNewJobForProject={handlestartNewJobForProject}
+              handleEndJob={handleEndJob}
+              startNewJobForProjectIsLoading={gqlEndpointsHelper.getLoading(
+                START_PROJECT_ENDPOINT_NAME,
+              )}
+              getEndJobForProjectIsLoading={jobId =>
+                this.state.jobIdForEndJob === jobId &&
+                gqlEndpointsHelper.getLoading(END_JOB_ENDPOINT_NAME)
+              }
             />
           );
 
-          return getComponentToRender({ props, componentOnSuccess });
+          return gqlEndpointsHelper.getComponentToRender({
+            componentOnSuccess,
+          });
         }}
       </Composed>
     );

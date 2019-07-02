@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import queryString from 'query-string'
-import history from '../history'
+import queryString from 'query-string';
+import history from '../history';
 
 export const redirect = ({
   url = '/',
   includeNewRedirectTo = false,
   includeOldSearchParams = true,
   newSearchParams = {},
-}) => {
-  let urlParams = {}
+} = {}) => {
+  let urlParams = {};
   if (includeOldSearchParams) {
-    urlParams = queryString.parse(history.location.search)
+    urlParams = queryString.parse(history.location.search);
   }
   if (includeNewRedirectTo) {
-    urlParams.redirectTo = history.location.pathname
+    urlParams.redirectTo = history.location.pathname;
   }
-  urlParams = { ...urlParams, ...newSearchParams }
+  urlParams = { ...urlParams, ...newSearchParams };
   if (history.location.pathname !== url) {
-    history.push(`${url}?${queryString.stringify(urlParams)}`)
+    history.push(`${url}?${queryString.stringify(urlParams)}`);
   }
-  window.scrollTo(0, 0)
-}
+  window.scrollTo(0, 0);
+};

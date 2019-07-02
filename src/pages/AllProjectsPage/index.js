@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {
   getDataFromReactAdoptProps,
   getRefetchFromReactAdoptProps,
-  getMutationFromReactAdoptProps,
   GqlEndpointsHelper,
   getHandleBackendCall,
-} from '../../util/gqlUtils'
-import { adopt } from 'react-adopt'
+  getReactAdoptArgForMutations,
+} from '../../util/gqlUtils';
+import { adopt } from 'react-adopt';
 import {
   GET_PROJECTS_ENDPOINT_NAME,
   GET_PROJECTS_QUERY,
@@ -29,32 +29,32 @@ import {
   DELETE_PROJECT_MUTATION,
   DUPLICATE_PROJECT_ENDPOINT_NAME,
   DUPLICATE_PROJECT_MUTATION,
-} from './queries'
-import { Query, Mutation } from 'react-apollo'
-import { redirect } from '../../util/redirectUtils'
-import {
-  PROJECT_DASHBOARD_PAGE_URL_PREFIX,
-  getUrlWithId,
-} from '../../strings/urlStrings'
-import { AllProjectsPageView } from './view'
+} from './queries';
+import { Query } from 'react-apollo';
+import { AllProjectsPageView } from './view';
 
 const Composed = adopt({
   [GET_PROJECTS_ENDPOINT_NAME]: ({ render }) => (
     <Query query={GET_PROJECTS_QUERY}>{render}</Query>
   ),
-  [DELETE_PROJECT_ENDPOINT_NAME]: ({ render }) => (
-    <Mutation mutation={DELETE_PROJECT_MUTATION}>{render}</Mutation>
-  ),
-  [DUPLICATE_PROJECT_ENDPOINT_NAME]: ({ render }) => (
-    <Mutation mutation={DUPLICATE_PROJECT_MUTATION}>{render}</Mutation>
-  ),
-})
+  ...getReactAdoptArgForMutations([
+    {
+      name: DUPLICATE_PROJECT_ENDPOINT_NAME,
+      mutation: DUPLICATE_PROJECT_MUTATION,
+    },
+    {
+      name: DELETE_PROJECT_ENDPOINT_NAME,
+      mutation: DELETE_PROJECT_MUTATION,
+    },
+  ]),
+});
 
 class AllProjectsPage extends Component {
   state = {
     projectDashboardIdForModal: null,
     projectDashboardModalIsVisible: false,
     createProjectModalIsVisible: false,
+    projectIdForDuplicateProject: null,
   }
 
   showProjectDashboardModal = () =>
@@ -62,15 +62,6 @@ class AllProjectsPage extends Component {
 
   hideProjectDashboardModal = () =>
     this.setState({ projectDashboardModalIsVisible: false })
-
-  handleProjectNameClick = projectId => {
-    redirect({
-      url: getUrlWithId({
-        prefix: PROJECT_DASHBOARD_PAGE_URL_PREFIX,
-        id: projectId,
-      }),
-    })
-  }
 
   showCreateProjectModal = () =>
     this.setState({ createProjectModalIsVisible: true })
@@ -86,41 +77,46 @@ class AllProjectsPage extends Component {
             getDataFromReactAdoptProps({
               props,
               endpointName: GET_PROJECTS_ENDPOINT_NAME,
-            }) || []
+            }) || [];
 
           const refetchProjects = getRefetchFromReactAdoptProps({
             props,
             endpointName: GET_PROJECTS_ENDPOINT_NAME,
-          })
+          });
 
-          const gqlEndpointsHelper = new GqlEndpointsHelper(props)
+          const gqlEndpointsHelper = new GqlEndpointsHelper(props);
 
-          const duplicateProject = gqlEndpointsHelper.get(
+          const duplicateProject = gqlEndpointsHelper.getMutation(
             DUPLICATE_PROJECT_ENDPOINT_NAME,
-          )
+          );
 
           const handleDuplicateProject = getHandleBackendCall({
-            backendCall: async args =>
+            backendCall: async args => {
+              await this.setState({
+                projectIdForDuplicateProject: args.projectId,
+              });
               await duplicateProject({
                 variables: {
                   id: args.projectId,
                 },
-              }),
+              });
+            },
             refetch: refetchProjects,
-          })
+          });
+
+          const deleteProject = gqlEndpointsHelper.getMutation(
+            DELETE_PROJECT_ENDPOINT_NAME,
+          );
 
           const handleDeleteProject = getHandleBackendCall({
             backendCall: async args =>
-              await getMutationFromReactAdoptProps({
-                props,
-                endpointName: DELETE_PROJECT_ENDPOINT_NAME,
-              })({
+              deleteProject({
                 variables: {
                   id: args.projectId,
                 },
               }),
             refetch: refetchProjects,
-          })
+          });
 
           return (
             <AllProjectsPageView
@@ -133,13 +129,16 @@ class AllProjectsPage extends Component {
               }
               hideCreateProjectModal={this.hideCreateProjectModal}
               showCreateProjectModal={this.showCreateProjectModal}
-              handleProjectNameClick={this.handleProjectNameClick}
+              getDuplicateProjectIsLoading={projectId =>
+                this.state.projectIdForDuplicateProject === projectId &&
+                gqlEndpointsHelper.getLoading(DUPLICATE_PROJECT_ENDPOINT_NAME)
+              }
             />
-          )
+          );
         }}
       </Composed>
-    )
+    );
   }
 }
 
-export default AllProjectsPage
+export default AllProjectsPage;

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { gql } from 'apollo-boost'
+import { gql } from 'apollo-boost';
 
 // eslint-disable-next-line
-export const GET_NEXT_TASK = gql`
-  query getNextTask($jobId: String!) {
-    getNextTask(jobId: $jobId) {
+export const NEXT_TASK = gql`
+  query nextTask($jobId: String!) {
+    nextTask(jobId: $jobId) {
       id
       fileId
       job {
@@ -38,7 +38,7 @@ export const GET_NEXT_TASK = gql`
       }
     }
   }
-`
+`;
 
 export const SUBMIT_TASK = gql`
   mutation submitTask(
@@ -50,4 +50,4 @@ export const SUBMIT_TASK = gql`
       id
     }
   }
-`
+`;

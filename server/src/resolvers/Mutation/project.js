@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ const { getUserId } = require('../../utils');
 
 const project = {
   async createProject(parent, { input }, context) {
-    let data = {...input};
+    let data = { ...input };
 
     // Add user
     const userId = getUserId(context);
@@ -46,7 +46,7 @@ const project = {
       throw new Error(`Project not found or you're not the creator`);
     }
 
-    let data = {...input};
+    let data = { ...input };
     delete data['id']; // remove id for the Prisma update schema
 
     // Adjust Array of Strings
@@ -56,7 +56,6 @@ const project = {
 
     return context.prisma.updateProject({ data, where: { id: projectId } });
   },
-
 
   async duplicateProject(parent, { id }, context) {
     const userId = getUserId(context);
@@ -90,6 +89,7 @@ const project = {
 
   async startProject(parent, { id }, context) {
     const userId = getUserId(context);
+
     const projectExists = await context.prisma.$exists.project({
       id,
       creator: { id: userId },
@@ -100,6 +100,7 @@ const project = {
     }
 
     const project = await context.prisma.project({ id });
+
     const job = await initializeJob(project);
     return _get(job, 'id');
   },

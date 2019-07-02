@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react'
-import { ProjectTableView } from './view'
+import React from 'react';
+import { ProjectTableView } from './view';
 
 class ProjectTable extends React.Component {
   render() {
     return (
       <ProjectTableView
         projects={this.props.projects}
-        handleProjectNameClick={this.props.handleProjectNameClick}
         handleDeleteProject={this.props.handleDeleteProject}
         handleDuplicateProject={this.props.handleDuplicateProject}
+        getDuplicateProjectIsLoading={this.props.getDuplicateProjectIsLoading}
       />
-    )
+    );
   }
 }
 
-export { ProjectTable }
+export { ProjectTable };
