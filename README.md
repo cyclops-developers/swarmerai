@@ -41,7 +41,7 @@ With this it is possible to split and install the parts in different service pro
 ### Start
 To check all the current support commands just run: **make**
 ```
-make
+$ make
   __    _____ _____ _____ _____ _____ 
  |  |  |  _  |   __|  |  | __  |     |
  |  |__|     |  |  |  |  |    -|  |  |
@@ -53,12 +53,12 @@ make
 
 Starting build the base images
 ```
-make build
+$ make build
 ```
 
 To easily start the project run
 ```
-make start
+$ make start
 ```
 This will start the project dependencies in a Docker with : 
 - Redis - https://redis.io/
