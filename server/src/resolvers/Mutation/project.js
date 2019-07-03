@@ -104,19 +104,21 @@ const project = {
     return _get(job, 'id');
   },
 
-  async deleteProject(parent, { id }, context) {
+  async stopProject(parent, { id }, context) {
     const userId = getUserId(context);
+
     const projectExists = await context.prisma.$exists.project({
       id,
       creator: { id: userId },
     });
+
     if (!projectExists) {
       throw new Error(`Project not found or you're not the creator`);
     }
 
-    // TODO: Check if the project has active Jobs
+    const data = { status: 'DELETED' }; 
     // if not delete the project
-    return context.prisma.deleteProject({ id });
+    return context.prisma.updateProject({ data, where: { id: id } });
   },
 };
 

@@ -32,6 +32,17 @@ const Query = {
     return context.prisma.project({ id });
   },
 
+  activeProjects(_parent, args, context) {
+    const id = getUserId(context);
+    const where = {
+      creator: {
+        id,
+      },
+      status_not : 'DELETED',
+    };
+    return context.prisma.projects({ where });
+  },
+
   me(_parent, args, context) {
     const id = getUserId(context);
     return context.prisma.user({ id });
