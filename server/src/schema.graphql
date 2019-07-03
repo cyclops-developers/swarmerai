@@ -3,12 +3,12 @@ type Query {
   project(id: ID!): Project
   me: User
 
-  getCategories: [Category]
-  getJobs(projectId: ID!): [Job!]!
-  getActiveJobs: [Job!]!
-  getNextTask(jobId: String!): Task
+  categories: [Category]
+  jobs(projectId: ID!, onlyActive: Boolean = false): [Job!]!
+  activeJobs: [Job!]!
+  nextTask(jobId: String!): Task
 
-  getTopContributors(projectId: String!, jobId:String, quantity: Int = 5): [Contributor]
+  topContributors(projectId: String!, jobId:String, quantity: Int = 5): [Contributor]
 }
 
 type Mutation {
@@ -130,6 +130,7 @@ type Job {
   status: ProjectStatus
   taskCompleted: Int
   expectedSubmissions: Int
+  topContributors: [Contributor]
 }
 
 type Task {
