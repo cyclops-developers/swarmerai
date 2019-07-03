@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { getContributors } from '../utils/contributorUtils';
+
 const Project = {
   creator: ({ id }, args, context) => {
     return context.prisma.project({ id }).creator();
@@ -29,6 +32,25 @@ const Project = {
       }
     }
     return null;
+  },
+  
+  topContributors: async ({ id }, args, context) => {
+    // Get jobs based in the project id
+    const where = {
+      projectId: id,
+    };
+
+    const jobs = await context.prisma.jobs({ where });
+
+    // if no jobs for that id
+    if (!jobs || jobs.length === 0) {
+      return null;
+    }
+
+    // Get Contributors
+    const returnContributors = await getContributors(context, jobs);
+    const quantity = 5;
+    return returnContributors.slice(0,quantity);
   },
 };
 

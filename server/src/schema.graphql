@@ -59,6 +59,7 @@ type Project {
   creator: User!
   status: ProjectStatus
   currentJob: Job
+  topContributors: [Contributor]
 }
 
 enum ProjectStatus {
