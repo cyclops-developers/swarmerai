@@ -18,7 +18,7 @@ import { getUserId } from '../utils';
 import { getContributors } from '../utils/contributorUtils';
 
 const Query = {
-  projects(parent, args, context) {
+  projects(_parent, args, context) {
     const id = getUserId(context);
     const where = {
       creator: {
@@ -28,20 +28,20 @@ const Query = {
     return context.prisma.projects({ where });
   },
 
-  project(parent, { id }, context) {
+  project(_parent, { id }, context) {
     return context.prisma.project({ id });
   },
 
-  me(parent, args, context) {
+  me(_parent, args, context) {
     const id = getUserId(context);
     return context.prisma.user({ id });
   },
 
-  getCategories(parent, args, context) {
+  categories(_parent, args, context) {
     return context.prisma.categories();
   },
-  getJobs: async (parent, { projectId }, context) => {
 
+  jobs: async (_parent, { projectId, onlyActive }, context) => {
     // Check user
     getUserId(context);
 
@@ -49,22 +49,28 @@ const Query = {
     const where = {
       projectId,
     };
+
+    if (onlyActive) {
+      where.status = 'ACTIVE';
+    }
+
     return context.prisma.jobs({ where });
   },
 
-  getActiveJobs(parent, args, context) {
+  activeJobs(_parent, args, context) {
     return context.prisma.jobs({ where: { status: 'ACTIVE' } });
   },
 
-  getNextTask(parent, { jobId }, context) {
+  nextTask(_parent, { jobId }, context) {
     return getNextTask(jobId);
   },
 
-  getTopContributors: async (parent, { projectId, jobId, quantity }, context) => {
+  topContributors: async (_parent, { projectId, jobId, quantity }, context) => {
     // Get jobs based in the project id
     const where = {
       projectId,
     };
+
     // Check job ib
     if (jobId) {
       where.id = jobId;
