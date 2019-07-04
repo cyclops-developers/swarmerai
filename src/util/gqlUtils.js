@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 import React from 'react';
-import { _get } from './lodashUtils';
-
+import { _get, _isBoolean, _mapValues, _keyBy } from './lodashUtils';
 import { execute } from './networkUtils';
+import { Mutation } from 'react-apollo';
 
 export const getDataFromReactAdoptProps = ({ props, endpointName }) =>
   _get(props, `${endpointName}.data.${endpointName}`);
@@ -59,6 +59,42 @@ export class GqlEndpointsHelper {
   }
 
   get = endpointName => _get(this.props, `${endpointName}`)
+  getData = endpointName =>
+    _get(this.props, `${endpointName}.data.${endpointName}`)
+
+  getLoading = endpointName => {
+    if (endpointName) {
+      const loading = _get(this.props, `${endpointName}.loading`);
+      if (_isBoolean(loading)) {
+        return loading;
+      } else {
+        return _get(this.props, `${endpointName}.result.loading`);
+      }
+    } else {
+      return Object.values(this.props)
+        .map(endpointResult => _get(endpointResult, 'loading'))
+        .filter(loading => _isBoolean(loading))
+        .some(loading => loading);
+    }
+  }
+
+  getComponentToRender = ({
+    componentOnLoading = <div>Loading...</div>,
+    componentOnError = <div>Please try again</div>,
+    componentOnSuccess,
+  }) => {
+    if (this.getLoading()) {
+      return componentOnLoading;
+    } else if (getHasErrorFromReactAdoptProps(this.props)) {
+      return componentOnError;
+    } else {
+      return componentOnSuccess;
+    }
+  }
+  getRefetchFromReactAdoptProps = endpointName =>
+    _get(this.props, `${endpointName}.refetch`)
+
+  getMutation = endpointName => _get(this.props, `${endpointName}.mutation`)
 }
 
 export const getHandleBackendCall = ({
@@ -69,9 +105,25 @@ export const getHandleBackendCall = ({
   await execute({
     action: async () => {
       await backendCall(values); // the backend call called with values from form or other child component
-      await refetch(); // e.g. refetch projects after creating new project
       onSuccess(); // used to display messages
+      await refetch(); // e.g. refetch projects after creating new project
       await afterRefetch(); // e.g. hide form modal
     },
   });
 };
+
+export const getReactAdoptArgForMutations = mutationEndpoints =>
+  _mapValues(
+    _keyBy(
+      mutationEndpoints.map(endpoint => ({
+        endpointName: endpoint.name,
+        renderProp: ({ render }) => (
+          <Mutation mutation={endpoint.mutation}>
+            {(mutation, result) => render({ mutation, result })}
+          </Mutation>
+        ),
+      })),
+      'endpointName',
+    ),
+    'renderProp',
+  );

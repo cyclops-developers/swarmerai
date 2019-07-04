@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,101 +13,106 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { Fragment } from 'react'
-import { Table, Button, Popconfirm, Progress } from 'antd'
-import { moment } from '../../util/libraryUtils'
-import { getColumnsWithFilterAndSorter } from '../../util/tableUtils'
-import { Job } from '../../util/jobUtils'
-import { Box } from '../../components/Box'
-import { Text } from '../../components/Text'
+import React from 'react';
+import { Table, Button, Popconfirm, Progress, message } from 'antd';
+import moment from 'moment';
+import { getColumnsWithFilterAndSorter } from '../../util/tableUtils';
+import { Job } from '../../util/jobUtils';
+import { Box } from '../../components/Box';
+import { Text } from '../../components/Text';
+import { Flex } from '../../components/Flex';
 
-const ID = 'id'
-const PROJECT_NAME = 'projectName'
-const DATE_STARTED = 'dateStarted'
-const CATEGORY = 'category'
-const CREATOR_NAME = 'creatorName'
-const STATUS = 'status'
+const ID = 'id';
+const PROJECT_NAME = 'projectName';
+const DATE_STARTED = 'dateStarted';
+const CATEGORY = 'category';
+const CREATOR_NAME = 'creatorName';
+const STATUS = 'status';
+const PROGRESS = 'progress';
 
 export const ProjectJobsTable = props => {
   const mappedJobs = props.jobs.map(job => ({
+    ...job,
     [ID]: job.id,
     [PROJECT_NAME]: job.project.name,
     [DATE_STARTED]: moment(job.startDateTime).format('L'),
     [CATEGORY]: job.category,
     [CREATOR_NAME]: job.project.creator.name,
     [STATUS]: job.status,
-  }))
+    [PROGRESS]: job.taskCompleted / job.expectedSubmissions,
+  }));
 
   const columns = [
-    {
-      title: 'Project name',
-      dataIndex: PROJECT_NAME,
-    },
     {
       title: 'Date started',
       dataIndex: DATE_STARTED,
     },
     {
-      title: 'Project category',
-      dataIndex: CATEGORY,
-    },
-
-    {
-      title: 'Project creator name',
-      dataIndex: CREATOR_NAME,
-    },
-    {
-      title: 'Stutus',
+      title: 'Status',
       dataIndex: STATUS,
+    },
+    {
+      title: 'Progress',
+      dataIndex: PROGRESS,
+      render: (progress, job) => {
+        const jobObject = new Job(job);
+        return (
+          <Box>
+            <Text>{`${jobObject.getTaskCompleted()} out of ${jobObject.getExpectedSubmissions()} tasks completed`}</Text>
+            <Progress percent={Math.round(progress * 100)} />
+          </Box>
+        );
+      },
+      hasNoFilterOrSort: true,
+      width: 350,
     },
     {
       title: 'Actions',
       render: (_, jobItem) => {
-        const job = new Job(jobItem)
+        const job = new Job(jobItem);
         return (
-          <Fragment>
-            <Box mb={6}>
-              <Button onClick={() => props.handleViewDetails(job.getId())}>
-                View details
-              </Button>
+          <Flex>
+            <Box mr={6}>
+              <Button
+                icon="info-circle"
+                onClick={() => props.handleViewDetails(job.getId())}
+              ></Button>
             </Box>
             {job.isActive() ? (
               <Popconfirm
-                title="Are you sure you want to delete this project?"
-                onConfirm={() => props.handleStopJob(job.getId())}
+                title="Are you sure you want to end this job?"
+                onConfirm={() =>
+                  props.handleEndJob({
+                    values: {
+                      jobId: job.getId(),
+                    },
+                    onSuccess: () =>
+                      message.success('Job was successfully stopped'),
+                  })
+                }
                 okText="Yes"
                 cancelText="No"
               >
-                <Button>Stop</Button>
+                <Button
+                  loading={props.getEndJobForProjectIsLoading(job.getId())}
+                  icon="stop"
+                  type="danger"
+                ></Button>
               </Popconfirm>
             ) : (
               <div />
             )}
-          </Fragment>
-        )
+          </Flex>
+        );
       },
       hasNoFilterOrSort: true,
     },
-    {
-      title: 'Progress',
-      render: (_, jobItem) => {
-        const job = new Job(jobItem)
-        return (
-          <Box>
-            <Text>30 out of 150 tasks completed</Text>
-            <Progress percent={job.getProgress() * 100} />
-          </Box>
-        )
-      },
-      hasNoFilterOrSort: true,
-      width: 250,
-    },
-  ]
+  ];
 
   const columnsWithFilterAndSorter = getColumnsWithFilterAndSorter({
     objects: mappedJobs,
     columns,
-  })
+  });
 
   return (
     <Table
@@ -115,5 +120,5 @@ export const ProjectJobsTable = props => {
       columns={columnsWithFilterAndSorter}
       dataSource={mappedJobs}
     />
-  )
-}
+  );
+};

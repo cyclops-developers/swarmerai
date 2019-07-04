@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 import { gql } from 'apollo-boost';
 
-export const GET_PROJECT_ENDPOINT_NAME = 'project';
+export const PROJECT_ENDPOINT_NAME = 'project';
 
 export const GET_PROJECT_QUERY = gql`
-  query ${GET_PROJECT_ENDPOINT_NAME}($id: ID!) {
-    ${GET_PROJECT_ENDPOINT_NAME}(id: $id) {
+  query ${PROJECT_ENDPOINT_NAME}($id: ID!) {
+    ${PROJECT_ENDPOINT_NAME}(id: $id) {
       id
       description
       name
@@ -39,6 +39,37 @@ export const GET_PROJECT_QUERY = gql`
       currentJob {
         id
       }
+      jobs {
+        id
+        project {
+          name
+          creator {
+            id
+            name
+          }
+        }
+        startDateTime
+        category
+        status
+        taskCompleted
+        expectedSubmissions
+        topContributors {
+          total
+          userId
+          user {
+            id
+            name
+          }
+        }
+      }
+      topContributors {
+          total
+          userId
+          user {
+            id
+            name
+          }
+        }
     }
   }
 `;
@@ -58,5 +89,15 @@ export const START_PROJECT_ENDPOINT_NAME = 'startProject';
 export const START_PROJECT_MUTATION = gql`
   mutation ${START_PROJECT_ENDPOINT_NAME}($id: ID!) {
     ${START_PROJECT_ENDPOINT_NAME}(id: $id)
+  }
+`;
+
+export const END_JOB_ENDPOINT_NAME = 'endJob';
+
+export const END_JOB_MUTATION = gql`
+  mutation ${END_JOB_ENDPOINT_NAME}($id: ID!) {
+    ${END_JOB_ENDPOINT_NAME}(id: $id) {
+      id
+    }
   }
 `;

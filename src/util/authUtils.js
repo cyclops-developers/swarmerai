@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { AUTH_TOKEN } from '../constant';
+import { redirect } from './redirectUtils';
+import { ALL_JOBS_PAGE_URL } from '../strings/urlStrings';
+
 export const getUser = () => {
-  let user = localStorage.getItem('user')
+  let user = localStorage.getItem('user');
   if (user) {
-    user = JSON.parse(user)
-    return user
+    user = JSON.parse(user);
+    return user;
   }
 
-  return null
-}
+  return null;
+};
+
+export const login = ({ signupOrLoginObject, refreshTokenFn }) => {
+  const { token, user } = signupOrLoginObject;
+  if (token) {
+    localStorage.setItem('user', JSON.stringify(user));
+
+    refreshTokenFn({
+      [AUTH_TOKEN]: token,
+    });
+
+    redirect({ url: ALL_JOBS_PAGE_URL });
+  }
+};

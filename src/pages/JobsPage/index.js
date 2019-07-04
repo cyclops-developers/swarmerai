@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react'
-import { useQuery } from 'react-apollo-hooks'
+import React from 'react';
+import { useQuery } from 'react-apollo-hooks';
 
-import get from 'lodash/get'
+import get from 'lodash/get';
 
-import { JobsTable } from '../../modules/JobsTable'
-import { GET_ACTIVE_JOBS } from './queries'
-import moment from 'moment'
+import { JobsTable } from '../../modules/JobsTable';
+import { ACTIVE_JOBS_QUERY } from './queries';
+import moment from 'moment';
 
 const JobsPage = () => {
-  const { data: jobsData, error: jobsError } = useQuery(GET_ACTIVE_JOBS)
-  const activeJobs = get(jobsData, 'getActiveJobs') || []
+  const { data: jobsData, error: jobsError } = useQuery(ACTIVE_JOBS_QUERY);
+  const activeJobs = get(jobsData, 'activeJobs') || [];
   const parsedJobs = activeJobs.map(job => ({
     id: job.id,
     name: job.project.name,
     category: job.project.category,
     dateCreated: moment(job.startDateTime).format(),
     creator: job.project.creator,
-  }))
+  }));
 
-  if (jobsError) console.log('error loading jobs', jobsError)
+  if (jobsError) console.log('error loading jobs', jobsError);
 
-  return <JobsTable jobs={parsedJobs} />
-}
+  return <JobsTable jobs={parsedJobs} />;
+};
 
-export default JobsPage
+export default JobsPage;

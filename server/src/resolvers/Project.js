@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ const Project = {
     const project = await context.prisma.project({ id });
     if (project) {
       const current = await context.prisma.jobs({
-        where: { projectId:id },
+        where: { projectId: id },
         orderBy: 'startDateTime_DESC',
       });
       if (current) {
@@ -33,7 +33,6 @@ const Project = {
     }
     return null;
   },
-  
   topContributors: async ({ id }, args, context) => {
     // Get jobs based in the project id
     const where = {
@@ -50,7 +49,12 @@ const Project = {
     // Get Contributors
     const returnContributors = await getContributors(context, jobs);
     const quantity = 5;
-    return returnContributors.slice(0,quantity);
+    return returnContributors.slice(0, quantity);
+  },
+  jobs: async ({ id }, args, context) => {
+    return context.prisma.jobs({
+      where: { projectId: id },
+    });
   },
 };
 

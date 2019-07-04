@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ const Job = {
   },
 
   taskCompleted: async ({ id }, args, context) => {
-    const task = await context.prisma.tasks({ where : { jobId: id } });
+    const task = await context.prisma.tasks({ where: { jobId: id } });
 
     // TODO: Add a count to validate the number of validations for that task
 

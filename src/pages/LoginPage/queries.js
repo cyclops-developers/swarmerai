@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import gql from 'graphql-tag'
+import gql from 'graphql-tag';
 
-export const LOGIN_ENDPOINT_NAME = 'login'
+export const LOGIN_ENDPOINT_NAME = 'login';
 
 export const LOGIN_MUTATION = gql`
   mutation ${LOGIN_ENDPOINT_NAME}($email: String!, $password: String!) {
@@ -28,4 +28,4 @@ export const LOGIN_MUTATION = gql`
       }
     }
   }
-`
+`;

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import system from 'system-components'
+import system from 'system-components';
 
 const Text = system(
   {
@@ -61,8 +61,8 @@ const Text = system(
   'bottom',
   'left',
   'opacity',
-)
+);
 
-Text.displayName = 'Text'
+Text.displayName = 'Text';
 
-export { Text }
+export { Text };

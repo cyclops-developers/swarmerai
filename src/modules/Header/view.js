@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,23 +15,24 @@
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react'
-import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import UserMenu from './UserMenu'
-import { Flex } from '../../components/Flex'
-import { Text } from '../../components/Text'
-import { Container } from '../../components/Container'
-import { AUTH_TOKEN } from '../../constant'
-import { getUser } from '../../util/authUtils'
-import Logo from '../../assets/logo.svg'
-import { Box } from '../../components/Box'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import UserMenu from './UserMenu';
+import { Flex } from '../../components/Flex';
+import { Text } from '../../components/Text';
+import { Container } from '../../components/Container';
+import { AUTH_TOKEN } from '../../constant';
+import { getUser } from '../../util/authUtils';
+import Logo from '../../assets/logo.svg';
+import { Box } from '../../components/Box';
+import { Link } from 'react-router-dom';
+import { redirect } from '../../util/redirectUtils';
 
 const LogoLink = styled(Link)`
   display: flex;
   align-items: center;
-`
+`;
 
 const Header = ({ isLoggedIn, user, mb, ...props }) => {
   return (
@@ -80,8 +81,8 @@ const Header = ({ isLoggedIn, user, mb, ...props }) => {
                 logout={() => {
                   props.refreshTokenFn({
                     [AUTH_TOKEN]: null,
-                  })
-                  window.location.href = '/'
+                  });
+                  redirect();
                 }}
               />
             )}
@@ -89,8 +90,8 @@ const Header = ({ isLoggedIn, user, mb, ...props }) => {
         </Flex>
       </Container>
     </Box>
-  )
-}
+  );
+};
 
 Header.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
@@ -98,6 +99,6 @@ Header.propTypes = {
     user: PropTypes.string,
     group: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
-}
+};
 
-export default Header
+export default Header;

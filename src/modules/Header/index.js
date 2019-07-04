@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from 'react';
 
-import HeaderView from './view'
+import HeaderView from './view';
 
 class Header extends PureComponent {
   render() {
-    return <HeaderView {...this.props} />
+    return <HeaderView {...this.props} />;
   }
 }
 
-export default Header
+export default Header;
