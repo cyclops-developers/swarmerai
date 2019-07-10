@@ -74,7 +74,7 @@ export const ProjectTableView = ({ projects, ...props }) => {
     {
       title: 'Date created',
       dataIndex: GQL_OBJECT_DATE_CREATED_FIELD_NAME,
-      render: dateCreated => moment(dateCreated).format('L'),
+      render: createdAt => moment(createdAt).format('L'),
       sorter: getSorter(GQL_OBJECT_DATE_CREATED_FIELD_NAME),
       filters: getUniqFilters(
         projects
@@ -154,7 +154,7 @@ export const ProjectTableView = ({ projects, ...props }) => {
                 <Button
                   loading={props.getDuplicateProjectIsLoading(project.getId())}
                   icon="copy"
-                ></Button>
+                />
               </Popconfirm>
             </Box>
             <Popconfirm

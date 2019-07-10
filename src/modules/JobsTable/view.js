@@ -60,7 +60,7 @@ export const JobsTableView = ({ jobs }) => {
     {
       title: 'Date started',
       dataIndex: GQL_OBJECT_DATE_CREATED_FIELD_NAME,
-      render: dateCreated => moment(dateCreated).format('L'),
+      render: createdAt => moment(createdAt).format('L'),
       sorter: getSorter(GQL_OBJECT_DATE_CREATED_FIELD_NAME),
       filters: getUniqFilters(
         jobs
