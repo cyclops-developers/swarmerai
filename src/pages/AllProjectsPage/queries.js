@@ -26,6 +26,7 @@ export const GET_PROJECTS_QUERY = gql`
       creator {
         name
       }
+      createdAt
       category
       validation
       bucketName

@@ -29,7 +29,7 @@ const JobsPage = () => {
     id: job.id,
     name: job.project.name,
     category: job.project.category,
-    dateCreated: moment(job.startDateTime).format(),
+    createdAt: moment(job.startDateTime).format(),
     creator: job.project.creator,
   }));
 
