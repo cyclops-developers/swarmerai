@@ -26,7 +26,9 @@ const renderField = ({ name, component: Component, gridColumn, getFieldNameText,
       <Text fontSize={14} mb={5} fontWeight="700">
         {getFieldNameText(name)}
       </Text>
-      <Field name={name} render={formikProps => <Component {...formikProps} {...props} />} />
+      <Field name={name}>
+        {formikProps => <Component {...formikProps} {...props} />}
+      </Field>
     </Box>
   </Grid.Item>
 )
