@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Laguro, Inc. 
+ *  Copyright 2019 Laguro, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react'
-import { JobsTableView } from './view'
+import React from 'react';
+import { JobsTableView } from './view';
+import orderBy from 'lodash/orderBy';
+import moment from 'moment';
 
-const JobsTable = ({ jobs }) => <JobsTableView jobs={jobs} />
+const JobsTable = ({ jobs }) => (
+  <JobsTableView
+    jobs={orderBy(
+      jobs,
+      job => {
+        return moment(job.createdAt).format();
+      },
+      ['desc'],
+    )}
+  />
+);
 
-export { JobsTable }
+export { JobsTable };
