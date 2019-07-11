@@ -20,13 +20,15 @@ import { Box } from '../components/Box'
 import { Grid } from '../components/Grid'
 import { Text } from '../components/Text'
 
-const renderField = ({ name, component, gridColumn, getFieldNameText }) => (
+const renderField = ({ name, component: Component, gridColumn, getFieldNameText, ...props }) => (
   <Grid.Item gridColumn={gridColumn || '1/-1'}>
     <Box mb={22}>
       <Text fontSize={14} mb={5} fontWeight="700">
         {getFieldNameText(name)}
       </Text>
-      <Field name={name} component={component} />
+      <Field name={name}>
+        {formikProps => <Component {...formikProps} {...props} />}
+      </Field>
     </Box>
   </Grid.Item>
 )

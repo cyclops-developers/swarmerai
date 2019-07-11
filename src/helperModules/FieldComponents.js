@@ -26,7 +26,7 @@ const radioStyle = {
   lineHeight: '30px',
 };
 
-export const FieldInput = ({ field, ...props }) => {
+export const FieldInput = ({ field, form, ...props }) => {
   return (
     <div>
       <Input {...field} {...props} />
@@ -34,7 +34,7 @@ export const FieldInput = ({ field, ...props }) => {
   );
 };
 
-export const FieldPasswordInput = ({ field, ...props }) => {
+export const FieldPasswordInput = ({ field, form, ...props }) => {
   return (
     <div>
       <Input.Password {...field} {...props} />

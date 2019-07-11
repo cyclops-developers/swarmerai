@@ -30,14 +30,17 @@ const SignupPageViewComponent = () => {
               {
                 name: NAME_FIELD_NAME,
                 component: FieldInput,
+                required: true,
               },
               {
                 name: EMAIL_FIELD_NAME,
                 component: FieldInput,
+                required: true,
               },
               {
                 name: PASSWORD_FIELD_NAME,
                 component: FieldPasswordInput,
+                required: true,
               },
             ],
             getFieldNameTextFromFieldName: getFieldNameText,
