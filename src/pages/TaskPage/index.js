@@ -106,8 +106,6 @@ const TaskPage = ({ ...props }) => {
 
   const { refetch: nextTask } = nextTaskData;
 
-  console.log({ nextTaskData });
-
   const submitTask = useMutation(SUBMIT_TASK);
 
   if (nextTaskData.error) console.log('error loading task', nextTaskData.error);
