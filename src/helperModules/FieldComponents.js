@@ -42,7 +42,7 @@ export const FieldPasswordInput = ({ field, form, ...props }) => {
   );
 };
 
-export const FieldTextArea = ({ field, ...props }) => {
+export const FieldTextArea = ({ field, form, ...props }) => {
   return <Input.TextArea {...field} {...props} />;
 };
 export const FieldInputNumber = ({ field, form, ...props }) => {
