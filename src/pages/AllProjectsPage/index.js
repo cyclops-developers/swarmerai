@@ -25,8 +25,8 @@ import { adopt } from 'react-adopt';
 import {
   GET_PROJECTS_ENDPOINT_NAME,
   GET_PROJECTS_QUERY,
-  STOP_PROJECT_ENDPOINT_NAME,
-  STOP_PROJECT_MUTATION,
+  DELETE_PROJECT_ENDPOINT_NAME,
+  DELETE_PROJECT_MUTATION,
   DUPLICATE_PROJECT_ENDPOINT_NAME,
   DUPLICATE_PROJECT_MUTATION,
 } from './queries';
@@ -43,8 +43,8 @@ const Composed = adopt({
       mutation: DUPLICATE_PROJECT_MUTATION,
     },
     {
-      name: STOP_PROJECT_ENDPOINT_NAME,
-      mutation: STOP_PROJECT_MUTATION,
+      name: DELETE_PROJECT_ENDPOINT_NAME,
+      mutation: DELETE_PROJECT_MUTATION,
     },
   ]),
 });
@@ -105,7 +105,7 @@ class AllProjectsPage extends Component {
           });
 
           const deleteProject = gqlEndpointsHelper.getMutation(
-            STOP_PROJECT_ENDPOINT_NAME,
+            DELETE_PROJECT_ENDPOINT_NAME,
           );
 
           const handleDeleteProject = getHandleBackendCall({

@@ -41,11 +41,11 @@ export const GET_PROJECTS_QUERY = gql`
   }
 `;
 
-export const STOP_PROJECT_ENDPOINT_NAME = 'stopProject';
+export const DELETE_PROJECT_ENDPOINT_NAME = 'deleteProject';
 
-export const STOP_PROJECT_MUTATION = gql`
-  mutation ${STOP_PROJECT_ENDPOINT_NAME}($id: ID!) {
-   ${STOP_PROJECT_ENDPOINT_NAME}(id: $id) {
+export const DELETE_PROJECT_MUTATION = gql`
+  mutation ${DELETE_PROJECT_ENDPOINT_NAME}($id: ID!) {
+   ${DELETE_PROJECT_ENDPOINT_NAME}(id: $id) {
      id
    }
   }
