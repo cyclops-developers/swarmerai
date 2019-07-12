@@ -78,16 +78,39 @@ const TaskPage = ({ ...props }) => {
 
   const jobId = get(props, 'match.params.jobId');
 
-  const { data: taskData, error: taskError, refetch: nextTask } = useQuery(
-    NEXT_TASK,
-    {
-      variables: { jobId },
-    },
-  );
+  const nextTaskData = useQuery(NEXT_TASK, {
+    variables: { jobId },
+  });
+
+  useEffect(() => {
+    if (nextTaskData && !isEmpty(nextTaskData.data)) {
+      const newTask = get(nextTaskData.data, 'nextTask');
+      if (newTask === null) {
+        setJobFinished(true);
+      }
+      setTask(newTask);
+      setProject(get(newTask, 'job.project', {}));
+    }
+
+    if (nextTaskData && nextTaskData.error) {
+      const errorPath = get(nextTaskData.error, 'graphQLErrors[0].path[0]');
+      const errorMessage = get(nextTaskData.error, 'graphQLErrors[0].message');
+      if (
+        errorPath === 'nextTask' &&
+        errorMessage === 'Cannot read property \'data\' of null'
+      ) {
+        setJobFinished(true);
+      }
+    }
+  }, [nextTaskData, nextTaskData.data, nextTaskData.error]);
+
+  const { refetch: nextTask } = nextTaskData;
+
+  console.log({ nextTaskData });
 
   const submitTask = useMutation(SUBMIT_TASK);
 
-  if (taskError) console.log('error loading task', taskError);
+  if (nextTaskData.error) console.log('error loading task', nextTaskData.error);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeydown, false);
@@ -95,15 +118,6 @@ const TaskPage = ({ ...props }) => {
       document.removeEventListener('keydown', handleKeydown, false);
     };
   });
-
-  useEffect(() => {
-    if (!isEmpty(taskData)) {
-      const newTask = get(taskData, 'nextTask');
-      if (newTask === null) setJobFinished(true);
-      setTask(newTask);
-      setProject(get(newTask, 'job.project', {}));
-    }
-  }, [taskData]);
 
   const handleGetNextTask = () => {
     // reset all state to default
