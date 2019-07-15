@@ -23,6 +23,7 @@ import {
 } from '../../helperModules/FieldComponents';
 import { _capitalize } from '../../util/lodashUtils';
 import { withFormik, Form } from 'formik';
+import * as Yup from 'yup';
 import { BlueLink } from '../../components/Link';
 import { SIGN_UP_PAGE_URL } from '../../strings/urlStrings';
 import { Chunk } from '../../components/Chunk';
@@ -66,6 +67,10 @@ const LoginPageViewComponent = props => {
   );
 };
 
+const LoginSchema = Yup.object().shape({
+  [EMAIL_FIELD_NAME]: Yup.string().email('Invalid email'),
+});
+
 export const LoginPageView = withFormik({
   mapPropsToValues: props => {
     const { data } = props;
@@ -75,4 +80,5 @@ export const LoginPageView = withFormik({
     await actions.props.onSubmit({ values });
     actions.setSubmitting(false);
   },
+  validationSchema: LoginSchema,
 })(LoginPageViewComponent);

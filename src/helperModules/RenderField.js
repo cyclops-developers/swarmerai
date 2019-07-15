@@ -15,10 +15,13 @@
  */
 import React from 'react'
 import _isUndefined from 'lodash/isUndefined'
+import { Form } from 'antd';
 import { Field } from 'formik'
 import { Box } from '../components/Box'
 import { Grid } from '../components/Grid'
 import { Text } from '../components/Text'
+
+const FormItem = Form.Item;
 
 const renderField = ({ name, component: Component, gridColumn, getFieldNameText, ...props }) => (
   <Grid.Item gridColumn={gridColumn || '1/-1'}>
@@ -27,7 +30,20 @@ const renderField = ({ name, component: Component, gridColumn, getFieldNameText,
         {getFieldNameText(name)}
       </Text>
       <Field name={name}>
-        {formikProps => <Component {...formikProps} {...props} />}
+        {formikProps => { 
+          const isTouched = formikProps.form.touched[name]
+          const error = formikProps.form.errors[name]
+          const hasTouchedError = isTouched && error
+          
+          return (
+            <FormItem 
+              help={hasTouchedError ? error : null}
+              validateStatus={hasTouchedError ? 'error' : 'success'}
+            >
+              <Component {...formikProps} {...props} />
+            </FormItem>
+          )
+        }}
       </Field>
     </Box>
   </Grid.Item>
