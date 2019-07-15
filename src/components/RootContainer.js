@@ -40,6 +40,7 @@ import {
 } from '../strings/urlStrings';
 import { _isNull } from '../util/lodashUtils';
 import SignupPage from '../pages/SignupPage';
+import Footer from '../modules/Footer';
 
 const ProtectedRoute = ({ component: Component, token, ...rest }) => {
   return token ? (
@@ -114,7 +115,7 @@ class RootContainer extends Component {
               token={this.state.token}
               refreshTokenFn={this.refreshTokenFn}
             />
-            <Container>
+            <Container minHeight="calc(100vh - 140px)">
               <Switch>
                 <Route
                   token={this.state.token}
@@ -164,6 +165,7 @@ class RootContainer extends Component {
                 <Route component={PageNotFound} />
               </Switch>
             </Container>
+            <Footer />
           </div>
         </ThemeProvider>
       </div>
