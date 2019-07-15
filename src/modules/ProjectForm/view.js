@@ -78,37 +78,45 @@ class ProjectFormViewComponent extends React.Component {
               {
                 name: CATEGORY_FIELD_NAME,
                 component: FieldInput,
+                required: true,
               },
               {
                 name: NAME_FIELD_NAME,
                 component: FieldInput,
+                required: true,
               },
               {
                 name: DESCRIPTION_FIELD_NAME,
                 component: FieldTextArea,
+                required: true,
               },
               {
                 name: BUCKET_NAME_FIELD_NAME,
                 component: FieldInput,
+                required: true,
               },
               {
                 name: IMAGE_WIDTH_FIELD_NAME,
                 component: FieldInputNumber,
                 gridColumn: '1/2',
+                required: true,
               },
               {
                 name: IMAGE_HEIGHT_FIELD_NAME,
                 component: FieldInputNumber,
                 gridColumn: '2/3',
+                required: true,
               },
               {
                 name: NUM_VALIDATION_FIELD_NAME,
                 component: FieldInputNumber,
+                required: true,
               },
 
               {
                 name: QUESTION_FIELD_NAME,
                 component: FieldInput,
+                required: true,
               },
               {
                 name: CLASSIFICATION_TYPE_FIELD_NAME,
@@ -128,6 +136,12 @@ class ProjectFormViewComponent extends React.Component {
               {
                 name: CLASSES_FIELD_NAME,
                 component: FieldLabelsSelect,
+                onlyVisibleIf:
+                  getFieldValue({
+                    props: this.props,
+                    fieldName: CLASSIFICATION_TYPE_FIELD_NAME,
+                  }) === MULTI_LABEL,
+                required: true,
               },
             ],
             getFieldNameTextFromFieldName: getFieldNameText,
@@ -152,7 +166,12 @@ class ProjectFormViewComponent extends React.Component {
 export const ProjectFormView = withFormik({
   mapPropsToValues: props => {
     const { data } = props;
-    return { ...data, categories: props.categories };
+    return {
+      ...data,
+      categories: props.categories,
+      [CLASSIFICATION_TYPE_FIELD_NAME]: MULTI_LABEL,
+      [IS_CLASS_REPEATABLE_FIELD_NAME]: true,
+    };
   },
   handleSubmit: async (values, actions) => {
     await actions.props.onSubmit({
