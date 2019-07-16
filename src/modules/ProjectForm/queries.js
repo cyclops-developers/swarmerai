@@ -25,3 +25,9 @@ export const GET_CATEGORIES_QUERY = gql`
     }
   }
 `;
+
+export const GET_IMAGE_URLS = gql`
+  query imageUrls($bucketName: String!) {
+    imageUrls(bucketName: $bucketName)
+  }
+`;
