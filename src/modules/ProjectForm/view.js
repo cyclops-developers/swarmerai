@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import _isEmpty from 'lodash/isEmpty';
 import _capitalize from 'lodash/capitalize';
 import { Form, withFormik } from 'formik';
-import { Button, message, AutoComplete } from 'antd';
+import { Button, message } from 'antd';
+import _get from 'lodash/get';
+import { withApollo } from 'react-apollo';
+
 import { Grid } from '../../components/Grid';
 import { Flex } from '../../components/Flex';
 import {
@@ -44,6 +47,7 @@ import {
   IMAGE_HEIGHT_FIELD_NAME,
 } from '../../util/projectUtils';
 import { _omit } from '../../util/lodashUtils';
+import { GET_IMAGE_URLS } from './queries';
 
 const getFieldNameText = fieldName => _capitalize(fieldName.replace(/-/g, ' '));
 
@@ -51,117 +55,162 @@ const getFieldValue = ({ props, fieldName }) => {
   return props.values[fieldName];
 };
 
-class ProjectFormViewComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.FieldCategoryAutocomplete = ({ field, form }) => (
-      <AutoComplete
-        {...field}
-        onChange={e => form.setFieldValue(field.name, e.valueOf())}
-        onBlur={e => form.setFieldTouched(field.name)}
-        filterOption={(inputValue, option) =>
-          option.props.children
-            .toUpperCase()
-            .indexOf(inputValue.toUpperCase()) !== -1
+let ProjectFormViewComponent = props => {
+  const [imageUrls, setImageUrls] = useState([]);
+  const [loadingImageUrls, setLoadingImageUrl] = useState(false);
+  const [bucketName, setBucketName] = useState(
+    _get(props, `values.${BUCKET_NAME_FIELD_NAME}`, ''),
+  );
+
+  useEffect(() => {
+    const getImageUrls = async bucketName => {
+      const { client } = props;
+
+      setLoadingImageUrl(true);
+
+      try {
+        const { data } = await client.query({
+          query: GET_IMAGE_URLS,
+          variables: {
+            bucketName,
+          },
+        });
+
+        const imageUrls = _get(data, 'imageUrls', []);
+        const imageUrlsFormatted = imageUrls.map(src => ({ src }));
+
+        setLoadingImageUrl(false);
+
+        return setImageUrls(imageUrlsFormatted);
+      } catch (error) {
+        setLoadingImageUrl(false);
+
+        if (bucketName) {
+          message.error('Error getting images');
         }
-        dataSource={this.props.categories}
-      />
-    );
-  }
+      }
+    };
 
-  render() {
-    return (
-      <Form>
-        <Grid gridTemplateColumns={'auto auto'}>
-          {renderFields({
-            fields: [
-              {
-                name: CATEGORY_FIELD_NAME,
-                component: FieldInput,
-                required: true,
-              },
-              {
-                name: NAME_FIELD_NAME,
-                component: FieldInput,
-                required: true,
-              },
-              {
-                name: DESCRIPTION_FIELD_NAME,
-                component: FieldTextArea,
-                required: true,
-              },
-              {
-                name: BUCKET_NAME_FIELD_NAME,
-                component: FieldInput,
-                required: true,
-              },
-              {
-                name: IMAGE_WIDTH_FIELD_NAME,
-                component: FieldInputNumber,
-                gridColumn: '1/2',
-                required: true,
-              },
-              {
-                name: IMAGE_HEIGHT_FIELD_NAME,
-                component: FieldInputNumber,
-                gridColumn: '2/3',
-                required: true,
-              },
-              {
-                name: NUM_VALIDATION_FIELD_NAME,
-                component: FieldInputNumber,
-                required: true,
-              },
+    getImageUrls(bucketName);
+  }, [bucketName, props]);
 
-              {
-                name: QUESTION_FIELD_NAME,
-                component: FieldInput,
-                required: true,
-              },
-              {
-                name: CLASSIFICATION_TYPE_FIELD_NAME,
-                component: FieldLabelTypeRadioGroup,
-                gridColumn: '1/2',
-              },
-              {
-                name: IS_CLASS_REPEATABLE_FIELD_NAME,
-                component: FieldIsLabelRepeatable,
-                onlyVisibleIf:
-                  getFieldValue({
-                    props: this.props,
-                    fieldName: CLASSIFICATION_TYPE_FIELD_NAME,
-                  }) === MULTI_LABEL,
-                gridColumn: '2/3',
-              },
-              {
-                name: CLASSES_FIELD_NAME,
-                component: FieldLabelsSelect,
-                onlyVisibleIf:
-                  getFieldValue({
-                    props: this.props,
-                    fieldName: CLASSIFICATION_TYPE_FIELD_NAME,
-                  }) === MULTI_LABEL,
-                required: true,
-              },
-            ],
-            getFieldNameTextFromFieldName: getFieldNameText,
-          })}
-        </Grid>
+  return (
+    <Form>
+      <Grid gridTemplateColumns={'auto auto'}>
+        {renderFields({
+          fields: [
+            {
+              name: CATEGORY_FIELD_NAME,
+              component: FieldInput,
+              required: true,
+            },
+            {
+              name: NAME_FIELD_NAME,
+              component: FieldInput,
+              required: true,
+            },
+            {
+              name: DESCRIPTION_FIELD_NAME,
+              component: FieldTextArea,
+              required: true,
+            },
+            {
+              name: BUCKET_NAME_FIELD_NAME,
+              component: FieldInput,
+              required: true,
+              imageUrls,
+              loadingImageUrls,
+              onKeyPress: async event => {
+                const bucket = _get(
+                  props,
+                  `values.${BUCKET_NAME_FIELD_NAME}`,
+                  '',
+                );
 
-        <Flex width="100%" justifyContent="center" mt={28}>
-          <Button
-            htmlType="submit"
-            loading={this.props.isSubmitting}
-            width={329}
-            height={50}
-          >
-            Save
-          </Button>
-        </Flex>
-      </Form>
-    );
-  }
-}
+                if (event.charCode === 13 && bucket) {
+                  setBucketName(bucket);
+                }
+              },
+              onBlur: async () => {
+                const bucket = _get(
+                  props,
+                  `values.${BUCKET_NAME_FIELD_NAME}`,
+                  '',
+                );
+
+                if (bucket) {
+                  setBucketName(bucket);
+                }
+              },
+            },
+            {
+              name: IMAGE_WIDTH_FIELD_NAME,
+              component: FieldInputNumber,
+              gridColumn: '1/2',
+              required: true,
+            },
+            {
+              name: IMAGE_HEIGHT_FIELD_NAME,
+              component: FieldInputNumber,
+              gridColumn: '2/3',
+              required: true,
+            },
+            {
+              name: NUM_VALIDATION_FIELD_NAME,
+              component: FieldInputNumber,
+              required: true,
+            },
+
+            {
+              name: QUESTION_FIELD_NAME,
+              component: FieldInput,
+              required: true,
+            },
+            {
+              name: CLASSIFICATION_TYPE_FIELD_NAME,
+              component: FieldLabelTypeRadioGroup,
+              gridColumn: '1/2',
+            },
+            {
+              name: IS_CLASS_REPEATABLE_FIELD_NAME,
+              component: FieldIsLabelRepeatable,
+              onlyVisibleIf:
+                getFieldValue({
+                  props: props,
+                  fieldName: CLASSIFICATION_TYPE_FIELD_NAME,
+                }) === MULTI_LABEL,
+              gridColumn: '2/3',
+            },
+            {
+              name: CLASSES_FIELD_NAME,
+              component: FieldLabelsSelect,
+              onlyVisibleIf:
+                getFieldValue({
+                  props: props,
+                  fieldName: CLASSIFICATION_TYPE_FIELD_NAME,
+                }) === MULTI_LABEL,
+              required: true,
+            },
+          ],
+          getFieldNameTextFromFieldName: getFieldNameText,
+        })}
+      </Grid>
+
+      <Flex width="100%" justifyContent="center" mt={28}>
+        <Button
+          htmlType="submit"
+          loading={props.isSubmitting}
+          width={329}
+          height={50}
+        >
+          Save
+        </Button>
+      </Flex>
+    </Form>
+  );
+};
+
+ProjectFormViewComponent = withApollo(ProjectFormViewComponent);
 
 export const ProjectFormView = withFormik({
   mapPropsToValues: props => {

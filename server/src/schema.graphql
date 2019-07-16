@@ -10,7 +10,13 @@ type Query {
   activeJobs: [Job!]!
   nextTask(jobId: String!): Task
 
-  topContributors(projectId: String!, jobId:String, quantity: Int = 5): [Contributor]
+  topContributors(
+    projectId: String!
+    jobId: String
+    quantity: Int = 5
+  ): [Contributor]
+
+  imageUrls(bucketName: String!): [String]
 }
 
 type Mutation {

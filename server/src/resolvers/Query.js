@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import _isEmpty from 'lodash/isEmpty';
+
 import { getNextTask } from '../task';
 import { getUserId } from '../utils';
 import { getContributors } from '../utils/contributorUtils';
+import { listBucket } from '../utils/bucketUtils';
 
 const Query = {
   projects(_parent, args, context) {
@@ -38,7 +41,7 @@ const Query = {
       creator: {
         id,
       },
-      status_not : 'DELETED',
+      status_not: 'DELETED',
     };
     return context.prisma.projects({ where });
   },
@@ -97,6 +100,20 @@ const Query = {
     // Get Contributors
     const returnContributors = await getContributors(context, jobs);
     return returnContributors.slice(0, quantity);
+  },
+
+  imageUrls: async (_, { bucketName }) => {
+    try {
+      const imageUrls = await listBucket(bucketName);
+
+      if (_isEmpty(imageUrls)) {
+        return [];
+      }
+
+      return imageUrls;
+    } catch (error) {
+      throw new Error('Error getting images');
+    }
   },
 };
 
